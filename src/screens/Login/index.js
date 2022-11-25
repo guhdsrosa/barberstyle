@@ -1,28 +1,34 @@
 import React from "react"
 import { View, Text, TextInput, Button } from "react-native"
 
-import {Container, CenterText} from './Login.styles'
+import {Container, CenterText, TextIputStyle, ButtonStyle} from './Login.styles'
 
 const Login = () => {
     return (
         <>
             <Container>
                 <CenterText>Bem vindo ao</CenterText>
-                <CenterText>LOGO</CenterText>
+                <CenterText>Barber's Style</CenterText>
 
                 <CenterText>Email</CenterText>
-                <TextInput
-                    value={"Email input"}
+                <TextIputStyle
+                    value={''}
                 />
 
                 <CenterText>Senha</CenterText>
-                <TextInput
-                    value={"Senha input"}
+                <TextIputStyle
+                    value={''}
                 />
 
-                <Button
+                <ButtonStyle
                     onPress={console.log("pressed")}
                     title="Login"
+                    color="#841584"
+                    accessibilityLabel="Botão de Login"
+                />
+                <ButtonStyle
+                    onPress={console.log("pressed")}
+                    title="Registrar"
                     color="#841584"
                     accessibilityLabel="Botão de Login"
                 />
