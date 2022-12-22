@@ -1,39 +1,67 @@
 import React from "react"
-import { View, Text, TextInput, Button } from "react-native"
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native"
 
-import {Container, CenterText, TextIputStyle, ButtonStyle} from './Login.styles'
+import logo from '../../assets/images/logo.png'
+import { styles } from './styles'
 
 const Login = () => {
     return (
-        <>
-            <Container>
-                <CenterText>Bem vindo ao</CenterText>
-                <CenterText>Barber's Style</CenterText>
+        <View style={styles.Container}>
 
-                <CenterText>Email</CenterText>
-                <TextIputStyle
-                    value={''}
-                />
+            <Image
+                source={logo}
+                style={styles.TitleLogo}
+                resizeMode={'contain'}
+            />
 
-                <CenterText>Senha</CenterText>
-                <TextIputStyle
-                    value={''}
-                />
+            <Text style={styles.Text}>Log In</Text>
 
-                <ButtonStyle
-                    onPress={console.log("pressed")}
-                    title="Login"
-                    color="#841584"
-                    accessibilityLabel="Botão de Login"
-                />
-                <ButtonStyle
-                    onPress={console.log("pressed")}
-                    title="Registrar"
-                    color="#841584"
-                    accessibilityLabel="Botão de Login"
-                />
-            </Container>
-        </>
+            <TextInput
+                style={styles.TextInput}
+                placeholder={'E-mail'}
+                value={''}
+                placeholderTextColor={'#9b9ca2'}
+            />
+            <TextInput
+                style={styles.TextInput}
+                placeholder={'Senha'}
+                value={''}
+                placeholderTextColor={'#9b9ca2'}
+            />
+
+            <View style={styles.ContentOptions}>
+                <Text style={styles.ContentRemember}>Lembrar de mim</Text>
+                <TouchableOpacity>
+                    <Text style={styles.ContentRecover}>Esqueceu a senha?</Text>
+                </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity style={styles.Button}>
+                <Text style={styles.ButtonText}>Log In</Text>
+            </TouchableOpacity>
+
+            <View style={styles.FooterOptions}>
+                <Text style={styles.ContentRemember}>Novo Usuário?</Text>
+                <TouchableOpacity>
+                    <Text style={[styles.ContentRecover, {marginLeft: 5}]}>Criar conta</Text>
+                </TouchableOpacity>
+            </View>
+
+
+            {/*<TouchableOpacity
+                onPress={console.log("pressed")}
+                title="Login"
+                color="#841584"
+                accessibilityLabel="Botão de Login"
+            />
+            <TouchableOpacity
+                onPress={console.log("pressed")}
+                title="Registrar"
+                color="#841584"
+                accessibilityLabel="Botão de Login"
+            />*/}
+
+        </View>
     )
 }
 
