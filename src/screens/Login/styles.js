@@ -4,14 +4,14 @@ export const styles = StyleSheet.create({
     Container: {
         paddingHorizontal: 30,
         height: '100%',
-        backgroundColor: '#28333F',
+        backgroundColor: '#fff',
         justifyContent: 'center'
     },
 
     TitleLogo: {
         height: 90,
         width: '100%',
-        marginBottom: 68,
+        marginBottom: 38,
     },
 
     Text: {
@@ -23,8 +23,8 @@ export const styles = StyleSheet.create({
     },
 
     TextInput: {
-        borderWidth: 1,
-        borderColor: 'rgba(123,97,255,0.6)',
+        borderWidth: 1.5,
+        borderColor: 'rgba(135,11,182,0.6)',
         color: '#fff',
         fontWeight: "bold",
         borderRadius: 12,
@@ -32,13 +32,21 @@ export const styles = StyleSheet.create({
         paddingRight: 20,
         marginTop: 10,
         paddingVertical: 7,
-        paddingVertical: 10
+        paddingVertical: 10,
+        backgroundColor: '#2f3c50'
+    },
+
+    eyeStyle: {
+        position: "absolute",
+        right: 10,
+        bottom: 13,
+        color: '#870bb6'
     },
 
     ContentOptions: {
         flexDirection: 'row',
         justifyContent: "space-between",
-        marginTop: 12,
+        marginTop: 20,
         marginBottom: 24
     },
 
@@ -47,12 +55,12 @@ export const styles = StyleSheet.create({
     },
 
     ContentRecover: {
-        color: '#7B61FF'
+        color: '#870bb6'
     },
 
     Button: {
         alignSelf: 'center',
-        backgroundColor: '#7b61ff',
+        backgroundColor: '#870bb6',
         borderRadius: 12
     },
 
@@ -67,12 +75,7 @@ export const styles = StyleSheet.create({
     FooterOptions: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 12,
+        marginTop: 22,
         marginBottom: 24
     }
 })
-
-/*
-export const ButtonStyle = styled.Button`
-    margin-top: 5px;
-`;*/
