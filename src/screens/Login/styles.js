@@ -3,20 +3,20 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     Container: {
         paddingHorizontal: 30,
-        height: '100%',
+        flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center'
+        //justifyContent: 'center'
     },
 
     TitleLogo: {
         height: 90,
         width: '100%',
-        marginBottom: 38,
+        marginTop: 80
     },
 
     Text: {
-        fontSize: 21,
-        color: '#fff',
+        fontSize: 30,
+        color: '#000',
         fontWeight: "bold",
         textAlign: 'center',
         marginBottom: 10,
@@ -24,8 +24,8 @@ export const styles = StyleSheet.create({
 
     TextInput: {
         borderWidth: 1.5,
-        borderColor: 'rgba(135,11,182,0.6)',
-        color: '#fff',
+        borderColor: '#E8E8E8',
+        color: '#BDBDBD',
         fontWeight: "bold",
         borderRadius: 12,
         paddingLeft: 20,
@@ -33,49 +33,49 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         paddingVertical: 7,
         paddingVertical: 10,
-        backgroundColor: '#2f3c50'
+        backgroundColor: '#F6F6F6'
     },
 
     eyeStyle: {
         position: "absolute",
         right: 10,
         bottom: 13,
-        color: '#870bb6'
+        color: '#FA5300'
     },
 
     ContentOptions: {
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        marginTop: 20,
-        marginBottom: 24
+        marginTop: 16,
+        alignSelf: 'center'
     },
 
     ContentRemember: {
-        color: '#fff'
+        color: '#BDBDBD',
+        fontSize: 16
     },
 
     ContentRecover: {
-        color: '#870bb6'
+        color: '#FA5300',
+        fontSize: 16
     },
 
     Button: {
         alignSelf: 'center',
-        backgroundColor: '#870bb6',
-        borderRadius: 12
+        backgroundColor: '#FA5300',
+        borderRadius: 100,
+        marginTop: 79,
     },
 
     ButtonText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "600",
         color: '#fff',
-        marginHorizontal: 136,
-        marginVertical: 17
+        paddingHorizontal: 138,
+        paddingVertical: 16
     },
 
     FooterOptions: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 22,
-        marginBottom: 24
+        marginTop: 14,
     }
 })

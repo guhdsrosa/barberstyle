@@ -8,6 +8,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Login from './screens/Login';
 import Register from './screens/Register';
 import Home from './screens/Home';
+import OptionRegister from './screens/OptionRegister'
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -60,6 +61,7 @@ function App() {
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
                 <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="OptionRegister" component={OptionRegister} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

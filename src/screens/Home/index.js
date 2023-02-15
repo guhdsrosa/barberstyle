@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image, StatusBar } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
@@ -7,7 +7,36 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Fotos from '../../assets/images/home/index'
 import Estab from '../../assets/images/teste/teste.jpg'
 
+import callApi from '../../server/api'
+
 const Home = () => {
+
+    /*
+    const [teste, setTest] = useState();
+
+    useEffect(() => {
+        testes()
+    }, [])
+
+    const testes = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: 'List',
+            };
+            console.log('entro')
+            callApi(config)
+                .then(function (response) {
+                    setTest(response)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+    */
 
     const lojas = [{ name: 'Teste1', foto: Estab }, { name: 'Teste2', foto: Estab }, { name: 'Teste3', foto: Estab }]
 
@@ -30,6 +59,10 @@ const Home = () => {
                         <Text style={styles.userText}>Usuário</Text>
                     </View>
                 </View>
+
+                {/*teste.map((result) => {
+                    <Text>{result}</Text>
+                })*/}
 
                 <LinearGradient colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.2)']} style={styles.optionContainer}>
                     <ScrollView horizontal={true}>
