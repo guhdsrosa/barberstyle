@@ -1,116 +1,93 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    Container: {
+    container: {
         flex: 1,
         backgroundColor: '#fff',
     },
 
-    userContent: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginTop: 70,
-        marginLeft: 50,
+    header: {
+        marginHorizontal: 6,
+        paddingBottom: 20,
     },
 
-    userPhoto: {
-        borderRadius: 100,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        backgroundColor: '#f0f0f0',
-        marginRight: 20,
-
-        shadowColor: "#000",
-        shadowOffset:{
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-        elevation: 24,
+    filterHeader: {
+        marginRight: 16,
+        marginTop: 10
     },
 
-    userTextContent: {
-        alignSelf: 'center'
-    },
-
-    userTextTitle: {
+    filterText: {
+        color: '#FA5300',
+        fontWeight: '500',
         fontSize: 16,
-        color: '#fff'
+        textAlign: 'right',
     },
 
-    userText: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: '#fff'
+    titleContent: {
+        textAlign: 'center',
+        marginTop: 11,
+        marginBottom: 18,
+        color: '#000',
+        fontWeight: '600',
+        fontSize: 24
     },
 
-    optionContainer: {
+    searchbarStyle: {
         marginHorizontal: 10,
-        marginTop: 30,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-    },
-
-    touchOptions: {
-        marginVertical: 20,
-        marginHorizontal: 20
-    },
-
-    logoImage: {
-        height: 100,
-        width: 100,
-        backgroundColor: '#fff',
         borderRadius: 100
     },
 
-    optionText: {
-        color: '#fff',
-        marginTop: 10,
-        fontSize: 15,
-        alignSelf: 'center'
-    },
-
     bodyContainer: {
-        paddingHorizontal: 20,
-        marginTop: 30,
-        paddingBottom: 20,
-        backgroundColor: '#fff',
-        flex: 1,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        
+        marginHorizontal: 6
+    },
+
+    touchStore: {
+        backgroundColor: '#fdfdfd',
+        borderRadius: 8,
+        marginBottom: 10,
+        flexDirection: 'row',
+
         shadowColor: "#000",
-        shadowOffset:{
+        shadowOffset: {
             width: 0,
-            height: 12,
+            height: 3,
         },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-        elevation: 24,
-    },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
 
-    textBody: {
-        textAlign: 'center',
-        fontSize: 17,
-        marginVertical: 20,
-        color: '#000',
-    },
-
-    storeTouch: {
-        marginHorizontal: 10
+        elevation: 6,
     },
 
     storeImage: {
-        height: 100,
-        width: 190
+        height: 110,
+        width: 110,
+        borderRadius: 8,
+        marginRight: 5,
+        alignSelf: 'center'
     },
 
-    textImage: {
+    textContent: {
+        width: '70%',
+        marginVertical: 10
+    },  
+
+    textStore: {
         color: '#000',
-        textAlign: 'center',
         fontSize: 17,
-        marginTop: 5
-    }
+        fontWeight: '600',
+    },
+
+    descriptionStore: {
+        color: '#000',
+        fontSize: 15,
+        marginTop: 3,
+        marginLeft: 3
+    },
+
+    iconStore: {
+        alignSelf: 'center',
+        backgroundColor: '#000',
+        position: 'absolute',
+        right: 140
+    },
 })
