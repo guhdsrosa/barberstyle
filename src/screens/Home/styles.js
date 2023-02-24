@@ -3,91 +3,42 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        paddingHorizontal: 20,
+        paddingTop: 20
     },
 
-    header: {
-        marginHorizontal: 6,
-        paddingBottom: 20,
+    menuContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flex: 1
     },
 
-    filterHeader: {
-        marginRight: 16,
-        marginTop: 10
+    userContent: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
 
-    filterText: {
-        color: '#FA5300',
-        fontWeight: '500',
-        fontSize: 16,
-        textAlign: 'right',
-    },
-
-    titleContent: {
-        textAlign: 'center',
-        marginTop: 11,
-        marginBottom: 18,
-        color: '#000',
-        fontWeight: '600',
-        fontSize: 24
-    },
-
-    searchbarStyle: {
-        marginHorizontal: 10,
+    userLogo: {
+        width: 65, 
+        height: 65,
         borderRadius: 100
     },
 
-    bodyContainer: {
-        marginHorizontal: 6
+    userTextContent: {
+        marginLeft: 16
     },
 
-    touchStore: {
-        backgroundColor: '#fdfdfd',
-        borderRadius: 8,
-        marginBottom: 10,
-        flexDirection: 'row',
-
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
-
-        elevation: 6,
-    },
-
-    storeImage: {
-        height: 110,
-        width: 110,
-        borderRadius: 8,
-        marginRight: 5,
+    filterHeader: {
         alignSelf: 'center'
     },
 
-    textContent: {
-        width: '70%',
-        marginVertical: 10
-    },  
-
-    textStore: {
-        color: '#000',
-        fontSize: 17,
-        fontWeight: '600',
+    filterLogo: {
+        tintColor: '#05293c',
+        width: 25,
+        height: 25,
     },
 
-    descriptionStore: {
-        color: '#000',
-        fontSize: 15,
-        marginTop: 3,
-        marginLeft: 3
-    },
-
-    iconStore: {
-        alignSelf: 'center',
-        backgroundColor: '#000',
-        position: 'absolute',
-        right: 140
+    header: {
+        marginVertical: 30
     },
 })

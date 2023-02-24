@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -13,7 +13,6 @@ import callApi from '../../server/api'
 
 const Home = () => {
 
-    /*
     const [teste, setTest] = useState();
 
     useEffect(() => {
@@ -24,12 +23,13 @@ const Home = () => {
         try {
             var config = {
                 method: 'get',
-                url: 'List',
+                url: 'pessoas/4',
             };
             console.log('entro')
             callApi(config)
                 .then(function (response) {
-                    setTest(response)
+                    console.log(response.data)
+                    setTest(response.data.Nome)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -38,35 +38,50 @@ const Home = () => {
             console.log('[ERROR]', err)
         }
     }
-    */
 
     const lojas = [
-        { name: 'Barbearia Alfredo Design', foto: Estab }, 
-        { name: 'Manicure e Pedicure Creide', foto: Estab }, 
+        { name: 'Barbearia Alfredo Design', foto: Estab },
+        { name: 'Manicure e Pedicure Creide', foto: Estab },
         { name: 'Cabeleleila Leila', foto: Estab },
         { name: 'Cabeleleiro Charles', foto: Estab },
         { name: 'Design Sombrancelha', foto: Estab },
     ]
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.filterHeader}>
-                    <Text style={styles.filterText}>Filtro</Text>
-                </TouchableOpacity>
+        <LinearGradient colors={['#11dbc5', '#ddf9f7']} style={styles.container}>
+            <ScrollView>
+                <View style={styles.menuContent}>
+                    <View style={styles.userContent}>
+                        <Image
+                            source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            style={styles.userLogo}
+                            resizeMode={'contain'}
+                        />
 
-                <Text style={styles.titleContent}>ESTABELECIMENTOS</Text>
+                        <View style={styles.userTextContent}>
+                            <Text>Olá!{'\n'}<Text>{teste ? teste : 'Gustavo'}</Text></Text>
+                        </View>
+                    </View>
 
+                    <TouchableOpacity style={styles.filterHeader}>
+                        <Image
+                            source={Fotos.hamb}
+                            resizeMode={'contain'}
+                            style={styles.filterLogo}
+                        />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.header}>
+                    <Text style={styles.titleContent}>Bem vindo,{'\n'}qual serviço deseja selecionar hoje?</Text>
+                </View>
                 <Searchbar
                     placeholder="Pesquisar"
                     //onChangeText={onChangeSearch}
                     //value={searchQuery}
                     style={styles.searchbarStyle}
                 />
-            </View>
-
-            <ScrollView style={styles.bodyContainer}>
-                {lojas.map((result) => 
+                {/*lojas.map((result) =>
                     <TouchableOpacity style={styles.touchStore}>
                         <Image
                             source={result.foto}
@@ -80,11 +95,9 @@ const Home = () => {
                             <Text style={styles.descriptionStore}>Alfenas-MG</Text>
                         </View>
                     </TouchableOpacity>
-                )}
+    )*/}
             </ScrollView>
-
-
-        </View>
+        </LinearGradient>
     )
 }
 
