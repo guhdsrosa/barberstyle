@@ -5,10 +5,12 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import AntDesing from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 
+//SCREENS
 import Login from './screens/Login';
 import Register from './screens/Register';
 import Home from './screens/Home';
 import OptionRegister from './screens/OptionRegister'
+import Perfil from './screens/Pefil';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -17,37 +19,43 @@ const MyTabs = () => {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor='#4f076a'
-            inactiveColor='#8c8c8c'
+            activeColor='#16dcc7'
+            inactiveColor='#fff'
             barStyle={{
-                backgroundColor: '#f2f2f2',
-                marginVertical: -10
+                backgroundColor: '#05293c',
+                //marginVertical: 10,
+                //marginHorizontal: 10,
+                //position: 'absolute',
+                //borderWidth: 3,
+                //borderRadius: 10,
+                //borderColor: '#05293c',
             }}
+            shifting={false}
         >
             <Tab.Screen
                 name="Home"
                 component={Home}
                 options={{
                     tabBarLabel: 'Início',
-                    tabBarIcon: ({ color }) => <AntDesing name="home" color={color} size={26} />
+                    tabBarIcon: ({ color }) => <AntDesing name="home" color={color} size={30} />,
+                    headerShown: false
                 }}
             />
-
             <Tab.Screen
                 name="Explore"
                 component={Home}
                 options={{
                     tabBarLabel: 'Explorar',
-                    tabBarIcon: ({ color }) => <Entypo name="magnifying-glass" color={color} size={26} />
+                    tabBarIcon: ({ color }) => <Entypo name="magnifying-glass" color={color} size={30} />
                 }}
             />
 
             <Tab.Screen
                 name="Perfil"
-                component={Home}
+                component={Perfil}
                 options={{
                     tabBarLabel: 'Perfil',
-                    tabBarIcon: ({ color }) => <AntDesing name="user" color={color} size={26} />
+                    tabBarIcon: ({ color }) => <AntDesing name="user" color={color} size={30} />
                 }}
             />
         </Tab.Navigator>
@@ -62,6 +70,7 @@ function App() {
                 <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="OptionRegister" component={OptionRegister} options={{ headerShown: false }} />
+                <Stack.Screen name="Perfil" component={MyTabs} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

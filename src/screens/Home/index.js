@@ -23,7 +23,7 @@ const Home = () => {
         try {
             var config = {
                 method: 'get',
-                url: 'pessoas/4',
+                url: 'pessoas/2',
             };
             console.log('entro')
             callApi(config)
@@ -48,7 +48,7 @@ const Home = () => {
     ]
 
     return (
-        <LinearGradient colors={['#11dbc5', '#ddf9f7']} style={styles.container}>
+        <LinearGradient colors={['#11dbc5', '#9ef9f2']} style={styles.container}>
             <ScrollView>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
@@ -59,7 +59,7 @@ const Home = () => {
                         />
 
                         <View style={styles.userTextContent}>
-                            <Text>Olá!{'\n'}<Text>{teste ? teste : 'Gustavo'}</Text></Text>
+                            <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{teste ? teste : 'Gustavo'}</Text></Text>
                         </View>
                     </View>
 
@@ -73,29 +73,43 @@ const Home = () => {
                 </View>
 
                 <View style={styles.header}>
-                    <Text style={styles.titleContent}>Bem vindo,{'\n'}qual serviço deseja selecionar hoje?</Text>
+                    <Text style={styles.titleText}>Bem vindo,{'\n'}qual serviço deseja selecionar hoje?</Text>
                 </View>
+
                 <Searchbar
                     placeholder="Pesquisar"
                     //onChangeText={onChangeSearch}
                     //value={searchQuery}
                     style={styles.searchbarStyle}
                 />
-                {/*lojas.map((result) =>
-                    <TouchableOpacity style={styles.touchStore}>
-                        <Image
-                            source={result.foto}
-                            style={styles.storeImage}
-                            resizeMode='stretch'
-                        />
 
-                        <View style={styles.textContent}>
-                            <Text style={styles.textStore}>{result.name}</Text>
-                            <Text style={styles.descriptionStore}>Excepteur fgsadw fhsud ea ut aliqua duis...</Text>
-                            <Text style={styles.descriptionStore}>Alfenas-MG</Text>
-                        </View>
-                    </TouchableOpacity>
-    )*/}
+                <View style={styles.body}>
+                    <View style={styles.bodyContent}>
+                        <Text style={styles.titleText}>Recomendados</Text>
+                        <TouchableOpacity style={styles.seeAllContent}>
+                            <Text style={[styles.titleText, { fontSize: 15 }]}>Ver mais</Text>
+                            <AntDesign name="right" size={15} style={styles.seeAllIcon}/>
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView horizontal={true}>
+                        {lojas.map((result) =>
+                            <TouchableOpacity style={styles.touchStore}>
+                                <Image
+                                    source={result.foto}
+                                    style={styles.storeImage}
+                                    resizeMode='stretch'
+                                />
+
+                                <View style={styles.textContent}>
+                                    <Text style={styles.textStore}>{result.name}</Text>
+                                    <Text style={styles.descriptionStore}>Alfenas-MG</Text>
+                                    <Text>Estrela</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </ScrollView>
+                </View>
             </ScrollView>
         </LinearGradient>
     )
