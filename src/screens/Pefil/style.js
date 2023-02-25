@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        //flex: 1,
     },
 
     headerColor: ['#11dbc5', '#9ef9f2'],
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     body: {
         backgroundColor: '#f0f0f0',
         marginTop: 135,
-        //borderRadius: 20,
+        paddingBottom: 15,
         borderTopStartRadius: 20,
         borderTopEndRadius: 20,
         flex: 1
@@ -67,13 +67,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         color: '#BDBDBD',
         fontSize: 16,
+        fontFamily: 'Quicksand-SemiBold',
     },
 
     saveButton: {
         backgroundColor: '#12dbc5',
-        marginVertical: 15,
+        marginTop: 15,
         marginHorizontal: 54,
-        borderRadius: 100
+        borderRadius: 100,
     },
 
     saveButtonText: {

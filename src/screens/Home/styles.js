@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20
     },
 
     menuContent: {
@@ -11,6 +10,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flex: 1,
         marginHorizontal: 20,
+        paddingTop: 10
     },
 
     userContent: {
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
     titleText: {
         fontFamily: 'Quicksand-SemiBold',
         color: '#131313',
-        fontSize: 20
+        fontSize: 16
     },
 
     searchbarStyle: {

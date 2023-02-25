@@ -81,7 +81,7 @@ const Home = () => {
                 </View>
 
                 <View style={styles.header}>
-                    <Text style={styles.titleText}>Bem vindo,{'\n'}qual serviço deseja selecionar hoje?</Text>
+                    <Text style={styles.titleText}>Bem vindo,{'\n'}qual serviço deseja procurar hoje?</Text>
                 </View>
 
                 <Searchbar
