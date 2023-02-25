@@ -77,7 +77,7 @@ const Register = ({route}) => {
                     onPress={() => {
                         setChecked(!checked);
                     }}
-                    color={'#FA5300'}
+                    color={'#12dbc5'}
                 />
                 <Text style={styles.checkText}>Você aceita as<Text style={styles.checkTextServices}> politicas e serviços </Text>do aplicativo</Text>
             </View>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -30,7 +31,8 @@ const MyTabs = () => {
                 //borderRadius: 10,
                 //borderColor: '#05293c',
             }}
-            shifting={false}
+            shifting={true}
+            labeled={false}
         >
             <Tab.Screen
                 name="Home"
@@ -55,7 +57,13 @@ const MyTabs = () => {
                 component={Perfil}
                 options={{
                     tabBarLabel: 'Perfil',
-                    tabBarIcon: ({ color }) => <AntDesing name="user" color={color} size={30} />
+                    //tabBarIcon: ({ color }) => <AntDesing name="user" color={color} size={30} />
+                    tabBarIcon: ({ color }) => 
+                        <Image 
+                            source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'}}
+                            style={{width: 30, height: 30, borderRadius: 100}}
+                            resizeMode={'contain'}
+                        />
                 }}
             />
         </Tab.Navigator>

@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     Text: {
         fontSize: 30,
         color: '#000',
-        fontWeight: "bold",
+        fontFamily: 'Quicksand-Bold',
         textAlign: 'center',
         marginBottom: 10,
     },
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#E8E8E8',
         color: '#BDBDBD',
-        fontWeight: "bold",
+        fontFamily: 'Quicksand-Bold',
         borderRadius: 12,
         paddingLeft: 20,
         paddingRight: 20,
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
         position: "absolute",
         right: 10,
         bottom: 13,
-        color: '#FA5300'
+        color: '#12dbc5'
     },
 
     ContentOptions: {
@@ -50,27 +50,29 @@ export const styles = StyleSheet.create({
 
     ContentRemember: {
         color: '#BDBDBD',
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'Quicksand-Bold',
     },
 
     ContentRecover: {
-        color: '#FA5300',
-        fontSize: 16
+        color: '#12dbc5',
+        fontSize: 16,
+        fontFamily: 'Quicksand-Bold',
     },
 
     Button: {
         alignSelf: 'center',
-        backgroundColor: '#FA5300',
+        backgroundColor: '#12dbc5',
         borderRadius: 100,
         marginTop: 79,
     },
 
     ButtonText: {
         fontSize: 16,
-        fontWeight: "600",
         color: '#fff',
         paddingHorizontal: 138,
-        paddingVertical: 16
+        paddingVertical: 16,
+        fontFamily: 'Quicksand-Bold',
     },
 
     FooterOptions: {

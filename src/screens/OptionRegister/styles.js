@@ -10,14 +10,14 @@ export const styles = StyleSheet.create({
         color: '#000',
         fontSize: 30,
         textAlign: 'center',
-        fontWeight: '600',
+        fontFamily: 'Quicksand-Bold',
         marginTop: 89,
         marginBottom: 142
     },
 
     button: {
         alignSelf: 'center',
-        backgroundColor: '#FA5300',
+        backgroundColor: '#12dbc5',
         marginBottom: 17,
         width: '100%',
         borderRadius: 100
@@ -26,8 +26,8 @@ export const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: '600',
         marginVertical: 16,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Quicksand-Bold',
     },
 })

@@ -16,13 +16,13 @@ export const styles = StyleSheet.create({
     menuTitle: {
         color: '#000',
         fontSize: 30,
-        fontWeight: '600',
+        fontFamily: 'Quicksand-Bold',
     },
 
     loginTitle: {
         fontSize: 16,
-        fontWeight: '500',
-        color: '#FA5300',
+        fontFamily: 'Quicksand-Bold',
+        color: '#12dbc5',
     },
 
     inputContainer: {
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#E8E8E8',
         color: '#BDBDBD',
-        fontWeight: '500',
+        fontFamily: 'Quicksand-Bold',
         borderRadius: 12,
         paddingLeft: 20,
         paddingRight: 20,
@@ -51,17 +51,20 @@ export const styles = StyleSheet.create({
 
     checkText: {
         color: '#666666',
+        fontFamily: 'Quicksand-Bold',
+        marginBottom: 4
     },
 
     checkTextServices: {
-        color: '#C64200',
+        color: '#12dbc5',
+        fontFamily: 'Quicksand-Bold',
     },
 
     buttonConfirm: {
         position: 'absolute',
         bottom: 49,
         alignSelf: 'center',
-        backgroundColor: '#FA5300',
+        backgroundColor: '#12dbc5',
         width: '100%',
         borderRadius: 100
     },
@@ -71,6 +74,6 @@ export const styles = StyleSheet.create({
         marginVertical: 16,
         color: '#fff',
         fontSize: 16,
-        fontWeight: '600'
+        fontWeight: '600',
     }
 })

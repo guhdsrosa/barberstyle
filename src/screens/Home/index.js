@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 
 import { Searchbar } from "react-native-paper";
 
@@ -14,6 +15,11 @@ import callApi from '../../server/api'
 const Home = () => {
 
     const [teste, setTest] = useState();
+    const navigation = useNavigation()
+
+    const perfilPress = () => {
+        navigation.navigate('Perfil')
+    }
 
     useEffect(() => {
         testes()
@@ -40,23 +46,25 @@ const Home = () => {
     }
 
     const lojas = [
-        { name: 'Barbearia Alfredo Design', foto: Estab },
-        { name: 'Manicure e Pedicure Creide', foto: Estab },
-        { name: 'Cabeleleila Leila', foto: Estab },
-        { name: 'Cabeleleiro Charles', foto: Estab },
-        { name: 'Design Sombrancelha', foto: Estab },
+        { name: 'Barbearia Alfred', foto: Estab },
+        { name: 'Barbearia Lesley', foto: Estab },
+        { name: 'Barbearia Joe', foto: Estab },
+        { name: 'Barbearia Charles', foto: Estab },
+        { name: 'Barbearia Hobert', foto: Estab },
     ]
 
     return (
-        <LinearGradient colors={['#11dbc5', '#9ef9f2']} style={styles.container}>
+        <LinearGradient colors={['#11dbc5', '#56d7c9']} style={styles.container}>
             <ScrollView>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
-                        <Image
-                            source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                            style={styles.userLogo}
-                            resizeMode={'contain'}
-                        />
+                        <TouchableOpacity onPress={perfilPress}>
+                            <Image
+                                source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                style={styles.userLogo}
+                                resizeMode={'contain'}
+                            />
+                        </TouchableOpacity>
 
                         <View style={styles.userTextContent}>
                             <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{teste ? teste : 'Gustavo'}</Text></Text>
