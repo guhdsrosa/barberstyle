@@ -12,6 +12,7 @@ import Register from './screens/Register';
 import Home from './screens/Home';
 import OptionRegister from './screens/OptionRegister'
 import Perfil from './screens/Pefil';
+import Store from './screens/Store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -79,6 +80,7 @@ function App() {
                 <Stack.Screen name="Home" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="OptionRegister" component={OptionRegister} options={{ headerShown: false }} />
                 <Stack.Screen name="Perfil" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="Store" component={Store} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

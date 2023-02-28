@@ -102,7 +102,7 @@ const Home = () => {
 
                     <ScrollView horizontal={true}>
                         {lojas.map((result) =>
-                            <TouchableOpacity style={styles.touchStore}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Store')} style={styles.touchStore}>
                                 <Image
                                     source={result.foto}
                                     style={styles.storeImage}
