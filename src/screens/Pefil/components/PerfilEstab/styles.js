@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#141414',
         fontFamily: 'Quicksand-SemiBold',
+        textAlign: 'center'
     },
 
     inputText: {
@@ -35,17 +36,27 @@ const styles = StyleSheet.create({
     },
 
     weekTouch: {
-        backgroundColor: '#0da797',
+        backgroundColor: '#F6F6F6',
         marginVertical: 10,
         marginHorizontal: 0,
         borderRadius: 20,
         paddingHorizontal: 10,
-        paddingBottom: 10
+        paddingBottom: 10,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+
+        elevation: 6,
     },
 
     weekText: {
         fontSize: 20,
-        color: '#F6F6F6',
+        color: '#141414',
         fontFamily: 'Quicksand-SemiBold',
         textAlign: 'center',
         paddingVertical: 10

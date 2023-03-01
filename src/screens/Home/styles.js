@@ -15,7 +15,8 @@ export const styles = StyleSheet.create({
 
     userContent: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 20
     },
 
     userLogo: {

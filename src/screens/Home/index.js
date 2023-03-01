@@ -8,7 +8,6 @@ import { Searchbar } from "react-native-paper";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fotos from '../../assets/images/home/index'
-import Estab from '../../assets/images/teste/teste.jpg'
 
 import callApi from '../../server/api'
 
@@ -46,11 +45,11 @@ const Home = () => {
     }
 
     const lojas = [
-        { name: 'Barbearia Alfred', foto: Estab },
-        { name: 'Barbearia Lesley', foto: Estab },
-        { name: 'Barbearia Joe', foto: Estab },
-        { name: 'Barbearia Charles', foto: Estab },
-        { name: 'Barbearia Hobert', foto: Estab },
+        { name: 'Barbearia Alfred', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
+        { name: 'Barbearia Lesley', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
+        { name: 'Barbearia Joe', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
+        { name: 'Barbearia Charles', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
+        { name: 'Barbearia Hobert', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
     ]
 
     return (
@@ -96,17 +95,23 @@ const Home = () => {
                         <Text style={styles.titleText}>Recomendados</Text>
                         <TouchableOpacity style={styles.seeAllContent}>
                             <Text style={[styles.titleText, { fontSize: 15 }]}>Ver mais</Text>
-                            <AntDesign name="right" size={15} style={styles.seeAllIcon}/>
+                            <AntDesign name="right" size={15} style={styles.seeAllIcon} />
                         </TouchableOpacity>
                     </View>
 
                     <ScrollView horizontal={true}>
                         {lojas.map((result) =>
-                            <TouchableOpacity onPress={() => navigation.navigate('Store')} style={styles.touchStore}>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Store', {
+                                    foto: `${result.foto}`,
+                                    name: `${result.name}`
+                                })}
+                                style={styles.touchStore}
+                            >
                                 <Image
-                                    source={result.foto}
+                                    source={{ uri: `${result.foto}` }}
                                     style={styles.storeImage}
-                                    resizeMode='stretch'
+                                    resizeMode='cover'
                                 />
 
                                 <View style={styles.textContent}>

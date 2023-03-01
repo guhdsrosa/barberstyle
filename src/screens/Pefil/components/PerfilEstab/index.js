@@ -330,6 +330,8 @@ const PerfilStab = () => {
                     </TouchableOpacity>
                 </View>
             }
+
+            
         </View>
     )
 }
