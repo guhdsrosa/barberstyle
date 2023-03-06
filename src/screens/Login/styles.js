@@ -60,11 +60,17 @@ export const styles = StyleSheet.create({
         fontFamily: 'Quicksand-Bold',
     },
 
+    servicesConfirm: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 15
+    },
+
     Button: {
         alignSelf: 'center',
         backgroundColor: '#12dbc5',
         borderRadius: 100,
-        marginTop: 79,
+        marginTop: 15,
     },
 
     ButtonText: {

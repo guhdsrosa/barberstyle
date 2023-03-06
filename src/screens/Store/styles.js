@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         margin: 14,
         zIndex: 1,
+        backgroundColor: '#141414',
+        borderRadius: 200,
     },
 
     storePhoto: {
@@ -22,11 +24,27 @@ const styles = StyleSheet.create({
     },
 
     storeName: {
-        color: '#fff',
-        bottom: '60%',
-        alignSelf: 'center',
+        color: '#000',
+        alignSelf: 'flex-start',
         fontSize: 30,
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Regular',
+        marginHorizontal: 15,
+        marginVertical: 10
+    },
+
+    body: {
+        marginHorizontal:15
+    },
+
+    options: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+
+    optionsText: {
+        fontSize: 16,
+        color: '#000',
+        fontFamily: 'Quicksand-SemiBold',
     }
 })
 

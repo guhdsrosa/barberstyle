@@ -11,37 +11,20 @@ import Fotos from '../../assets/images/home/index'
 
 import callApi from '../../server/api'
 
-const Home = () => {
+const Home = ({ route }) => {
 
-    const [teste, setTest] = useState();
     const navigation = useNavigation()
+    const [teste, setTest] = useState();
+    const [user, setUser] = useState({
+        IdUsuario: '',
+        Nome: '',
+        TipoUsuario: ''
+    });
+
+    console.log(route.params)
 
     const perfilPress = () => {
         navigation.navigate('Perfil')
-    }
-
-    useEffect(() => {
-        testes()
-    }, [])
-
-    const testes = async () => {
-        try {
-            var config = {
-                method: 'get',
-                url: 'pessoas/2',
-            };
-            console.log('entro')
-            callApi(config)
-                .then(function (response) {
-                    console.log(response.data)
-                    setTest(response.data.Nome)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } catch (err) {
-            console.log('[ERROR]', err)
-        }
     }
 
     const lojas = [

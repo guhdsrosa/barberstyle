@@ -5,6 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
+//components
+import Services from "./components/services";
+
 const Store = ({ route }) => {
 
     const navigation = useNavigation();
@@ -14,29 +17,34 @@ const Store = ({ route }) => {
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <AntDesign name="left" size={30} color={'#12dbc5'} />
+                    <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
                 </TouchableOpacity>
+
                 <Image
                     source={{ uri: foto }}
                     style={styles.storePhoto}
                     resizeMode='cover'
-                    blurRadius={10}
+                    blurRadius={0}
                 />
                 <Text style={styles.storeName}>{name}</Text>
             </View>
 
-            <View>
-                <TouchableOpacity>
-                    <Text>Serviços</Text>
-                </TouchableOpacity>
+            <View style={styles.body}>
+                <View style={styles.options}>
+                    <TouchableOpacity>
+                        <Text style={styles.optionsText}>Serviços</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity>
-                    <Text>Endereço</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.optionsText}>Endereço</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity>
-                    <Text>Sobre</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.optionsText}>Sobre</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <Services />
             </View>
         </ScrollView>
     )
