@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginHorizontal: 16,
+        justifyContent: 'center'
     },
 
     titleContent: {
@@ -11,8 +12,7 @@ export const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         fontFamily: 'Quicksand-Bold',
-        marginTop: 89,
-        marginBottom: 142
+        marginBottom: 50
     },
 
     button: {

@@ -10,13 +10,13 @@ const OptionRegister = () => {
 
     const client = () => {
         navigation.navigate('Register', {
-            option: 'client'
+            option: 'comum'
         })
     }
 
     const establishment = () => {
         navigation.navigate('Register', {
-            option: 'establishment'
+            option: 'estabelecimento'
         })
     }
 

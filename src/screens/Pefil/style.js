@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         borderColor: '#E8E8E8',
         backgroundColor: '#F6F6F6',
         paddingHorizontal: 15,
-        color: '#BDBDBD',
+        color: '#141414',
         fontSize: 16,
         fontFamily: 'Quicksand-SemiBold',
     },

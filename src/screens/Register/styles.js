@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     inputText: {
         borderWidth: 1.5,
         borderColor: '#E8E8E8',
-        color: '#BDBDBD',
+        color: '#141414',
         fontFamily: 'Quicksand-Bold',
         borderRadius: 12,
         paddingLeft: 20,

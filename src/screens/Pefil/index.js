@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from "./style";
 
@@ -13,6 +14,7 @@ const Perfil = () => {
     const navigation = useNavigation()
 
     const [typeUser, setTypeUser] = useState('estabelecimento')
+    const [user, setUser] = useState({})
     const [step, setStep] = useState(1)
 
     const screens = ({ type }) => {
@@ -40,6 +42,21 @@ const Perfil = () => {
         ])
     }
 
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            console.log(params.login)
+            setUser(params.login)
+        } catch (e) {
+            // error reading value
+        }
+    }
+
+    useEffect(() => {
+        userGet()
+    }, [])
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setStep(1)
@@ -65,25 +82,34 @@ const Perfil = () => {
                 />
 
                 <View style={styles.body}>
-                    <Text style={styles.titleName}>Nome da Pessoa</Text>
+                    <Text style={styles.titleName}>{user.Nome}</Text>
 
                     {step == 1 &&
                         <>
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Nome'}
+                                value={user.Nome}
                             />
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Email'}
+                                value={user.Email}
                             />
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Senha'}
+                                value={user.Senha}
                             />
                             <TextInput
                                 style={styles.inputText}
-                                placeholder={'Telefone'}
+                                placeholder={'Telefone1'}
+                                value={user.Telefone1}
+                            />
+                            <TextInput
+                                style={styles.inputText}
+                                placeholder={'Telefone2'}
+                                value={user.Telefone2}
                             />
                         </>
                     }
@@ -93,7 +119,7 @@ const Perfil = () => {
                     }
 
 
-                    {typeUser == 'estabelecimento' &&
+                    {user.TipoUsuario == 'estabelecimento' &&
                         <TouchableOpacity onPress={() => screens({ type: 'estab' })} style={styles.saveButton}>
                             <Text style={styles.saveButtonText}>Editar Estabelecimento</Text>
                         </TouchableOpacity>

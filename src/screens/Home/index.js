@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Searchbar } from "react-native-paper";
 
@@ -15,13 +16,7 @@ const Home = ({ route }) => {
 
     const navigation = useNavigation()
     const [teste, setTest] = useState();
-    const [user, setUser] = useState({
-        IdUsuario: '',
-        Nome: '',
-        TipoUsuario: ''
-    });
-
-    console.log(route.params)
+    const [user, setUser] = useState({});
 
     const perfilPress = () => {
         navigation.navigate('Perfil')
@@ -34,6 +29,20 @@ const Home = ({ route }) => {
         { name: 'Barbearia Charles', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
         { name: 'Barbearia Hobert', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
     ]
+
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            setUser(params.login)
+        } catch (e) {
+            // error reading value
+        }
+    }
+
+    useEffect(() => {
+        userGet()
+    }, [])
 
     return (
         <LinearGradient colors={['#11dbc5', '#56d7c9']} style={styles.container}>
@@ -49,7 +58,7 @@ const Home = ({ route }) => {
                         </TouchableOpacity>
 
                         <View style={styles.userTextContent}>
-                            <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{teste ? teste : 'Gustavo'}</Text></Text>
+                            <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{user.Nome}</Text></Text>
                         </View>
                     </View>
 

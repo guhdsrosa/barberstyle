@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     TextInput: {
         borderWidth: 1.5,
         borderColor: '#E8E8E8',
-        color: '#BDBDBD',
+        color: '#141414',
         fontFamily: 'Quicksand-Bold',
         borderRadius: 12,
         paddingLeft: 20,
@@ -58,12 +58,6 @@ export const styles = StyleSheet.create({
         color: '#12dbc5',
         fontSize: 16,
         fontFamily: 'Quicksand-Bold',
-    },
-
-    servicesConfirm: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 15
     },
 
     Button: {

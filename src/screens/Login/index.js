@@ -1,13 +1,10 @@
 import React, { useState } from "react"
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Checkbox } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native"
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 import callApi from '../../server/api'
 
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import logo from '../../assets/images/logo.png'
 import { styles } from './styles'
 
@@ -19,10 +16,8 @@ const Login = () => {
         Email: null,
         Senha: null
     })
-    const [checked, setChecked] = useState(false);
 
     const Login = async () => {
-        navigation.navigate('Home');
         if (login.Email && login.Senha) {
             try {
                 var config = {
@@ -37,13 +32,8 @@ const Login = () => {
                     .then(function (response) {
                         if (response.status == 200) {
                             console.log('[USER]', response.data)
-                            if (checked == 'true') {
-                                AsyncStorage.setItem('@user', response.data)
-                            }
-                            console.log(response.data.login.IdUsuario)
-                            navigation.navigate('Home', {
-                                userId: response.data.login.IdUsuario,
-                            });
+                            AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
+                            navigation.navigate('Home')
                         }
                     })
                     .catch(function (error) {
@@ -98,17 +88,6 @@ const Login = () => {
                     <FontAwesome name="eye" size={25} style={styles.eyeStyle} onPress={hidePass} /> :
                     <FontAwesome name="eye-slash" size={25} style={styles.eyeStyle} onPress={hidePass} />
                 }
-            </View>
-
-            <View style={styles.servicesConfirm}>
-                <Checkbox
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        setChecked(!checked);
-                    }}
-                    color={'#12dbc5'}
-                />
-                <Text style={styles.checkText}>Deseja salvar senha?</Text>
             </View>
 
             <TouchableOpacity style={styles.Button} onPress={Login}>
