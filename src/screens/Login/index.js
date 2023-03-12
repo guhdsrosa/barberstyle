@@ -32,12 +32,13 @@ const Login = () => {
                     .then(function (response) {
                         if (response.status == 200) {
                             console.log('[USER]', response.data)
-                            AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
+                            AsyncStorage.setItem('userInfo', JSON.stringify(response.data.login))
                             navigation.navigate('Home')
                         }
                     })
                     .catch(function (error) {
                         Alert.alert('Erro', 'Login ou senha podem estar incorretos')
+                        console.log('[error]', error)
                     });
             } catch (err) {
                 console.log('[ERROR]', err)

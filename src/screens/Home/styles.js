@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     },
 
     filterLogo: {
-        tintColor: '#05293c',
+        tintColor: '#191622',
         width: 25,
         height: 25,
     },
@@ -58,13 +58,14 @@ export const styles = StyleSheet.create({
 
     titleText: {
         fontFamily: 'Quicksand-SemiBold',
-        color: '#131313',
+        color: '#fff',
         fontSize: 16
     },
 
     searchbarStyle: {
         borderRadius: 50,
         marginHorizontal: 20,
+        backgroundColor: '#f2f2f2',
     },
 
     body: {
@@ -80,10 +81,12 @@ export const styles = StyleSheet.create({
 
     seeAllContent: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
 
     seeAllIcon: {
+        paddingTop: 4,
+        marginLeft: 3
     },
 
     touchStore: {

@@ -5,13 +5,17 @@ const styles = StyleSheet.create({
         //flex: 1,
     },
 
-    headerColor: ['#11dbc5', '#9ef9f2'],
+    headerColor: ['#11dbc5', '#169284'],
 
     exitButton: {
         position: 'absolute',
         right: 0,
         marginRight: 16,
-        marginTop: 24
+        marginTop: 24,
+        backgroundColor: '#DD6B55',
+        paddingHorizontal: 10,
+        paddingBottom: 2,
+        borderRadius: 10,
     },
 
     exitButtonText: {

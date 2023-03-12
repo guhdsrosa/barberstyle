@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import callApi from '../../server/api'
+
+import AwesomeAlert from 'react-native-awesome-alerts';
+import LinearGradient from "react-native-linear-gradient";
 
 import styles from "./style";
 
@@ -15,7 +18,20 @@ const Perfil = () => {
 
     const [typeUser, setTypeUser] = useState('estabelecimento')
     const [user, setUser] = useState({})
+    const [userName, setUserName] = useState('')
     const [step, setStep] = useState(1)
+    const [showAlert, setShowAlert] = useState({
+        show: false,
+        title: '',
+        message: '',
+        errorButtom: '',
+        successButtom: '',
+        showCancelButton: false,
+        showConfirmButton: false,
+        cancelText: '',
+        confirmText: '',
+        option: null
+    })
 
     const screens = ({ type }) => {
         console.log('type: ', type)
@@ -31,26 +47,105 @@ const Perfil = () => {
     }
 
     const logout = () => {
-        Alert.alert('Aviso', 'Você realmente quer deslogar da sua conta?', [
-            {
-                text: 'Mudei de ideia'
-            },
-            {
-                text: 'Sair',
-                onPress: () => navigation.navigate('Login')
-            }
-        ])
+        setShowAlert({
+            ...showAlert,
+            show: true,
+            title: 'Aviso',
+            message: `Você realmente quer deslogar da sua conta?`,
+            errorButtom: '',
+            successButtom: '',
+            showCancelButton: true,
+            showConfirmButton: true,
+            cancelText: 'Sair',
+            confirmText: 'Mudei de ideia',
+            option: 'logout'
+        })
     }
 
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const params = JSON.parse(jsonValue)
-            console.log(params.login)
-            setUser(params.login)
+            setUserName(params.Nome)
+            setUser(params)
         } catch (e) {
             // error reading value
         }
+    }
+
+    const updateUser = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Usuario/Update',
+                data: {
+                    IdUsuario: user.IdUsuario,
+                    Nome: user.Nome,
+                    Email: user.Email,
+                    Senha: user.Senha,
+                    Foto: user.Foto,
+                    Telefone: user.Telefone
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setShowAlert({
+                            ...showAlert,
+                            show: true,
+                            title: 'Sucesso',
+                            message: `${response.data.sucesso}`,
+                            errorButtom: '',
+                            successButtom: '',
+                            showCancelButton: false,
+                            showConfirmButton: true,
+                            cancelText: '',
+                            confirmText: 'Vlw!',
+                            option: false
+                        })
+                        AsyncStorage.setItem('userInfo',JSON.stringify(user));
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                    setShowAlert({
+                        ...showAlert,
+                        show: true,
+                        title: 'Ops!',
+                        message: `Ocorreu algum erro inesperado ao salvar seus dados`,
+                        errorButtom: '',
+                        successButtom: '',
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelText: 'Tentar novamente',
+                        confirmText: '',
+                        option: false
+                    })
+                });
+        } catch (err) {
+            console.log('[error]', err)
+        }
+    }
+
+    const resetAlert = ({ option }) => {
+
+        if (option == 'logout') {
+            navigation.navigate('Login')
+        }
+
+        setShowAlert({
+            ...showAlert,
+            show: false,
+            title: '',
+            message: '',
+            errorButtom: '',
+            successButtom: '',
+            showCancelButton: false,
+            showConfirmButton: false,
+            cancelText: '',
+            confirmText: '',
+            option: false
+        })
     }
 
     useEffect(() => {
@@ -60,7 +155,7 @@ const Perfil = () => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setStep(1)
-            setTypeUser('estabelecimento') //Recebe o tipo de usuario dele
+            setTypeUser(user.TipoUsuario)
         });
 
         return unsubscribe;
@@ -82,7 +177,7 @@ const Perfil = () => {
                 />
 
                 <View style={styles.body}>
-                    <Text style={styles.titleName}>{user.Nome}</Text>
+                    <Text style={styles.titleName}>{userName}</Text>
 
                     {step == 1 &&
                         <>
@@ -90,27 +185,32 @@ const Perfil = () => {
                                 style={styles.inputText}
                                 placeholder={'Nome'}
                                 value={user.Nome}
+                                onChangeText={text => setUser({ ...user, Nome: text })}
                             />
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Email'}
                                 value={user.Email}
+                                onChangeText={text => setUser({ ...user, Email: text })}
                             />
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Senha'}
                                 value={user.Senha}
+                                onChangeText={text => setUser({ ...user, Senha: text })}
+                                secureTextEntry={true}
                             />
                             <TextInput
                                 style={styles.inputText}
                                 placeholder={'Telefone1'}
-                                value={user.Telefone1}
+                                value={user.Telefone}
+                                onChangeText={text => setUser({ ...user, Telefone: text })}
                             />
-                            <TextInput
+                            {/*<TextInput
                                 style={styles.inputText}
                                 placeholder={'Telefone2'}
                                 value={user.Telefone2}
-                            />
+                            />*/}
                         </>
                     }
 
@@ -125,11 +225,33 @@ const Perfil = () => {
                         </TouchableOpacity>
                     }
 
-                    <TouchableOpacity style={styles.saveButton}>
+                    <TouchableOpacity style={styles.saveButton} onPress={updateUser}>
                         <Text style={styles.saveButtonText}>Salvar</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+
+            <AwesomeAlert
+                show={showAlert.show}
+                showProgress={false}
+                title={`${showAlert.title}`}
+                message={`${showAlert.message}`}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={showAlert.showCancelButton}
+                showConfirmButton={showAlert.showConfirmButton}
+                cancelText={`${showAlert.cancelText}`}
+                confirmText={`${showAlert.confirmText}`}
+                confirmButtonColor="#52cb5f"
+                cancelButtonColor="#DD6B55"
+                onCancelPressed={() => {
+                    resetAlert({ option: showAlert.option })
+                }}
+                onConfirmPressed={() =>
+                    resetAlert({ option: null })
+                }
+            />
+
         </LinearGradient>
     )
 }

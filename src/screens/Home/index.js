@@ -18,6 +18,8 @@ const Home = ({ route }) => {
     const [teste, setTest] = useState();
     const [user, setUser] = useState({});
 
+    console.log(user)
+
     const perfilPress = () => {
         navigation.navigate('Perfil')
     }
@@ -34,7 +36,8 @@ const Home = ({ route }) => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const params = JSON.parse(jsonValue)
-            setUser(params.login)
+            console.log(params)
+            setUser(params)
         } catch (e) {
             // error reading value
         }
@@ -45,7 +48,7 @@ const Home = ({ route }) => {
     }, [])
 
     return (
-        <LinearGradient colors={['#11dbc5', '#56d7c9']} style={styles.container}>
+        <LinearGradient colors={['#11dbc5', '#10aada']} style={styles.container}>
             <ScrollView>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
@@ -80,14 +83,16 @@ const Home = ({ route }) => {
                     //onChangeText={onChangeSearch}
                     //value={searchQuery}
                     style={styles.searchbarStyle}
+                    elevation={0}
+                    iconColor={'#0da697'}
                 />
 
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Recomendados</Text>
-                        <TouchableOpacity style={styles.seeAllContent}>
+                        <TouchableOpacity style={styles.seeAllContent} onPress={() => navigation.navigate('Explore')}>
                             <Text style={[styles.titleText, { fontSize: 15 }]}>Ver mais</Text>
-                            <AntDesign name="right" size={15} style={styles.seeAllIcon} />
+                            <AntDesign name="right" size={15} style={styles.seeAllIcon} color={'#fff'} />
                         </TouchableOpacity>
                     </View>
 
@@ -109,7 +114,10 @@ const Home = ({ route }) => {
                                 <View style={styles.textContent}>
                                     <Text style={styles.textStore}>{result.name}</Text>
                                     <Text style={styles.descriptionStore}>Alfenas-MG</Text>
-                                    <Text>Estrela</Text>
+                                    <View>
+                                        <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
+                                        <Text style={styles.descriptionStore}>5.5</Text>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
@@ -119,6 +119,14 @@ const Register = ({ route }) => {
                 />
 
                 {passError && <Text style={[styles.checkText, {color: '#ff0002', marginTop: 10, marginLeft: 5}]}>Sua senha está diferente</Text>}
+
+                <TextInput
+                    style={styles.inputText}
+                    placeholder={'Telefone'}
+                    value={user.Telefone}
+                    placeholderTextColor={'#BDBDBD'}
+                    onChangeText={text => setUser({ ...user, Telefone: text })}
+                />
 
                 <TextInput
                     style={styles.inputText}

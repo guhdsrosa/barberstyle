@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         paddingVertical: 7,
         paddingVertical: 10,
-        backgroundColor: '#F6F6F6'
+        backgroundColor: '#F6F6F6',
     },
 
     eyeStyle: {
@@ -65,6 +65,15 @@ export const styles = StyleSheet.create({
         backgroundColor: '#12dbc5',
         borderRadius: 100,
         marginTop: 15,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
 
     ButtonText: {
