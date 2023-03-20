@@ -171,7 +171,7 @@ const Perfil = () => {
                 </TouchableOpacity>
 
                 <Image
-                    source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                    source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                     style={styles.userLogo}
                     resizeMode={'contain'}
                 />

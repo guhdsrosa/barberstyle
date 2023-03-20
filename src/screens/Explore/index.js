@@ -3,13 +3,14 @@ import { View, ScrollView, Text, Alert, Image, TouchableOpacity } from "react-na
 import callApi from '../../server/api'
 import LoadingGif from '../../assets/images/loading/loading.gif'
 import FastImage from "react-native-fast-image";
+import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./styles";
 
 import { Searchbar } from "react-native-paper";
 
 const Explore = () => {
-
+    const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [establishment, setEstablishment] = useState([])
 
@@ -51,7 +52,7 @@ const Explore = () => {
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             {loading &&
                 <View style={styles.loading}>
                     <FastImage
@@ -74,27 +75,35 @@ const Explore = () => {
                         iconColor={'#0da697'}
                     />
 
-                    {establishment.map((result) =>
-                        <TouchableOpacity style={styles.establishmentContent}>
-                            <FastImage
-                                style={styles.establishmentPhoto}
-                                source={{ uri: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' }}
-                                resizeMode={FastImage.resizeMode.cover}
-                            />
+                    <ScrollView>
+                        {establishment.map((result) =>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Store', {
+                                    foto: `${result.Foto}`,
+                                    name: `${result.NomeEstabelecimento}`
+                                })}
+                                style={styles.establishmentContent}
+                            >
+                                <FastImage
+                                    style={styles.establishmentPhoto}
+                                    source={{ uri: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' }}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                />
 
-                            <View style={styles.addressContent}>
-                                {/*<Text>{result.Foto}</Text>*/}
-                                <Text style={styles.establishmentTitle}>{result.NomeEstabelecimento}</Text>
-                                <View style={styles.addressStore}>
-                                    <Text style={styles.establishmenAdress}>{result.Rua}</Text>
-                                    {result.Cidade ? <Text style={styles.establishmenAdress}>{`${result.Cidade} - ${result.Bairro}`}</Text> : <Text></Text>}
+                                <View style={styles.addressContent}>
+                                    {/*<Text>{result.Foto}</Text>*/}
+                                    <Text style={styles.establishmentTitle}>{result.NomeEstabelecimento}</Text>
+                                    <View style={styles.addressStore}>
+                                        <Text style={styles.establishmenAdress}>{result.Rua}</Text>
+                                        {result.Cidade ? <Text style={styles.establishmenAdress}>{`${result.Cidade} - ${result.Bairro}`}</Text> : <Text></Text>}
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
+                            </TouchableOpacity>
+                        )}
+                    </ScrollView>
                 </View>
             }
-        </ScrollView>
+        </View>
     )
 }
 

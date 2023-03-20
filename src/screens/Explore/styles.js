@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
 
     loading: {
@@ -21,8 +21,8 @@ export const styles = StyleSheet.create({
     },
 
     body: {
-        marginHorizontal: 10,
-        marginVertical: 10
+        paddingHorizontal: 10,
+        paddingVertical: 10,
     },
 
     searchbarStyle: {
@@ -37,20 +37,22 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10,
         flexDirection: 'row',
+        borderWidth: 0.5,
+        borderColor: '#d0d0d0',
 
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
 
         elevation: 3,
     },
 
     establishmentPhoto: {
-        height: 70, 
+        height: 70,
         width: 70,
         borderRadius: 12
     },

@@ -96,7 +96,6 @@ export const styles = StyleSheet.create({
         marginRight: 6,
         marginLeft: 6,
         marginBottom: 25,
-        flex: 1,
 
         shadowColor: "#131313",
         shadowOffset: {
@@ -106,7 +105,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
 
-        elevation: 7,
+        elevation: 6,
     },
 
     storeImage: {

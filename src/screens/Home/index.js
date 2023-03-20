@@ -15,10 +15,7 @@ import callApi from '../../server/api'
 const Home = ({ route }) => {
 
     const navigation = useNavigation()
-    const [teste, setTest] = useState();
     const [user, setUser] = useState({});
-
-    console.log(user)
 
     const perfilPress = () => {
         navigation.navigate('Perfil')
@@ -36,7 +33,7 @@ const Home = ({ route }) => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const params = JSON.parse(jsonValue)
-            console.log(params)
+            //console.log(params)
             setUser(params)
         } catch (e) {
             // error reading value
@@ -61,17 +58,17 @@ const Home = ({ route }) => {
                         </TouchableOpacity>
 
                         <View style={styles.userTextContent}>
-                            <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{user.Nome}</Text></Text>
+                            <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{user.Nome ? user.Nome.split(" ")[0] : null}</Text></Text>
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.filterHeader}>
+                    {/*<TouchableOpacity style={styles.filterHeader}>
                         <Image
                             source={Fotos.hamb}
                             resizeMode={'contain'}
                             style={styles.filterLogo}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity>*/}
                 </View>
 
                 <View style={styles.header}>

@@ -31,7 +31,7 @@ const Login = () => {
                 callApi(config)
                     .then(function (response) {
                         if (response.status == 200) {
-                            console.log('[USER]', response.data)
+                            //console.log('[USER]', response.data)
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.login))
                             navigation.navigate('Home')
                         }

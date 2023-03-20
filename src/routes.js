@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import AntDesing from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //SCREENS
 import Login from './screens/Login';
@@ -18,10 +18,25 @@ import Explore from './screens/Explore';
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-
 const MyTabs = () => {
     const theme = useTheme();
     theme.colors.secondaryContainer = "transperent"
+
+    const [user, setUser] = useState({})
+
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            setUser(params)
+        } catch (e) {
+            // error reading value
+        }
+    }
+
+    useEffect(() => {
+        userGet()
+    }, [])
 
     return (
         <Tab.Navigator
@@ -40,7 +55,7 @@ const MyTabs = () => {
                 component={Home}
                 options={{
                     tabBarLabel: 'Início',
-                    tabBarIcon: ({ color }) => <AntDesing name="home" color={color} size={30} />,
+                    tabBarIcon: ({ color }) => <Entypo name="home" color={color} size={30} />,
                     headerShown: false,
                 }}
             />
@@ -54,6 +69,18 @@ const MyTabs = () => {
                 }}
             />
 
+            {user.TipoUsuario == 'estabelecimento' &&
+                <Tab.Screen
+                    name="Perfil1"
+                    component={Perfil}
+                    options={{
+                        tabBarLabel: 'Início',
+                        tabBarIcon: ({ color }) => <Entypo name="shop" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
+
             <Tab.Screen
                 name="Perfil"
                 component={Perfil}
@@ -61,7 +88,7 @@ const MyTabs = () => {
                     tabBarLabel: 'Perfil',
                     tabBarIcon: () =>
                         <Image
-                            source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                             style={{ width: 30, height: 30, borderRadius: 100 }}
                             resizeMode={'contain'}
                         />,
@@ -74,6 +101,7 @@ const MyTabs = () => {
 }
 
 function App() {
+
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Login">

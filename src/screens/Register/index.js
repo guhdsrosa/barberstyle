@@ -3,9 +3,12 @@ import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "reac
 import { Checkbox } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Perfil from "../Pefil";
 
 const Register = ({ route }) => {
 
@@ -21,6 +24,19 @@ const Register = ({ route }) => {
         TipoUsuario: '',
         Foto: '',
         Telefone: ''
+    })
+    const [showAlert, setShowAlert] = useState({
+        show: false,
+        title: '',
+        message: '',
+        errorButtom: '',
+        successButtom: '',
+        showCancelButton: false,
+        showConfirmButton: false,
+        cancelText: '',
+        confirmText: '',
+        option: null,
+        color: null
     })
     const { option } = route.params
 
@@ -44,16 +60,74 @@ const Register = ({ route }) => {
                         .then(function (response) {
                             if (response.status == 200) {
                                 console.log('[USER]', response.data)
+                                AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
+
+                                if (option == 'comum') {
+                                    setShowAlert({
+                                        ...showAlert,
+                                        show: true,
+                                        title: 'Oba!',
+                                        message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+                                        errorButtom: 'perfil',
+                                        successButtom: 'explorar',
+                                        showCancelButton: true,
+                                        showConfirmButton: true,
+                                        cancelText: 'Ir para perfil',
+                                        confirmText: 'Explorar',
+                                        option: false,
+                                        color: true
+                                    })
+                                }
+                                if (option == 'estabelecimento') {
+                                    /*setShowAlert({
+                                        ...showAlert,
+                                        show: true,
+                                        title: 'Oba!',
+                                        message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+                                        errorButtom: 'perfil',
+                                        successButtom: 'explorar',
+                                        showCancelButton: true,
+                                        showConfirmButton: true,
+                                        cancelText: 'Ir para perfil',
+                                        confirmText: 'Explorar',
+                                        option: false,
+                                        color: true
+                                    })*/
+                                }
                             }
                         })
                         .catch(function (error) {
-                            Alert.alert('Erro', 'Algum erro inesperado aconteceu, tente novamente')
+                            setShowAlert({
+                                ...showAlert,
+                                show: true,
+                                title: 'Erro',
+                                message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                                errorButtom: '',
+                                successButtom: '',
+                                showCancelButton: true,
+                                showConfirmButton: false,
+                                cancelText: 'Ok',
+                                confirmText: '',
+                                option: false
+                            })
                         });
                 } catch (err) {
                     console.log('[ERROR]', err)
                 }
-            }else{
-                Alert.alert('Aviso', 'Sua senha esta diferente')
+            } else {
+                setShowAlert({
+                    ...showAlert,
+                    show: true,
+                    title: 'Aviso',
+                    message: `Ocorreu um erro ao criar sua conta sua senha está diferente!`,
+                    errorButtom: '',
+                    successButtom: '',
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    cancelText: 'Ok',
+                    confirmText: '',
+                    option: false
+                })
             }
 
             if (option == 'estabelecimento') {
@@ -65,8 +139,33 @@ const Register = ({ route }) => {
 
     }
 
+    const resetAlert = ({ option }) => {
+        if (option == 'perfil') {
+            navigation.navigate('Perfil')
+        }
+
+        if (option == 'explorar') {
+            navigation.navigate('Home')
+        }
+
+        setShowAlert({
+            ...showAlert,
+            show: false,
+            title: '',
+            message: '',
+            errorButtom: '',
+            successButtom: '',
+            showCancelButton: false,
+            showConfirmButton: false,
+            cancelText: '',
+            confirmText: '',
+            option: false,
+            color: null
+        })
+    }
+
     useEffect(() => {
-        if(user.Senha != user.ConfirmSenha && user.ConfirmSenha != ''){
+        if (user.Senha != user.ConfirmSenha && user.ConfirmSenha != '') {
             setPassError(true)
         } else {
             setPassError(false)
@@ -118,8 +217,6 @@ const Register = ({ route }) => {
                     onChangeText={text => setUser({ ...user, Email: text })}
                 />
 
-                {passError && <Text style={[styles.checkText, {color: '#ff0002', marginTop: 10, marginLeft: 5}]}>Sua senha está diferente</Text>}
-
                 <TextInput
                     style={styles.inputText}
                     placeholder={'Telefone'}
@@ -145,6 +242,8 @@ const Register = ({ route }) => {
                     onChangeText={text => setUser({ ...user, ConfirmSenha: text })}
                     secureTextEntry={true}
                 />
+
+                {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}
             </View>
 
             <View style={styles.servicesConfirm}>
@@ -161,6 +260,27 @@ const Register = ({ route }) => {
             <TouchableOpacity onPress={registerPress} style={styles.buttonConfirm}>
                 <Text style={styles.buttonConfirmText}>{button}</Text>
             </TouchableOpacity>
+
+            <AwesomeAlert
+                show={showAlert.show}
+                showProgress={false}
+                title={`${showAlert.title}`}
+                message={`${showAlert.message}`}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={showAlert.showCancelButton}
+                showConfirmButton={showAlert.showConfirmButton}
+                cancelText={`${showAlert.cancelText}`}
+                confirmText={`${showAlert.confirmText}`}
+                confirmButtonColor="#52cb5f"
+                cancelButtonColor={!showAlert.color ? "#DD6B55" : '#52cb5f'}
+                onCancelPressed={() => {
+                    resetAlert({ option: showAlert.errorButtom })
+                }}
+                onConfirmPressed={() =>
+                    resetAlert({ option: showAlert.successButtom })
+                }
+            />
         </View>
     )
 }

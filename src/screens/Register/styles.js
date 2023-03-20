@@ -61,12 +61,11 @@ export const styles = StyleSheet.create({
     },
 
     buttonConfirm: {
-        position: 'absolute',
-        bottom: 49,
         alignSelf: 'center',
         backgroundColor: '#12dbc5',
         width: '100%',
-        borderRadius: 100
+        borderRadius: 100,
+        marginTop: 35
     },
 
     buttonConfirmText: {
