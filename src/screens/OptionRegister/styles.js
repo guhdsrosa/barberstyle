@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     },
 
     titleContent: {
-        color: '#000',
+        color: '#fff',
         fontSize: 30,
         textAlign: 'center',
         fontFamily: 'Quicksand-Bold',

@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 16
+        paddingHorizontal: 16,
+        paddingBottom: 14
     },
 
     menuContent: {
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
     servicesConfirm: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 35
+        marginTop: 10
     },
 
     checkText: {
@@ -65,7 +66,8 @@ export const styles = StyleSheet.create({
         backgroundColor: '#12dbc5',
         width: '100%',
         borderRadius: 100,
-        marginTop: 35
+        marginTop: 10,
+        marginBottom: 20
     },
 
     buttonConfirmText: {

@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
 
     Text: {
         fontSize: 30,
-        color: '#000',
+        color: '#fff',
         fontFamily: 'Quicksand-Bold',
         textAlign: 'center',
         marginBottom: 10,

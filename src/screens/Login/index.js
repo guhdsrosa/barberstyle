@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native"
 import callApi from '../../server/api'
 
+import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import logo from '../../assets/images/logo.png'
 import { styles } from './styles'
@@ -58,7 +59,7 @@ const Login = () => {
     }
 
     return (
-        <View style={styles.Container}>
+        <LinearGradient colors={['#09080a', '#021f1c']} style={styles.Container}>
 
             {<Image
                 source={logo}
@@ -105,7 +106,7 @@ const Login = () => {
                 <Text style={styles.ContentRemember}>Novo Usuário?</Text>
                 <Text onPress={Register} style={styles.ContentRecover}> Criar conta</Text>
             </View>
-        </View>
+        </LinearGradient>
     )
 }
 
