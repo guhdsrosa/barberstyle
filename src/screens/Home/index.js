@@ -22,7 +22,7 @@ const Home = ({ route }) => {
     }
 
     const lojas = [
-        { name: 'Barbearia Alfred', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
+        { name: 'Barbearia Alfred Richard Vas VAS', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
         { name: 'Barbearia Lesley', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
         { name: 'Barbearia Joe', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
         { name: 'Barbearia Charles', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
@@ -45,7 +45,7 @@ const Home = ({ route }) => {
     }, [])
 
     return (
-        <LinearGradient colors={['#11dbc5', '#10aada']} style={styles.container}>
+        <LinearGradient colors={['#191919', '#000']} style={styles.container}>
             <ScrollView>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
@@ -81,7 +81,7 @@ const Home = ({ route }) => {
                     //value={searchQuery}
                     style={styles.searchbarStyle}
                     elevation={0}
-                    iconColor={'#0da697'}
+                    iconColor={'#131313'}
                 />
 
                 <View style={styles.body}>
@@ -111,10 +111,10 @@ const Home = ({ route }) => {
                                 <View style={styles.textContent}>
                                     <Text style={styles.textStore}>{result.name}</Text>
                                     <Text style={styles.descriptionStore}>Alfenas-MG</Text>
-                                    <View>
-                                        <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
-                                        <Text style={styles.descriptionStore}>5.5</Text>
-                                    </View>
+                                </View>
+                                <View style={styles.starContent}>
+                                    <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
+                                    <Text style={styles.descriptionStore}>5.5</Text>
                                 </View>
                             </TouchableOpacity>
                         )}

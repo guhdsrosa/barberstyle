@@ -41,7 +41,7 @@ const MyTabs = () => {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#0da697"
+            activeColor="#11dbc5"
             inactiveColor="#95a5a6"
             shifting={true}
             sceneAnimationEnabled={true}

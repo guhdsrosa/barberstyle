@@ -59,14 +59,15 @@ const Login = () => {
     }
 
     return (
-        <LinearGradient colors={['#09080a', '#021f1c']} style={styles.Container}>
+        <LinearGradient colors={['#131313', '#131313', '#131313', '#03332b']} style={styles.Container}>
 
-            {<Image
+            {/*<Image
                 source={logo}
                 style={styles.TitleLogo}
                 resizeMode={'contain'}
-            />}
+            />*/}
 
+            <Text style={styles.TextWelcome}>Bem vindo ao{'\n'}Barber Style.</Text>
             <Text style={styles.Text}>Log In</Text>
 
             <TextInput
@@ -96,11 +97,11 @@ const Login = () => {
                 <Text style={styles.ButtonText}>Log In</Text>
             </TouchableOpacity>
 
-            <View style={styles.ContentOptions}>
+            {/*<View style={styles.ContentOptions}>
                 <TouchableOpacity>
                     <Text style={styles.ContentRecover}>Esqueci a senha</Text>
                 </TouchableOpacity>
-            </View>
+            </View>*/}
 
             <View style={styles.FooterOptions}>
                 <Text style={styles.ContentRemember}>Novo Usuário?</Text>

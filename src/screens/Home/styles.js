@@ -31,13 +31,13 @@ export const styles = StyleSheet.create({
 
     userHello: {
         fontFamily: 'Quicksand-Bold',
-        color: '#131313',
+        color: '#14fff4',
         fontSize: 24
     },
 
     userName: {
         fontFamily: 'Quicksand-Medium',
-        color: '#131313',
+        color: '#fff',
         fontSize: 24
     },
 
@@ -91,41 +91,43 @@ export const styles = StyleSheet.create({
 
     touchStore: {
         backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 15,
+        borderRadius: 10,
+        //padding: 15,
         marginRight: 6,
         marginLeft: 6,
-        marginBottom: 25,
-
-        shadowColor: "#131313",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-
-        elevation: 6,
+        maxWidth: 177
     },
 
     storeImage: {
         width: 177,
         height: 183,
-        borderRadius: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        alignSelf: 'center',
+        marginBottom: 5,
+        marginHorizontal: 5
     },
 
     textContent: {
         paddingLeft: 9,
-        marginTop: 8,
+        paddingBottom: 20
     },
 
     textStore: {
-        fontFamily: 'Quicksand-SemiBold',
-        color: '#131313'
+        fontFamily: 'Quicksand-Medium',
+        color: '#131313',
+        paddingRight: 9
     },
 
     descriptionStore: {
-        fontFamily: 'Quicksand-Medium',
+        fontFamily: 'Quicksand-Light',
         color: '#131313',
+    },
+
+    starContent: {
+        flexDirection: 'row',
+        position: 'absolute',
+        right: 10,
+        bottom: 10
     }
 })

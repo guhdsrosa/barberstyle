@@ -4,6 +4,7 @@ import callApi from '../../server/api'
 import LoadingGif from '../../assets/images/loading/loading.gif'
 import FastImage from "react-native-fast-image";
 import { useNavigation } from "@react-navigation/native";
+import LinearGradient from "react-native-linear-gradient";
 
 import { styles } from "./styles";
 
@@ -52,7 +53,7 @@ const Explore = () => {
     }, [])
 
     return (
-        <View style={styles.container}>
+        <LinearGradient colors={['#000', '#131313']} style={styles.container}>
             {loading &&
                 <View style={styles.loading}>
                     <FastImage
@@ -72,7 +73,7 @@ const Explore = () => {
                         //value={searchQuery}
                         style={styles.searchbarStyle}
                         elevation={0}
-                        iconColor={'#0da697'}
+                        iconColor={'#131313'}
                     />
 
                     <ScrollView>
@@ -103,7 +104,7 @@ const Explore = () => {
                     </ScrollView>
                 </View>
             }
-        </View>
+        </LinearGradient>
     )
 }
 

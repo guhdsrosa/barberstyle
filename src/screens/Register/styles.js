@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 16,
-        paddingBottom: 14
+        paddingBottom: 14,
     },
 
     menuContent: {
@@ -67,7 +67,16 @@ export const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 100,
         marginTop: 10,
-        marginBottom: 20
+        marginBottom: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
 
     buttonConfirmText: {

@@ -5,14 +5,14 @@ const styles = StyleSheet.create({
         //flex: 1,
     },
 
-    headerColor: ['#11dbc5', '#169284'],
+    headerColor: ['#191919', '#000'],
 
     exitButton: {
         position: 'absolute',
         right: 0,
         marginRight: 16,
         marginTop: 24,
-        backgroundColor: '#DD6B55',
+        backgroundColor: '#cc0000',
         paddingHorizontal: 10,
         paddingBottom: 2,
         borderRadius: 10,
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#fff',
         fontFamily: 'Quicksand-Bold',
+        paddingVertical: 2
     },
 
     titleText: {
@@ -79,6 +80,15 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginHorizontal: 54,
         borderRadius: 100,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
 
     saveButtonText: {

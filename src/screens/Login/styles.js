@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 30,
         flex: 1,
         backgroundColor: '#fff',
-        //justifyContent: 'center'
+        justifyContent: 'center',
+        paddingBottom: 40
     },
 
     TitleLogo: {
@@ -14,10 +15,18 @@ export const styles = StyleSheet.create({
         marginTop: 80
     },
 
-    Text: {
-        fontSize: 30,
+    TextWelcome: {
+        fontSize: 35,
         color: '#fff',
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Light',
+        textAlign: 'left',
+        marginBottom: 30,
+    },
+
+    Text: {
+        fontSize: 26,
+        color: '#fff',
+        fontFamily: 'Quicksand-Regular',
         textAlign: 'center',
         marginBottom: 10,
     },
@@ -26,7 +35,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#E8E8E8',
         color: '#141414',
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Medium',
         borderRadius: 12,
         paddingLeft: 20,
         paddingRight: 20,
@@ -40,7 +49,7 @@ export const styles = StyleSheet.create({
         position: "absolute",
         right: 10,
         bottom: 13,
-        color: '#12dbc5'
+        color: '#131313'
     },
 
     ContentOptions: {
@@ -49,37 +58,28 @@ export const styles = StyleSheet.create({
     },
 
     ContentRemember: {
-        color: '#BDBDBD',
+        color: '#fff',
         fontSize: 16,
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Medium',
     },
 
     ContentRecover: {
         color: '#12dbc5',
         fontSize: 16,
-        fontFamily: 'Quicksand-Bold',
+        fontFamily: 'Quicksand-Medium',
     },
 
     Button: {
         alignSelf: 'center',
         backgroundColor: '#12dbc5',
-        borderRadius: 100,
+        borderRadius: 30,
         marginTop: 15,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 5,
     },
 
     ButtonText: {
         fontSize: 16,
         color: '#fff',
-        paddingHorizontal: 138,
+        marginHorizontal: 138,
         paddingVertical: 16,
         fontFamily: 'Quicksand-Bold',
     },

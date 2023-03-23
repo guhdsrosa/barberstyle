@@ -29,13 +29,16 @@ const Register = ({ route }) => {
     const [establishment, setEstablishment] = useState({
         NomeEstab: '',
         CEP: '',
+        Cidade: '',
         Rua: '',
         Bairro: '',
         Estado: '',
         Numero: '',
         CNPJ: '',
         TelefoneEstab: '',
-        Sobre: ''
+        TelefoneEstab1: '',
+        Sobre: '',
+        RedeSocial: ''
     })
 
     const [showAlert, setShowAlert] = useState({
@@ -64,6 +67,7 @@ const Register = ({ route }) => {
                         && establishment.Rua != ''
                         && establishment.Bairro != ''
                         && establishment.Estado != ''
+                        && establishment.Cidade != ''
                         && establishment.Numero != ''
                         && establishment.TelefoneEstab != ''
                     ) {
@@ -179,7 +183,65 @@ const Register = ({ route }) => {
 
     const insertEstablishment = async () => {
         try {
+            var config = {
+                method: 'post',
+                url: 'Estabelecimento/Register',
+                data: {
+                    CEP: establishment.CEP,
+                    Rua: establishment.Rua,
+                    Bairro: establishment.Bairro,
+                    Estado: establishment.Estado,
+                    Cidade: establishment.Cidade,
+                    NumeroEstabelecimento: establishment.Numero,
+                    CNPJ: establishment.CNPJ,
+                    Telefone1: establishment.TelefoneEstab,
+                    Telefone2: establishment.TelefoneEstab1,
+                    SobreNos: establishment.Sobre,
+                    RedeSocial: establishment.RedeSocial
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        console.log('[USER]', response.data)
+                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
 
+                        if (option == 'comum') {
+                            setShowAlert({
+                                ...showAlert,
+                                show: true,
+                                title: 'Oba!',
+                                message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+                                errorButtom: 'perfil',
+                                successButtom: 'explorar',
+                                showCancelButton: true,
+                                showConfirmButton: true,
+                                cancelText: 'Ir para perfil',
+                                confirmText: 'Explorar',
+                                option: false,
+                                color: true
+                            })
+                        }
+                        if (option == 'estabelecimento') {
+                            insertEstablishment()
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    setShowAlert({
+                        ...showAlert,
+                        show: true,
+                        title: 'Erro',
+                        message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                        errorButtom: '',
+                        successButtom: '',
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelText: 'Ok',
+                        confirmText: '',
+                        option: false
+                    })
+                });
         } catch (err) {
             console.log('[ERROR]', err)
         }
@@ -311,63 +373,87 @@ const Register = ({ route }) => {
                             placeholder={'CEP*'}
                             value={establishment.CEP}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, CEPEstab: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, CEP: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Rua*'}
-                            value={establishment.Nome}
+                            value={establishment.Rua}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, Rua: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Bairro*'}
-                            value={establishment.Nome}
+                            value={establishment.Bairro}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, Bairro: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Estado*'}
-                            value={establishment.Nome}
+                            value={establishment.Estado}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, Estado: text })}
+                        />
+
+                        <TextInput
+                            style={styles.inputText}
+                            placeholder={'Cidade*'}
+                            value={establishment.Cidade}
+                            placeholderTextColor={'#BDBDBD'}
+                            onChangeText={text => setEstablishment({ ...establishment, Cidade: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Numero*'}
-                            value={establishment.Nome}
+                            value={establishment.Numero}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, Numero: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'CNPJ'}
-                            value={establishment.Nome}
+                            value={establishment.CNPJ}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, CNPJ: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Telefone do Estabelecimento*'}
-                            value={establishment.Nome}
+                            value={establishment.TelefoneEstab}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, TelefoneEstab: text })}
+                        />
+
+                        <TextInput
+                            style={styles.inputText}
+                            placeholder={'Telefone do Estabelecimento'}
+                            value={establishment.TelefoneEstab1}
+                            placeholderTextColor={'#BDBDBD'}
+                            onChangeText={text => setEstablishment({ ...establishment, TelefoneEstab1: text })}
                         />
 
                         <TextInput
                             style={styles.inputText}
                             placeholder={'Sobre'}
-                            value={establishment.Nome}
+                            value={establishment.Sobre}
                             placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setEstablishment({ ...establishment, Nome: text })}
+                            onChangeText={text => setEstablishment({ ...establishment, Sobre: text })}
+                        />
+
+                        <TextInput
+                            style={styles.inputText}
+                            placeholder={'Rede Social'}
+                            value={establishment.RedeSocial}
+                            placeholderTextColor={'#BDBDBD'}
+                            onChangeText={text => setEstablishment({ ...establishment, RedeSocial: text })}
                         />
                     </>
                 }

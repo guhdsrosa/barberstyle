@@ -22,7 +22,7 @@ const OptionRegister = () => {
     }
 
     return(
-        <LinearGradient colors={['#09080a', '#021f1c']} style={styles.container}>
+        <LinearGradient colors={['#131313', '#131313']} style={styles.container}>
             <Text style={styles.titleContent}>Por favor{'\n'} selecione sua opção</Text>
 
             <TouchableOpacity style={styles.button} onPress={client}>
