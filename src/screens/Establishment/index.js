@@ -1,10 +1,19 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import callApi from '../../server/api'
+
+import AwesomeAlert from 'react-native-awesome-alerts';
+import LinearGradient from "react-native-linear-gradient";
+
+//Screens
+import Geral from "./components/geral";
+
 import styles from "./styles";
 
-const PerfilStab = () => {
-
-    const [option, setOption] = useState('geral')
+const Establishment = () => {
+    const [option, setOption] = useState('')
     const [week, setWeek] = useState({
         segunda: false,
         terca: false,
@@ -13,114 +22,60 @@ const PerfilStab = () => {
         sexta: false,
         sabado: false,
     })
+    const [optionsSelect, setOptionsSelect] = useState([
+        { id: 0, name: 'Geral' },
+        { id: 0, name: 'Horarios' },
+        { id: 0, name: 'Profissionais' },
+        { id: 0, name: 'Cadastro' },
+        { id: 0, name: 'Redes' },
+        { id: 0, name: 'Consumiveis' },
+        { id: 0, name: 'Comodidades' }
+    ])
 
     console.log(week)
 
     const optionSelect = ({ opt }) => {
-        if (opt == 'geral') {
+        if (opt == 'Geral') {
             setOption('geral')
         }
 
-        if (opt == 'horarios') {
+        if (opt == 'Horarios') {
             setOption('horarios')
         }
 
-        if (opt == 'profissionais') {
+        if (opt == 'Profissionais') {
             setOption('profissionais')
         }
 
-        if (opt == 'cadastro') {
+        if (opt == 'Cadastro') {
             setOption('cadastro')
         }
 
-        if (opt == 'redes') {
+        if (opt == 'Redes') {
             setOption('redes')
         }
 
-        if (opt == 'consumiveis') {
+        if (opt == 'Consumiveis') {
             setOption('consumiveis')
         }
 
-        if (opt == 'comodidades') {
+        if (opt == 'Comodidades') {
             setOption('comodidades')
         }
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <ScrollView style={styles.scrollContent} horizontal={true}>
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'geral' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Geral</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'horarios' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Horarios</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'profissionais' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Profissionais</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'cadastro' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Cadastro de Serviço</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'redes' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Redes Sociais</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'consumiveis' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Consumíveis</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { optionSelect({ opt: 'comodidades' }) }} style={styles.touchOption}>
-                    <Text style={styles.textOption}>Comodidades</Text>
-                </TouchableOpacity>
+                {optionsSelect.map((result) =>
+                    <TouchableOpacity onPress={() => { optionSelect({ opt: result.name }) }} style={styles.touchOption}>
+                        <Text style={styles.textOption}>{result.name}</Text>
+                    </TouchableOpacity>
+                )}
             </ScrollView>
 
             {option == 'geral' &&
-                <>
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Nome do Estabelecimento*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'CEP*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Rua*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Bairro*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Estado*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Número*'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'CNPJ'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Telefone'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Telefone'}
-                    />
-                    <TextInput
-                        style={styles.inputText}
-                        placeholder={'Sobre nós'}
-                    />
-                </>
+                <Geral />
             }
 
             {option == 'horarios' &&
@@ -331,9 +286,9 @@ const PerfilStab = () => {
                 </View>
             }
 
-            
+
         </View>
     )
 }
 
-export default PerfilStab;
+export default Establishment

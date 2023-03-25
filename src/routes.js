@@ -14,6 +14,7 @@ import OptionRegister from './screens/OptionRegister'
 import Perfil from './screens/Pefil';
 import Store from './screens/Store';
 import Explore from './screens/Explore';
+import Establishment from './screens/Establishment';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -41,8 +42,8 @@ const MyTabs = () => {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#11dbc5"
-            inactiveColor="#95a5a6"
+            activeColor="#fff"
+            inactiveColor="#4b4b4b"
             shifting={true}
             sceneAnimationEnabled={true}
             labeled={false}
@@ -71,10 +72,10 @@ const MyTabs = () => {
 
             {user.TipoUsuario == 'estabelecimento' &&
                 <Tab.Screen
-                    name="Perfil1"
-                    component={Perfil}
+                    name="Estabelecimento"
+                    component={Establishment}
                     options={{
-                        tabBarLabel: 'Início',
+                        tabBarLabel: 'Estabelecimento',
                         tabBarIcon: ({ color }) => <Entypo name="shop" color={color} size={30} />,
                         headerShown: false,
                     }}
@@ -112,6 +113,7 @@ function App() {
                 <Stack.Screen name="Perfil" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Store" component={Store} options={{ headerShown: false }} />
                 <Stack.Screen name="Explore" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="Establishment" component={MyTabs} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

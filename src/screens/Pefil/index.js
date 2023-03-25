@@ -9,9 +9,6 @@ import LinearGradient from "react-native-linear-gradient";
 
 import styles from "./style";
 
-//component
-import PerfilStab from "./components/PerfilEstab";
-
 const Perfil = () => {
 
     const navigation = useNavigation()
@@ -32,19 +29,6 @@ const Perfil = () => {
         confirmText: '',
         option: null
     })
-
-    const screens = ({ type }) => {
-        console.log('type: ', type)
-        if (type == 'estab') {
-            setStep(step + 1)
-            setTypeUser(false)
-        }
-
-        if (type == 'back') {
-            setStep(step - 1)
-            setTypeUser('estabelecimento') //Recebe o tipo de usuario dele
-        }
-    }
 
     const logout = () => {
         setShowAlert({
@@ -103,7 +87,7 @@ const Perfil = () => {
                             confirmText: 'Vlw!',
                             option: false
                         })
-                        AsyncStorage.setItem('userInfo',JSON.stringify(user));
+                        AsyncStorage.setItem('userInfo', JSON.stringify(user));
                     }
                 })
                 .catch(function (error) {
@@ -127,9 +111,15 @@ const Perfil = () => {
         }
     }
 
-    const resetAlert = ({ option }) => {
+    const resetAlert = async ({ option }) => {
 
         if (option == 'logout') {
+            try {
+                await AsyncStorage.clear();
+            } catch (err) {
+                console.log(err)
+            }
+
             navigation.navigate('Login')
         }
 
@@ -179,51 +169,37 @@ const Perfil = () => {
                 <View style={styles.body}>
                     <Text style={styles.titleName}>{userName}</Text>
 
-                    {step == 1 &&
-                        <>
-                            <TextInput
-                                style={styles.inputText}
-                                placeholder={'Nome'}
-                                value={user.Nome}
-                                onChangeText={text => setUser({ ...user, Nome: text })}
-                            />
-                            <TextInput
-                                style={styles.inputText}
-                                placeholder={'Email'}
-                                value={user.Email}
-                                onChangeText={text => setUser({ ...user, Email: text })}
-                            />
-                            <TextInput
-                                style={styles.inputText}
-                                placeholder={'Senha'}
-                                value={user.Senha}
-                                onChangeText={text => setUser({ ...user, Senha: text })}
-                                secureTextEntry={true}
-                            />
-                            <TextInput
-                                style={styles.inputText}
-                                placeholder={'Telefone1'}
-                                value={user.Telefone}
-                                onChangeText={text => setUser({ ...user, Telefone: text })}
-                            />
-                            {/*<TextInput
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder={'Nome'}
+                        value={user.Nome}
+                        onChangeText={text => setUser({ ...user, Nome: text })}
+                    />
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder={'Email'}
+                        value={user.Email}
+                        onChangeText={text => setUser({ ...user, Email: text })}
+                    />
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder={'Senha'}
+                        value={user.Senha}
+                        onChangeText={text => setUser({ ...user, Senha: text })}
+                        secureTextEntry={true}
+                    />
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder={'Telefone1'}
+                        value={user.Telefone}
+                        onChangeText={text => setUser({ ...user, Telefone: text })}
+                    />
+                    {/*<TextInput
                                 style={styles.inputText}
                                 placeholder={'Telefone2'}
                                 value={user.Telefone2}
                             />*/}
-                        </>
-                    }
 
-                    {step == 2 &&
-                        <PerfilStab />
-                    }
-
-
-                    {user.TipoUsuario == 'estabelecimento' &&
-                        <TouchableOpacity onPress={() => screens({ type: 'estab' })} style={styles.saveButton}>
-                            <Text style={styles.saveButtonText}>Editar Estabelecimento</Text>
-                        </TouchableOpacity>
-                    }
 
                     <TouchableOpacity style={styles.saveButton} onPress={updateUser}>
                         <Text style={styles.saveButtonText}>Salvar</Text>

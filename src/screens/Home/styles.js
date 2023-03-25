@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     userContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 20
+        marginTop: 10
     },
 
     userLogo: {
@@ -31,13 +31,13 @@ export const styles = StyleSheet.create({
 
     userHello: {
         fontFamily: 'Quicksand-Bold',
-        color: '#14fff4',
+        color: '#fff',
         fontSize: 24
     },
 
     userName: {
         fontFamily: 'Quicksand-Medium',
-        color: '#fff',
+        color: '#14fff4',
         fontSize: 24
     },
 

@@ -45,6 +45,33 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#000',
         fontFamily: 'Quicksand-SemiBold',
+    },
+    
+    bottomConfirm: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginBottom: 40,
+        alignItems: 'center',
+    },
+
+    confirmButton: {
+        backgroundColor: '#000',
+        borderRadius: 100,
+    },
+
+    textButton: {
+        paddingHorizontal: 36,
+        paddingVertical: 13.5,
+        color: '#fff',
+        fontFamily: 'Quicksand-SemiBold',
+        fontSize: 16,
+        textAlign: 'center'
+    },
+
+    textPrice: {
+        fontFamily: 'Quicksand-SemiBold',
+        color: '#000',
+        fontSize: 17,
     }
 })
 

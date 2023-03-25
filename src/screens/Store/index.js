@@ -47,11 +47,12 @@ const Store = ({ route }) => {
                 <Services />
             </View>
 
-            <Text>Total: R$0,00</Text>
-
-            <TouchableOpacity>
-                <Text>Reservar Horário</Text>
-            </TouchableOpacity>
+            <View style={styles.bottomConfirm}>
+                <TouchableOpacity style={styles.confirmButton}>
+                    <Text style={styles.textButton}>Reservar Horário</Text>
+                </TouchableOpacity>
+                <Text style={styles.textPrice}>Total: R$0,00</Text>
+            </View>
         </ScrollView>
     )
 }

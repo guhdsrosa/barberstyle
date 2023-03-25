@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Quicksand-Bold',
         alignSelf: 'center',
         color: '#12dbc5',
-        marginBottom: 10
+        marginBottom: 20
     },
 
     optionsContainer: {

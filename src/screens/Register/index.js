@@ -185,7 +185,7 @@ const Register = ({ route }) => {
         try {
             var config = {
                 method: 'post',
-                url: 'Estabelecimento/Register',
+                url: 'Estabelecimento/Create',
                 data: {
                     CEP: establishment.CEP,
                     Rua: establishment.Rua,
