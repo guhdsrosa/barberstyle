@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
     },
 
     body: {
-        marginVertical: 20
+        marginTop: 20
     },
 
     bodyContent: {

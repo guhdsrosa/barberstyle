@@ -59,21 +59,24 @@ const Register = ({ route }) => {
     const registerPress = async () => {
         if (user.Senha == user.ConfirmSenha && user.Senha.length > 5) {
             if (user.Nome != '' && user.Email != '' && user.Telefone != '') {
-                if (option == 'estabelecimento' && screen == 0) {
+                if (option == 'Dono' && screen == 0) {
                     return setScreen(screen + 1)
                 } else {
-                    if (establishment.NomeEstab != ''
+                    if (option == 'Dono' &&
+                        establishment.NomeEstab != ''
                         && establishment.CEP != ''
                         && establishment.Rua != ''
                         && establishment.Bairro != ''
                         && establishment.Estado != ''
                         && establishment.Cidade != ''
                         && establishment.Numero != ''
-                        && establishment.TelefoneEstab != ''
-                    ) {
+                        && establishment.TelefoneEstab != '') {
+                        return insertUser()
+                    } 
+                    if (option == 'Funcionario' || option == 'Cliente'){
                         return insertUser()
                     } else {
-                        setShowAlert({
+                        return setShowAlert({
                             ...showAlert,
                             show: true,
                             title: 'Ocorreu um erro ao cadastrar',
@@ -140,7 +143,7 @@ const Register = ({ route }) => {
                         console.log('[USER]', response.data)
                         AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
 
-                        if (option == 'comum') {
+                        if (option == 'Cliente' || option == 'Funcionario') {
                             setShowAlert({
                                 ...showAlert,
                                 show: true,
@@ -156,7 +159,7 @@ const Register = ({ route }) => {
                                 color: true
                             })
                         }
-                        if (option == 'estabelecimento') {
+                        if (option == 'Dono') {
                             insertEstablishment()
                         }
                     }
@@ -185,8 +188,9 @@ const Register = ({ route }) => {
         try {
             var config = {
                 method: 'post',
-                url: 'Estabelecimento/Create',
+                url: 'Estabelecimento/Register',
                 data: {
+                    NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
                     Rua: establishment.Rua,
                     Bairro: establishment.Bairro,
@@ -203,28 +207,20 @@ const Register = ({ route }) => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
-                        console.log('[USER]', response.data)
-                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
-
-                        if (option == 'comum') {
-                            setShowAlert({
-                                ...showAlert,
-                                show: true,
-                                title: 'Oba!',
-                                message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
-                                errorButtom: 'perfil',
-                                successButtom: 'explorar',
-                                showCancelButton: true,
-                                showConfirmButton: true,
-                                cancelText: 'Ir para perfil',
-                                confirmText: 'Explorar',
-                                option: false,
-                                color: true
-                            })
-                        }
-                        if (option == 'estabelecimento') {
-                            insertEstablishment()
-                        }
+                        return setShowAlert({
+                            ...showAlert,
+                            show: true,
+                            title: 'Oba!',
+                            message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+                            errorButtom: 'perfil',
+                            successButtom: 'explorar',
+                            showCancelButton: true,
+                            showConfirmButton: true,
+                            cancelText: 'Ir para perfil',
+                            confirmText: 'Explorar',
+                            option: false,
+                            color: true
+                        })
                     }
                 })
                 .catch(function (error) {
@@ -281,11 +277,15 @@ const Register = ({ route }) => {
     }, [user.Senha, user.ConfirmSenha])
 
     useEffect(() => {
-        if (option == 'comum') {
+        if (option == 'Cliente') {
             return setButton('Cadastrar')
         }
 
-        if (option == 'estabelecimento') {
+        if (option == 'Funcionario') {
+            return setButton('Cadastrar')
+        }
+
+        if (option == 'Dono') {
             return setButton('Proximo')
         }
     }, [option])

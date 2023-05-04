@@ -11,13 +11,19 @@ const OptionRegister = () => {
 
     const client = () => {
         navigation.navigate('Register', {
-            option: 'comum'
+            option: 'Cliente'
+        })
+    }
+
+    const func = () => {
+        navigation.navigate('Register', {
+            option: 'Funcionario'
         })
     }
 
     const establishment = () => {
         navigation.navigate('Register', {
-            option: 'estabelecimento'
+            option: 'Dono'
         })
     }
 
@@ -26,7 +32,11 @@ const OptionRegister = () => {
             <Text style={styles.titleContent}>Por favor{'\n'} selecione sua opção</Text>
 
             <TouchableOpacity style={styles.button} onPress={client}>
-                <Text style={styles.buttonText}>Sou um cliente</Text>
+                <Text style={styles.buttonText}>Sou cliente</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={func}>
+                <Text style={styles.buttonText}>Sou funcionario</Text>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.button} onPress={establishment}>

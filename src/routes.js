@@ -70,13 +70,37 @@ const MyTabs = () => {
                 }}
             />
 
-            {user.TipoUsuario == 'estabelecimento' &&
+            {user.TipoUsuario == 'Dono' &&
                 <Tab.Screen
                     name="Estabelecimento"
                     component={Establishment}
                     options={{
                         tabBarLabel: 'Estabelecimento',
                         tabBarIcon: ({ color }) => <Entypo name="shop" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
+
+            {user.TipoUsuario == 'Dono' &&
+                <Tab.Screen
+                    name="Relatório"
+                    component={Establishment}
+                    options={{
+                        tabBarLabel: 'Relatório',
+                        tabBarIcon: ({ color }) => <Entypo name="bar-graph" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
+
+            {user.TipoUsuario == 'Funcionario' &&
+                <Tab.Screen
+                    name="Relatório"
+                    component={Establishment}
+                    options={{
+                        tabBarLabel: 'Relatório',
+                        tabBarIcon: ({ color }) => <Entypo name="bar-graph" color={color} size={30} />,
                         headerShown: false,
                     }}
                 />

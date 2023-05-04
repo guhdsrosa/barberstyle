@@ -22,7 +22,8 @@ export const styles = StyleSheet.create({
 
     body: {
         paddingHorizontal: 10,
-        paddingVertical: 10,
+        paddingTop: 10,
+        flex: 1
     },
 
     searchbarStyle: {
@@ -33,7 +34,8 @@ export const styles = StyleSheet.create({
 
     establishmentContent: {
         backgroundColor: '#fff',
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 5,
         borderRadius: 15,
         padding: 10,
         flexDirection: 'row',

@@ -120,6 +120,39 @@ const Home = ({ route }) => {
                         )}
                     </ScrollView>
                 </View>
+
+                <View style={[styles.body, {paddingBottom: 20}]}>
+                    <View style={styles.bodyContent}>
+                        <Text style={styles.titleText}>Talvez você gostaria</Text>
+                    </View>
+
+                    <ScrollView horizontal={true}>
+                        {lojas.map((result) =>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Store', {
+                                    foto: `${result.foto}`,
+                                    name: `${result.name}`
+                                })}
+                                style={styles.touchStore}
+                            >
+                                <Image
+                                    source={{ uri: `${result.foto}` }}
+                                    style={styles.storeImage}
+                                    resizeMode='cover'
+                                />
+
+                                <View style={styles.textContent}>
+                                    <Text style={styles.textStore}>{result.name}</Text>
+                                    <Text style={styles.descriptionStore}>Alfenas-MG</Text>
+                                </View>
+                                <View style={styles.starContent}>
+                                    <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
+                                    <Text style={styles.descriptionStore}>5.5</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </ScrollView>
+                </View>
             </ScrollView>
         </LinearGradient>
     )
