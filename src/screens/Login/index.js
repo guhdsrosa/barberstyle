@@ -34,7 +34,7 @@ const Login = () => {
                     .then(function (response) {
                         if (response.status == 200) {
                             //console.log('[USER]', response.data)
-                            AsyncStorage.setItem('userInfo', JSON.stringify(response.data.login))
+                            AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
                             navigation.navigate('Home')
                         }
                     })

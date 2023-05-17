@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     TitleLogo: {
         height: 90,
         width: '100%',
-        marginTop: 80
+        marginTop: 80,
     },
 
     TextWelcome: {
