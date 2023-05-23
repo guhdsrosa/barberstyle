@@ -132,6 +132,7 @@ const Register = ({ route }) => {
                     Nome: user.Nome,
                     Email: user.Email,
                     Senha: user.Senha,
+                    confirmpassword: user.Senha,
                     TipoUsuario: option,
                     Foto: user.Foto,
                     Telefone: user.Telefone
