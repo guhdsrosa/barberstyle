@@ -7,18 +7,16 @@ const styles = StyleSheet.create({
     },
     
     title: {
-        fontSize: 20,
+        fontSize: 17,
         fontFamily: 'Quicksand-Bold',
-        alignSelf: 'center',
-        color: '#12dbc5',
-        marginBottom: 20
+        color: '#141414',
+        marginBottom: 10
     },
 
     optionsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 15,
-        marginHorizontal: 10,
         borderWidth: 1,
         paddingHorizontal: 10,
         paddingVertical: 6,

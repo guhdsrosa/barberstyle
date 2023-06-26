@@ -16,6 +16,7 @@ const Perfil = () => {
     const [typeUser, setTypeUser] = useState('estabelecimento')
     const [user, setUser] = useState({})
     const [userName, setUserName] = useState('')
+    const [userPass, setUserPass] = useState('')
     const [step, setStep] = useState(1)
     const [showAlert, setShowAlert] = useState({
         show: false,
@@ -66,7 +67,7 @@ const Perfil = () => {
                     IdUsuario: user.IdUsuario,
                     Nome: user.Nome,
                     Email: user.Email,
-                    Senha: user.Senha,
+                    Senha: userPass,
                     Foto: user.Foto,
                     Telefone: user.Telefone
                 }
@@ -184,8 +185,8 @@ const Perfil = () => {
                     <TextInput
                         style={styles.inputText}
                         placeholder={'Senha'}
-                        value={user.Senha}
-                        onChangeText={text => setUser({ ...user, Senha: text })}
+                        value={userPass}
+                        onChangeText={text => setUserPass(text)}
                         secureTextEntry={true}
                     />
                     <TextInput

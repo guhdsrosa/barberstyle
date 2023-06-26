@@ -15,7 +15,7 @@ const Explore = () => {
     const [loading, setLoading] = useState(false)
     const [establishment, setEstablishment] = useState([])
 
-    console.log(establishment)
+    console.log('establishment', establishment)
 
     const getAllEstablishment = async () => {
         setLoading(true)

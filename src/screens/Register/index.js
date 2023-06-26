@@ -141,8 +141,8 @@ const Register = ({ route }) => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
-                        console.log('[USER]', response.data)
-                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data))
+                        console.log('[USER]', response.data.user)
+                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
 
                         if (option == 'Cliente' || option == 'Funcionario') {
                             setShowAlert({
@@ -170,7 +170,7 @@ const Register = ({ route }) => {
                         ...showAlert,
                         show: true,
                         title: 'Erro',
-                        message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                        message: `Algums erro inesperado aconteceu, por favor tente novamente`,
                         errorButtom: '',
                         successButtom: '',
                         showCancelButton: true,
@@ -240,7 +240,7 @@ const Register = ({ route }) => {
                     })
                 });
         } catch (err) {
-            console.log('[ERROR]', err)
+            console.log('[ERRORs]', err)
         }
     }
 
@@ -459,17 +459,6 @@ const Register = ({ route }) => {
                     </>
                 }
             </View>
-
-            {/*<View style={styles.servicesConfirm}>
-                <Checkbox
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        setChecked(!checked);
-                    }}
-                    color={'#12dbc5'}
-                />
-                <Text style={styles.checkText}>Você aceita as<Text style={styles.checkTextServices}> politicas e serviços </Text>do aplicativo</Text>
-            </View>*/}
 
             <TouchableOpacity onPress={registerPress} style={styles.buttonConfirm}>
                 <Text style={styles.buttonConfirmText}>{screen == 0 ? button : 'Cadastrar'}</Text>

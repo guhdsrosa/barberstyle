@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -7,11 +7,18 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 
 //components
 import Services from "./components/services";
+import Endereco from "./components/endereco";
+import Sobre from "./components/sobre";
 
 const Store = ({ route }) => {
 
     const navigation = useNavigation();
+    const [option, setOption] = useState('services')
     const { foto, name } = route.params
+
+    const optionSelect = ({option}) => {
+        setOption(option)
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -31,20 +38,22 @@ const Store = ({ route }) => {
 
             <View style={styles.body}>
                 <View style={styles.options}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => optionSelect({option: 'services'})}>
                         <Text style={styles.optionsText}>Serviços</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => optionSelect({option: 'address'})}>
                         <Text style={styles.optionsText}>Endereço</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => optionSelect({option: 'more'})}>
                         <Text style={styles.optionsText}>Sobre</Text>
                     </TouchableOpacity>
                 </View>
 
-                <Services />
+                {option == 'services' && <Services />}
+                {option == 'address' && <Endereco />}
+                {option == 'more' && <Sobre />}
             </View>
 
             <View style={styles.bottomConfirm}>
