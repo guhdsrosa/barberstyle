@@ -4,7 +4,7 @@ import { View, Text } from "react-native";
 const Sobre = () => {
     return(
         <View>
-            <Text>dadsa</Text>
+            <Text>Sobre</Text>
         </View>
     )
 }
