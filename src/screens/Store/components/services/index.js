@@ -33,11 +33,8 @@ const Services = () => {
                 <View style={styles.optionsContainer}>
                     <Text style={styles.textOptions}>{result}</Text>
 
-                    <View style={{alignItems: 'center'}}>
-                        <Text style={styles.textOptions}>R$0,00</Text>
-                        <TouchableOpacity style={styles.plusButton}>
-                            <Entypo style={styles.plusIcon} name="plus" size={20} color={'#fff'} />
-                        </TouchableOpacity>
+                    <View style={{alignItems: 'center',}}>
+                        <Text style={[styles.textOptions, {marginVertical: 10}]}>R$0,00</Text>
                     </View>
                 </View>
             )}

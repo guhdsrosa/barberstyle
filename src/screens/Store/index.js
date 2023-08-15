@@ -9,6 +9,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Services from "./components/services";
 import Endereco from "./components/endereco";
 import Sobre from "./components/sobre";
+import CalendarModal from "./components/calendar";
 
 const Store = ({ route }) => {
 
@@ -16,9 +17,15 @@ const Store = ({ route }) => {
     const [option, setOption] = useState('services')
     const { foto, name } = route.params
 
-    const optionSelect = ({option}) => {
+    const optionSelect = ({ option }) => {
         setOption(option)
     }
+
+    const reservationPress = () => {
+        setOption('reservation')
+    }
+
+    console.log(option)
 
     return (
         <ScrollView style={styles.container}>
@@ -36,28 +43,32 @@ const Store = ({ route }) => {
                 <Text style={styles.storeName}>{name}</Text>
             </View>
 
-            <View style={styles.body}>
-                <View style={styles.options}>
-                    <TouchableOpacity onPress={() => optionSelect({option: 'services'})}>
-                        <Text style={styles.optionsText}>Serviços</Text>
-                    </TouchableOpacity>
+            {option === 'reservation' ?
+                <CalendarModal/>
+                :
+                <View style={styles.body}>
+                    <View style={styles.options}>
+                        <TouchableOpacity onPress={() => optionSelect({ option: 'services' })}>
+                            <Text style={styles.optionsText}>Serviços</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => optionSelect({option: 'address'})}>
-                        <Text style={styles.optionsText}>Endereço</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => optionSelect({ option: 'address' })}>
+                            <Text style={styles.optionsText}>Endereço</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => optionSelect({option: 'more'})}>
-                        <Text style={styles.optionsText}>Sobre</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => optionSelect({ option: 'more' })}>
+                            <Text style={styles.optionsText}>Sobre</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {option == 'services' && <Services />}
+                    {option == 'address' && <Endereco />}
+                    {option == 'more' && <Sobre />}
                 </View>
-
-                {option == 'services' && <Services />}
-                {option == 'address' && <Endereco />}
-                {option == 'more' && <Sobre />}
-            </View>
+            }
 
             <View style={styles.bottomConfirm}>
-                <TouchableOpacity style={styles.confirmButton}>
+                <TouchableOpacity style={styles.confirmButton} onPress={() => reservationPress()}>
                     <Text style={styles.textButton}>Reservar Horário</Text>
                 </TouchableOpacity>
                 <Text style={styles.textPrice}>Total: R$0,00</Text>

@@ -354,6 +354,15 @@ const Register = ({ route }) => {
                             secureTextEntry={true}
                         />
 
+<TextInput
+                            style={styles.inputText}
+                            placeholder={'Foto'}
+                            value={user.ConfirmSenha}
+                            placeholderTextColor={'#BDBDBD'}
+                            onChangeText={text => setUser({ ...user, Foto: text })}
+                            secureTextEntry={true}
+                        />
+
                         {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}
                     </>
                 }

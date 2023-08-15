@@ -1,6 +1,9 @@
 import React from "react";
 import { ScrollView, View, Text, TextInput } from "react-native";
-import MapView from "react-native-maps/lib/MapView";
+import MapView from "react-native-maps";
+import {enableLatestRenderer} from 'react-native-maps';
+
+enableLatestRenderer();
 
 import styles from "./styles";
 
@@ -15,6 +18,7 @@ const Endereco = () => {
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
+                //provider={PROVIDER_GOOGLE}
             />
 
             <View style={styles.twoOption}>

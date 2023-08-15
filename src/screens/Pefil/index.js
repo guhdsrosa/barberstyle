@@ -67,7 +67,7 @@ const Perfil = () => {
                     IdUsuario: user.IdUsuario,
                     Nome: user.Nome,
                     Email: user.Email,
-                    Senha: userPass,
+                    Senha: userPass != '' ? null : userPass,
                     Foto: user.Foto,
                     Telefone: user.Telefone
                 }
