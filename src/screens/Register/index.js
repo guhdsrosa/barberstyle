@@ -17,6 +17,7 @@ const Register = ({ route }) => {
     const [checked, setChecked] = useState(false);
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
+    const [idEstabFunc, setIdEstabFunc] = useState(null)
     const [user, setUser] = useState({
         Nome: '',
         Email: '',
@@ -72,8 +73,8 @@ const Register = ({ route }) => {
                         && establishment.Numero != ''
                         && establishment.TelefoneEstab != '') {
                         return insertUser()
-                    } 
-                    if (option == 'Funcionario' || option == 'Cliente'){
+                    }
+                    if (option == 'Funcionario' || option == 'Cliente') {
                         return insertUser()
                     } else {
                         return setShowAlert({
@@ -203,6 +204,41 @@ const Register = ({ route }) => {
                     Telefone2: establishment.TelefoneEstab1,
                     SobreNos: establishment.Sobre,
                     RedeSocial: establishment.RedeSocial
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    console.log('[RES] ', response.data)
+                    setIdEstabFunc(null)
+                    insertEstablishmentFunc()
+                })
+                .catch(function (error) {
+                    setShowAlert({
+                        ...showAlert,
+                        show: true,
+                        title: 'Erro',
+                        message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                        errorButtom: '',
+                        successButtom: '',
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelText: 'Ok',
+                        confirmText: '',
+                        option: false
+                    })
+                });
+        } catch (err) {
+            console.log('[ERRORs]', err)
+        }
+    }
+
+    insertEstablishmentFunc = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: '/EstabFunc/Create',
+                data: {
+                    IdEstabelecimento: idEstabFunc
                 }
             };
             callApi(config)
@@ -354,7 +390,7 @@ const Register = ({ route }) => {
                             secureTextEntry={true}
                         />
 
-<TextInput
+                        <TextInput
                             style={styles.inputText}
                             placeholder={'Foto'}
                             value={user.ConfirmSenha}
