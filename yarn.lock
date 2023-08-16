@@ -5812,6 +5812,11 @@ react-native-gradle-plugin@^0.70.2:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.2.tgz"
   integrity sha512-k7d+CVh0fs/VntA2WaKD58cFB2rtiSLBHYlciH18ncaT4N/B3A4qOGv9pSCEHfQikELm6vAf98KMbE3c8KnH1A==
 
+react-native-image-crop-picker@^0.35.0:
+  version "0.35.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.35.3.tgz#cc9ae109ae5ac2d0877a0c5ac51935421a3651d8"
+  integrity sha512-JMBmtfdJvxvPNTjSmiqNaBuEAqwwzyYvgvwiOU8ikIE113RD6hPV+wpxGFCqGJPzJF/JO6uEzpDOcFCfHZbmtQ==
+
 react-native-linear-gradient@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz"

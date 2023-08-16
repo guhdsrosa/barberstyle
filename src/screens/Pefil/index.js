@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../server/api'
+import ImagePicker from 'react-native-image-crop-picker';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 import LinearGradient from "react-native-linear-gradient";
@@ -30,6 +31,21 @@ const Perfil = () => {
         confirmText: '',
         option: null
     })
+    const [refreshing, setRefreshing] = useState(false);
+
+    const handleRefresh = () => {
+        setRefreshing(true);
+
+        // Simule o processo de atualização
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
+
+    const [foto, setFoto] = useState(false)
+    console.log('foto', foto)
+
 
     const logout = () => {
         setShowAlert({
@@ -68,7 +84,8 @@ const Perfil = () => {
                     Nome: user.Nome,
                     Email: user.Email,
                     Senha: userPass != '' ? null : userPass,
-                    Foto: user.Foto,
+                    //Foto: user.Foto,
+                    Foto: foto ? foto : user.Foto,
                     Telefone: user.Telefone
                 }
             };
@@ -139,6 +156,19 @@ const Perfil = () => {
         })
     }
 
+    const imagePickerPress = () => {
+        ImagePicker.openPicker({
+            //multiple: true
+            width: 400,
+            height: 400,
+            cropping: true,
+        }).then(images => {
+            //console.log('IMAGEM: ', images);
+            setFoto(images.path)
+            //updateUser()
+        });
+    }
+
     useEffect(() => {
         userGet()
     }, [])
@@ -154,18 +184,28 @@ const Perfil = () => {
 
     return (
         <LinearGradient style={styles.container} colors={styles.headerColor}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={handleRefresh}
+                    />
+                }
+            >
                 <Text style={styles.titleText}>Perfil</Text>
 
                 <TouchableOpacity style={styles.exitButton} onPress={logout}>
                     <Text style={styles.exitButtonText}>Sair</Text>
                 </TouchableOpacity>
 
-                <Image
-                    source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                    style={styles.userLogo}
-                    resizeMode={'contain'}
-                />
+                <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
+                    <Image
+                        source={{uri: foto ? foto : user.Foto}}
+                        style={styles.userLogo}
+                        resizeMode={'contain'}
+                        onPre
+                    />
+                </TouchableOpacity>
 
                 <View style={styles.body}>
                     <Text style={styles.titleName}>{userName}</Text>
@@ -196,10 +236,10 @@ const Perfil = () => {
                         onChangeText={text => setUser({ ...user, Telefone: text })}
                     />
                     {/*<TextInput
-                                style={styles.inputText}
-                                placeholder={'Telefone2'}
-                                value={user.Telefone2}
-                            />*/}
+                        style={styles.inputText}
+                        placeholder={'Telefone2'}
+                        value={user.Telefone2}
+                    />*/}
 
 
                     <TouchableOpacity style={styles.saveButton} onPress={updateUser}>

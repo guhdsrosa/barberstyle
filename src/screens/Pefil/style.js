@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingBottom: 2,
         borderRadius: 10,
+        zIndex: 2000
     },
 
     exitButtonText: {
@@ -33,16 +34,21 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
 
+    containerUserLogo: {
+        zIndex: 1000, 
+        position: 'absolute', 
+        alignSelf: 'center', 
+    },
+
     userLogo: {
         width: 158,
         height: 158,
         alignSelf: 'center',
         borderWidth: 3,
-        borderColor: '#fff',
+        borderColor: '#ffffff90',
         borderRadius: 100,
-        position: 'absolute',
         marginTop: 68,
-        zIndex: 1,
+        zIndex: 1000,
     },
 
     body: {
