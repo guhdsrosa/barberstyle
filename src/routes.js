@@ -24,6 +24,7 @@ const MyTabs = () => {
     theme.colors.secondaryContainer = "transperent"
 
     const [user, setUser] = useState({})
+    const [foto, setFoto] = useState(false)
 
     const userGet = async () => {
         try {
@@ -113,7 +114,8 @@ const MyTabs = () => {
                     tabBarLabel: 'Perfil',
                     tabBarIcon: () =>
                         <Image
-                            source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            // source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            source={{uri: foto ? foto : user.Foto}}
                             style={{ width: 30, height: 30, borderRadius: 100 }}
                             resizeMode={'contain'}
                         />,

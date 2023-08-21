@@ -34,7 +34,9 @@ const Login = () => {
                     .then(function (response) {
                         if (response.status == 200) {
                             console.log('[USER]', response.data)
+                            
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
+                            AsyncStorage.setItem('userSenha', JSON.stringify(response.data))
                             navigation.navigate('Home')
                         }
                     })
@@ -54,7 +56,8 @@ const Login = () => {
     const areLogged = async () => {
         try {
             const value = await AsyncStorage.getItem('userInfo');
-            if (value !== null) {
+            const teste = await AsyncStorage.getItem('userSenha');
+            if (value !== null || teste !== null) {
                 navigation.navigate('Home')
             }
             setLoading(false)

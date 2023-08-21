@@ -16,6 +16,8 @@ const Home = ({ route }) => {
 
     const navigation = useNavigation()
     const [user, setUser] = useState({});
+    const [Senha, setSenha] = useState({});
+    const [foto, setFoto] = useState(false)
 
     const perfilPress = () => {
         navigation.navigate('Perfil')
@@ -32,9 +34,12 @@ const Home = ({ route }) => {
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
+            const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
+            const senha = JSON.parse(jsonValueSenha)
             //console.log(params)
             setUser(params)
+            setSenha(senha)
         } catch (e) {
             // error reading value
         }
@@ -51,7 +56,8 @@ const Home = ({ route }) => {
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
                             <Image
-                                source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                source={{uri: foto ? foto : user.Foto}}
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />

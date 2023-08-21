@@ -85,5 +85,21 @@ export const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
-    }
+    },
+    containerUserLogo: {
+        zIndex: 1000, 
+        position: 'absolute', 
+        alignSelf: 'center', 
+    },
+
+    userLogo: {
+        width: 158,
+        height: 158,
+        alignSelf: 'center',
+        borderWidth: 3,
+        borderColor: '#ffffff90',
+        borderRadius: 100,
+        marginTop: 68,
+        zIndex: 1000,
+    },
 })

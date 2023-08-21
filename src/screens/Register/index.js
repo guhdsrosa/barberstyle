@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView, Image } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ImagePicker from 'react-native-image-crop-picker';
 
 import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
@@ -18,6 +19,7 @@ const Register = ({ route }) => {
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
     const [idEstabFunc, setIdEstabFunc] = useState(null)
+    const [foto, setFoto] = useState(false)
     const [user, setUser] = useState({
         Nome: '',
         Email: '',
@@ -135,63 +137,9 @@ const Register = ({ route }) => {
                     Senha: user.Senha,
                     confirmpassword: user.Senha,
                     TipoUsuario: option,
-                    Foto: user.Foto,
-                    Telefone: user.Telefone
-                }
-            };
-            callApi(config)
-                .then(function (response) {
-                    if (response.status == 200) {
-                        console.log('[USER]', response.data.user)
-                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
-
-                        if (option == 'Cliente' || option == 'Funcionario') {
-                            setShowAlert({
-                                ...showAlert,
-                                show: true,
-                                title: 'Oba!',
-                                message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
-                                errorButtom: 'perfil',
-                                successButtom: 'explorar',
-                                showCancelButton: true,
-                                showConfirmButton: true,
-                                cancelText: 'Ir para perfil',
-                                confirmText: 'Explorar',
-                                option: false,
-                                color: true
-                            })
-                        }
-                        if (option == 'Dono') {
-                            insertEstablishment()
-                        }
-                    }
-                })
-                .catch(function (error) {
-                    setShowAlert({
-                        ...showAlert,
-                        show: true,
-                        title: 'Erro',
-                        message: `Algums erro inesperado aconteceu, por favor tente novamente`,
-                        errorButtom: '',
-                        successButtom: '',
-                        showCancelButton: true,
-                        showConfirmButton: false,
-                        cancelText: 'Ok',
-                        confirmText: '',
-                        option: false
-                    })
-                });
-        } catch (err) {
-            console.log('[ERROR]', err)
-        }
-    }
-
-    const insertEstablishment = async () => {
-        try {
-            var config = {
-                method: 'post',
-                url: 'Estabelecimento/Register',
-                data: {
+                    //Foto: user.Foto,
+                    Foto: foto ? foto : user.Foto,
+                    Telefone: user.Telefone,
                     NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
                     Rua: establishment.Rua,
@@ -208,56 +156,42 @@ const Register = ({ route }) => {
             };
             callApi(config)
                 .then(function (response) {
-                    console.log('[RES] ', response.data)
-                    setIdEstabFunc(null)
-                    insertEstablishmentFunc()
-                })
-                .catch(function (error) {
-                    setShowAlert({
-                        ...showAlert,
-                        show: true,
-                        title: 'Erro',
-                        message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-                        errorButtom: '',
-                        successButtom: '',
-                        showCancelButton: true,
-                        showConfirmButton: false,
-                        cancelText: 'Ok',
-                        confirmText: '',
-                        option: false
-                    })
-                });
-        } catch (err) {
-            console.log('[ERRORs]', err)
-        }
-    }
-
-    insertEstablishmentFunc = async () => {
-        try {
-            var config = {
-                method: 'post',
-                url: '/EstabFunc/Create',
-                data: {
-                    IdEstabelecimento: idEstabFunc
-                }
-            };
-            callApi(config)
-                .then(function (response) {
                     if (response.status == 200) {
-                        return setShowAlert({
-                            ...showAlert,
-                            show: true,
-                            title: 'Oba!',
-                            message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
-                            errorButtom: 'perfil',
-                            successButtom: 'explorar',
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            cancelText: 'Ir para perfil',
-                            confirmText: 'Explorar',
-                            option: false,
-                            color: true
-                        })
+                        console.log('[USER]', response.data.user)
+                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
+
+                        if (option == 'Cliente' || option == 'Funcionario' || option == 'Dono') {
+                            setShowAlert({
+                                ...showAlert,
+                                show: true,
+                                title: 'Oba!',
+                                message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+                                errorButtom: 'perfil',
+                                successButtom: 'explorar',
+                                showCancelButton: true,
+                                showConfirmButton: true,
+                                cancelText: 'Ir para perfil',
+                                confirmText: 'Explorar',
+                                option: false,
+                                color: true
+                            })
+                        }
+                        // if (option == 'Dono') {
+                        //     //insertEstablishment()
+                        //     setShowAlert({
+                        //         ...showAlert,
+                        //         show: true,
+                        //         title: 'Erro',
+                        //         message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                        //         errorButtom: '',
+                        //         successButtom: '',
+                        //         showCancelButton: true,
+                        //         showConfirmButton: false,
+                        //         cancelText: 'Ok',
+                        //         confirmText: '',
+                        //         option: false
+                        //     })
+                        // }
                     }
                 })
                 .catch(function (error) {
@@ -265,7 +199,7 @@ const Register = ({ route }) => {
                         ...showAlert,
                         show: true,
                         title: 'Erro',
-                        message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+                        message: `Algums erro inesperado aconteceu, por favor tente novamente`,
                         errorButtom: '',
                         successButtom: '',
                         showCancelButton: true,
@@ -274,11 +208,106 @@ const Register = ({ route }) => {
                         confirmText: '',
                         option: false
                     })
+                    console.log(error)
                 });
         } catch (err) {
-            console.log('[ERRORs]', err)
+            console.log('[ERROR]', err)
         }
     }
+
+    // const insertEstablishment = async () => {
+    //     try {
+    //         var config = {
+    //             method: 'post',
+    //             url: 'Estabelecimento/Register',
+    //             data: {
+    //                 NomeEstabelecimento: establishment.NomeEstab,
+    //                 CEP: establishment.CEP,
+    //                 Rua: establishment.Rua,
+    //                 Bairro: establishment.Bairro,
+    //                 Estado: establishment.Estado,
+    //                 Cidade: establishment.Cidade,
+    //                 NumeroEstabelecimento: establishment.Numero,
+    //                 CNPJ: establishment.CNPJ,
+    //                 Telefone1: establishment.TelefoneEstab,
+    //                 Telefone2: establishment.TelefoneEstab1,
+    //                 SobreNos: establishment.Sobre,
+    //                 RedeSocial: establishment.RedeSocial
+    //             }
+    //         };
+    //         callApi(config)
+    //             .then(function (response) {
+    //                 console.log('[RES] ', response.data)
+    //                 // setIdEstabFunc(null)
+    //                 // insertEstablishmentFunc()
+    //             })
+    //             .catch(function (error) {
+    //                 setShowAlert({
+    //                     ...showAlert,
+    //                     show: true,
+    //                     title: 'Erro',
+    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+    //                     errorButtom: '',
+    //                     successButtom: '',
+    //                     showCancelButton: true,
+    //                     showConfirmButton: false,
+    //                     cancelText: 'Ok',
+    //                     confirmText: '',
+    //                     option: false
+    //                 })
+    //             });
+    //     } catch (err) {
+    //         console.log('[ERRORs]', err)
+    //     }
+    // }
+
+    // insertEstablishmentFunc = async () => {
+    //     try {
+    //         var config = {
+    //             method: 'post',
+    //             url: '/EstabFunc/Create',
+    //             data: {
+    //                 IdEstabelecimento: idEstabFunc
+    //             }
+    //         };
+    //         callApi(config)
+    //             .then(function (response) {
+    //                 if (response.status == 200) {
+    //                     return setShowAlert({
+    //                         ...showAlert,
+    //                         show: true,
+    //                         title: 'Oba!',
+    //                         message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
+    //                         errorButtom: 'perfil',
+    //                         successButtom: 'explorar',
+    //                         showCancelButton: true,
+    //                         showConfirmButton: true,
+    //                         cancelText: 'Ir para perfil',
+    //                         confirmText: 'Explorar',
+    //                         option: false,
+    //                         color: true
+    //                     })
+    //                 }
+    //             })
+    //             .catch(function (error) {
+    //                 setShowAlert({
+    //                     ...showAlert,
+    //                     show: true,
+    //                     title: 'Erro',
+    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
+    //                     errorButtom: '',
+    //                     successButtom: '',
+    //                     showCancelButton: true,
+    //                     showConfirmButton: false,
+    //                     cancelText: 'Ok',
+    //                     confirmText: '',
+    //                     option: false
+    //                 })
+    //             });
+    //     } catch (err) {
+    //         console.log('[ERRORs]', err)
+    //     }
+    // }
 
     const resetAlert = ({ option }) => {
         if (option == 'perfil') {
@@ -329,6 +358,19 @@ const Register = ({ route }) => {
 
     const optionClose = () => {
         navigation.goBack()
+    }
+
+    const imagePickerPress = () => {
+        ImagePicker.openPicker({
+            //multiple: true
+            width: 400,
+            height: 400,
+            cropping: true,
+        }).then(images => {
+            //console.log('IMAGEM: ', images);
+            setFoto(images.path)
+            //updateUser()
+        });
     }
 
     return (
@@ -390,14 +432,23 @@ const Register = ({ route }) => {
                             secureTextEntry={true}
                         />
 
-                        <TextInput
+                        {/* <TextInput
                             style={styles.inputText}
                             placeholder={'Foto'}
-                            value={user.ConfirmSenha}
+                            value={user.Foto}
                             placeholderTextColor={'#BDBDBD'}
                             onChangeText={text => setUser({ ...user, Foto: text })}
-                            secureTextEntry={true}
-                        />
+                        /> */}
+
+                    <TouchableOpacity style={styles.inputText} onPress={() => imagePickerPress()}>
+                    <Image
+                        
+                        source={{uri: foto ? foto : user.Foto}}
+                        style={styles.userLogo}
+                        resizeMode={'contain'}
+                        onPre
+                    />
+                    </TouchableOpacity>
 
                         {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}
                     </>

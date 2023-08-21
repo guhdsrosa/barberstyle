@@ -18,6 +18,7 @@ const Perfil = () => {
     const [user, setUser] = useState({})
     const [userName, setUserName] = useState('')
     const [userPass, setUserPass] = useState('')
+    const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [showAlert, setShowAlert] = useState({
         show: false,
@@ -31,6 +32,8 @@ const Perfil = () => {
         confirmText: '',
         option: null
     })
+
+    
     const [refreshing, setRefreshing] = useState(false);
 
     const handleRefresh = () => {
@@ -42,10 +45,10 @@ const Perfil = () => {
         }, 2000);
     };
 
-
+    console.log(Senha)
+    console.log(user)
     const [foto, setFoto] = useState(false)
     console.log('foto', foto)
-
 
     const logout = () => {
         setShowAlert({
@@ -66,9 +69,12 @@ const Perfil = () => {
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
+            const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
+            const senha = JSON.parse(jsonValueSenha)
             setUserName(params.Nome)
             setUser(params)
+            setSenha(senha)
         } catch (e) {
             // error reading value
         }
@@ -83,7 +89,7 @@ const Perfil = () => {
                     IdUsuario: user.IdUsuario,
                     Nome: user.Nome,
                     Email: user.Email,
-                    Senha: userPass != '' ? null : userPass,
+                    Senha: Senha.Senha,
                     //Foto: user.Foto,
                     Foto: foto ? foto : user.Foto,
                     Telefone: user.Telefone
@@ -168,6 +174,7 @@ const Perfil = () => {
             //updateUser()
         });
     }
+    
 
     useEffect(() => {
         userGet()
@@ -222,11 +229,18 @@ const Perfil = () => {
                         value={user.Email}
                         onChangeText={text => setUser({ ...user, Email: text })}
                     />
-                    <TextInput
+                    {/* <TextInput
                         style={styles.inputText}
                         placeholder={'Senha'}
                         value={userPass}
                         onChangeText={text => setUserPass(text)}
+                        secureTextEntry={true}
+                    /> */}
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder={'Senha'}
+                        value={Senha.Senha}
+                        onChangeText={text => setSenha({...user, Senha: text})}
                         secureTextEntry={true}
                     />
                     <TextInput
