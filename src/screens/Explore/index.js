@@ -15,8 +15,6 @@ const Explore = () => {
     const [loading, setLoading] = useState(false)
     const [establishment, setEstablishment] = useState([])
 
-    console.log('establishment', establishment)
-
     const getAllEstablishment = async () => {
         setLoading(true)
         try {
@@ -46,6 +44,12 @@ const Explore = () => {
             setLoading(false)
             Alert.alert('Erro', 'Erro ao carregar os estabelecimento')
         }
+    }
+
+    const establishmentPress = (result) => {
+        navigation.navigate('Store', {
+            data: result
+        })
     }
 
     useEffect(() => {
@@ -79,10 +83,7 @@ const Explore = () => {
                     <ScrollView>
                         {establishment.map((result) =>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Store', {
-                                    foto: `${result.Foto}`,
-                                    name: `${result.NomeEstabelecimento}`
-                                })}
+                                onPress={() => establishmentPress(result)}
                                 style={styles.establishmentContent}
                             >
                                 <FastImage

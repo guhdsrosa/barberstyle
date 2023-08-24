@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../server/api'
 import ImagePicker from 'react-native-image-crop-picker';
 
+import logo from '../../assets/images/logo.png'
+
 import AwesomeAlert from 'react-native-awesome-alerts';
 import LinearGradient from "react-native-linear-gradient";
 
@@ -20,6 +22,9 @@ const Perfil = () => {
     const [userPass, setUserPass] = useState('')
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
+    const [photo, setPhoto] = React.useState(null);
+    //const fs = require('fs')
+    //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
         show: false,
         title: '',
@@ -33,7 +38,6 @@ const Perfil = () => {
         option: null
     })
 
-    
     const [refreshing, setRefreshing] = useState(false);
 
     const handleRefresh = () => {
@@ -45,10 +49,7 @@ const Perfil = () => {
         }, 2000);
     };
 
-    console.log(Senha)
-    console.log(user)
     const [foto, setFoto] = useState(false)
-    console.log('foto', foto)
 
     const logout = () => {
         setShowAlert({
@@ -91,7 +92,7 @@ const Perfil = () => {
                     Email: user.Email,
                     Senha: Senha.Senha,
                     //Foto: user.Foto,
-                    Foto: foto ? foto : user.Foto,
+                    Foto: createFormData(photo),
                     Telefone: user.Telefone
                 }
             };
@@ -170,11 +171,22 @@ const Perfil = () => {
             cropping: true,
         }).then(images => {
             //console.log('IMAGEM: ', images);
-            setFoto(images.path)
+            setPhoto(images)
             //updateUser()
         });
     }
-    
+
+    const createFormData = (photo) => {
+        const data = new FormData();
+
+        data.append('photo', {
+            name: 'user_profile.jpg',
+            type: photo.mime,
+            uri: photo.path,
+        });
+        
+        return data;
+    };
 
     useEffect(() => {
         userGet()
@@ -207,10 +219,10 @@ const Perfil = () => {
 
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
-                        source={{uri: foto ? foto : user.Foto}}
+                        //source={{ uri: foto ? foto : user.Foto }}
+                        source={{ uri: photo?.path ? photo?.path : user.Foto }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
-                        onPre
                     />
                 </TouchableOpacity>
 
@@ -240,7 +252,7 @@ const Perfil = () => {
                         style={styles.inputText}
                         placeholder={'Senha'}
                         value={Senha.Senha}
-                        onChangeText={text => setSenha({...user, Senha: text})}
+                        onChangeText={text => setSenha({ ...user, Senha: text })}
                         secureTextEntry={true}
                     />
                     <TextInput

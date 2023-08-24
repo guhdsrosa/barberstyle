@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import callApi from '../../server/api'
 
 import styles from "./styles";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -15,7 +16,10 @@ const Store = ({ route }) => {
 
     const navigation = useNavigation();
     const [option, setOption] = useState('services')
-    const { foto, name } = route.params
+    const [services, setServices] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [selectService, setSelectService] = useState([])
+    const { data } = route.params
 
     const optionSelect = ({ option }) => {
         setOption(option)
@@ -25,7 +29,40 @@ const Store = ({ route }) => {
         setOption('reservation')
     }
 
-    console.log(option)
+    const serviceEstab = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Servico/findServicoEstab',
+                data: {
+                    IdEstabelecimento: data.IdEstabelecimento
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setServices(response.data)
+                        setLoading(true)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
+    const selectServicePress = async (id, name) => {
+        //console.log(id, name)
+        setSelectService(arr => [...arr, `${id}`])
+    }
+    console.log('selectService', selectService)
+
+    useEffect(() => {
+        if (data)
+            serviceEstab()
+    }, [data])
 
     return (
         <ScrollView style={styles.container}>
@@ -34,17 +71,17 @@ const Store = ({ route }) => {
                     <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
                 </TouchableOpacity>
 
-                <Image
-                    source={{ uri: foto }}
+                {data && <Image
+                    source={{ uri: data?.FotoEstabelecimento }}
                     style={styles.storePhoto}
                     resizeMode='cover'
                     blurRadius={0}
-                />
-                <Text style={styles.storeName}>{name}</Text>
+                />}
+                {data && <Text style={styles.storeName}>{data?.NomeEstabelecimento}</Text>}
             </View>
 
             {option === 'reservation' ?
-                <CalendarModal/>
+                <CalendarModal />
                 :
                 <View style={styles.body}>
                     <View style={styles.options}>
@@ -61,7 +98,7 @@ const Store = ({ route }) => {
                         </TouchableOpacity>
                     </View>
 
-                    {option == 'services' && <Services />}
+                    {loading && option == 'services' && <Services data={services} select={selectServicePress} />}
                     {option == 'address' && <Endereco />}
                     {option == 'more' && <Sobre />}
                 </View>
