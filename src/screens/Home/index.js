@@ -18,7 +18,7 @@ const Home = ({ route }) => {
     const [user, setUser] = useState({});
     const [Senha, setSenha] = useState({});
     const [foto, setFoto] = useState(false)
-
+    console.log(user?.Foto)
     const perfilPress = () => {
         navigation.navigate('Perfil')
     }

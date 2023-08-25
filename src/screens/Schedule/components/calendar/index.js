@@ -25,31 +25,10 @@ const CalendarModal = () => {
         today: "Hoje"
     };
 
-    const foto = [
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'
-    ]
-
     LocaleConfig.defaultLocale = 'br';
 
     return (
         <View style={{ marginBottom: 30, marginHorizontal: 10 }}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                {foto.map((result, index) => (
-                    <TouchableOpacity>
-                        <Image
-                            source={{ uri: result }}
-                            key={index}
-                            style={{ width: 50, height: 50, borderRadius: 100, marginHorizontal: 10, marginVertical: 5 }}
-                        />
-                    </TouchableOpacity>
-                ))}
-            </View>
-
             <Calendar
                 onDayPress={day => {
                     setSelected(day.dateString);

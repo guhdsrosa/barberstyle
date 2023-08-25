@@ -15,6 +15,7 @@ import Perfil from './screens/Pefil';
 import Store from './screens/Store';
 import Explore from './screens/Explore';
 import Establishment from './screens/Establishment';
+import Schedule from './screens/Schedule';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -140,6 +141,7 @@ function App() {
                 <Stack.Screen name="Store" component={Store} options={{ headerShown: false }} />
                 <Stack.Screen name="Explore" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Establishment" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="Schedule" component={Schedule} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

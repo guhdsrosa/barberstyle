@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from "./styles";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -10,7 +11,6 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Services from "./components/services";
 import Endereco from "./components/endereco";
 import Sobre from "./components/sobre";
-import CalendarModal from "./components/calendar";
 
 const Store = ({ route }) => {
 
@@ -18,7 +18,9 @@ const Store = ({ route }) => {
     const [option, setOption] = useState('services')
     const [services, setServices] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [user, setUser] = useState(false)
     const [selectService, setSelectService] = useState([])
+    const [price, setPrice] = useState(null)
     const { data } = route.params
 
     const optionSelect = ({ option }) => {
@@ -26,7 +28,11 @@ const Store = ({ route }) => {
     }
 
     const reservationPress = () => {
-        setOption('reservation')
+        navigation.navigate('Schedule', {
+            selectService: selectService,
+            IdUsuario: user.IdUsuario,
+            IdEstabelecimento: data.IdEstabelecimento
+        })
     }
 
     const serviceEstab = async () => {
@@ -53,11 +59,30 @@ const Store = ({ route }) => {
         }
     }
 
-    const selectServicePress = async (id, name) => {
-        //console.log(id, name)
-        setSelectService(arr => [...arr, `${id}`])
+    const selectServicePress = async (id, name, preco) => {
+        if (selectService.includes(`${id}`)) {
+            const novoArray = selectService.filter((num) => num !== `${id}`);
+            setSelectService(novoArray);
+            setPrice(price - preco)
+        } else {
+            setSelectService([...selectService, `${id}`]);
+            setPrice(price + preco)
+        }
     }
-    console.log('selectService', selectService)
+
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            setUser(params)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        userGet()
+    }, [])
 
     useEffect(() => {
         if (data)
@@ -80,35 +105,31 @@ const Store = ({ route }) => {
                 {data && <Text style={styles.storeName}>{data?.NomeEstabelecimento}</Text>}
             </View>
 
-            {option === 'reservation' ?
-                <CalendarModal />
-                :
-                <View style={styles.body}>
-                    <View style={styles.options}>
-                        <TouchableOpacity onPress={() => optionSelect({ option: 'services' })}>
-                            <Text style={styles.optionsText}>Serviços</Text>
-                        </TouchableOpacity>
+            <View style={styles.body}>
+                <View style={styles.options}>
+                    <TouchableOpacity onPress={() => optionSelect({ option: 'services' })}>
+                        <Text style={styles.optionsText}>Serviços</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => optionSelect({ option: 'address' })}>
-                            <Text style={styles.optionsText}>Endereço</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity onPress={() => optionSelect({ option: 'address' })}>
+                        <Text style={styles.optionsText}>Endereço</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => optionSelect({ option: 'more' })}>
-                            <Text style={styles.optionsText}>Sobre</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {loading && option == 'services' && <Services data={services} select={selectServicePress} />}
-                    {option == 'address' && <Endereco />}
-                    {option == 'more' && <Sobre />}
+                    <TouchableOpacity onPress={() => optionSelect({ option: 'more' })}>
+                        <Text style={styles.optionsText}>Sobre</Text>
+                    </TouchableOpacity>
                 </View>
-            }
+
+                {loading && option == 'services' && <Services data={services} select={selectServicePress} selectService={selectService} />}
+                {option == 'address' && <Endereco />}
+                {option == 'more' && <Sobre />}
+            </View>
 
             <View style={styles.bottomConfirm}>
                 <TouchableOpacity style={styles.confirmButton} onPress={() => reservationPress()}>
                     <Text style={styles.textButton}>Reservar Horário</Text>
                 </TouchableOpacity>
-                <Text style={styles.textPrice}>Total: R$0,00</Text>
+                <Text style={styles.textPrice}>Total: R${price ? price : `00`}</Text>
             </View>
         </ScrollView>
     )
