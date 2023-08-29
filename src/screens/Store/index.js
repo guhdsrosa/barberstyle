@@ -108,21 +108,21 @@ const Store = ({ route }) => {
             <View style={styles.body}>
                 <View style={styles.options}>
                     <TouchableOpacity onPress={() => optionSelect({ option: 'services' })}>
-                        <Text style={styles.optionsText}>Serviços</Text>
+                        <Text style={[styles.optionsText, {color: option === 'services' ?  '#12dbc5' : '#181818'}]}>Serviços</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => optionSelect({ option: 'address' })}>
-                        <Text style={styles.optionsText}>Endereço</Text>
+                        <Text style={[styles.optionsText, {color: option === 'address' ?  '#12dbc5' : '#181818'}]}>Endereço</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => optionSelect({ option: 'more' })}>
-                        <Text style={styles.optionsText}>Sobre</Text>
+                        <Text style={[styles.optionsText, {color: option === 'more' ?  '#12dbc5' : '#181818'}]}>Sobre</Text>
                     </TouchableOpacity>
                 </View>
 
                 {loading && option == 'services' && <Services data={services} select={selectServicePress} selectService={selectService} />}
-                {option == 'address' && <Endereco />}
-                {option == 'more' && <Sobre />}
+                {option == 'address' && <Endereco data={data} />}
+                {option == 'more' && <Sobre data={data} />}
             </View>
 
             <View style={styles.bottomConfirm}>

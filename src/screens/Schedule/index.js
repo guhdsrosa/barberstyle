@@ -3,6 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } fr
 import CalendarModal from "./components/calendar";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
+import { SelectList } from 'react-native-dropdown-select-list'
+import Entypo from "react-native-vector-icons/Entypo";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import styles from "./styles";
@@ -13,8 +15,7 @@ const Schedule = ({ route }) => {
     const [selectBarber, setSelectBarber] = useState(null)
     const [barber, setBarber] = useState(null)
     const [loading, setLoading] = useState(false)
-
-    console.log('selectService:', selectService, 'IdUsuario:', IdUsuario, 'IdEstabelecimento:', IdEstabelecimento)
+    const [selected, setSelected] = useState('');
 
     const getBarber = async () => {
         try {
@@ -46,17 +47,41 @@ const Schedule = ({ route }) => {
         setSelectBarber(item)
     }
 
+    setCalendar = (date) => {
+        setSelected(date)
+    }
+
     useEffect(() => {
         if (IdEstabelecimento)
             getBarber()
     }, [IdEstabelecimento])
 
+
+
+
+
+
+    const data = [
+        { key: '1', value: '9:00 hrs' },
+        { key: '2', value: '10:00 hrs' },
+        { key: '3', value: '13:00 hrs', disabled: true },
+        { key: '4', value: '14:00 hrs', disabled: true },
+        { key: '5', value: '15:00 hrs' },
+        { key: '6', value: '16:00 hrs' },
+        { key: '7', value: '18:00 hrs' },
+        { key: '7', value: '19:00 hrs', disabled: true }
+    ]
+
+    useEffect(() => {
+        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
+    }, [selected])
+
     return (
-        <>
+        <ScrollView>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                 <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
             </TouchableOpacity>
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'center', marginVertical: 40 }}>
                 <Text style={styles.titleText}>Selecione o barbeiro de sua preferencia:</Text>
                 {loading ?
                     <View style={styles.container}>
@@ -65,7 +90,6 @@ const Schedule = ({ route }) => {
                                 <TouchableOpacity key={index} onPress={() => selectBarberPress(result)}>
                                     <View style={{ alignItems: 'center' }}>
                                         <Image
-                                            //source={{ uri: result.Foto }}
                                             source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                                             resizeMode="contain"
                                             style={styles.barberImage}
@@ -83,9 +107,34 @@ const Schedule = ({ route }) => {
                     />
                 }
 
-                {selectBarber && <CalendarModal />}
+                {selectBarber &&
+                    <>
+                        <CalendarModal
+                            setCalendar={setCalendar}
+                            date={selected}
+                        />
+
+                        <View style={{marginHorizontal: 10}}>
+                            <SelectList
+                                setSelected={(val) => console.log(val)}
+                                data={data}
+                                save="value"
+                                search={false}
+                                dropdownTextStyles={{color: '#181818'}}
+                                disabledTextStyles={{color: '#b3b3b3'}}
+                                placeholder="Selecione horário"
+                                fontFamily="Quicksand-Medium"
+                                boxStyles={{backgroundColor: '#141414'}}
+                                inputStyles={{color: '#fff'}}
+                                arrowicon={<Entypo name="chevron-small-down" color={'#fff'} size={20} />}
+                            />
+                        </View>
+                    </>
+                }
+
+
             </View>
-        </>
+        </ScrollView>
     )
 }
 
