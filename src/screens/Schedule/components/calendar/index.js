@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
-const CalendarModal = () => {
-    const [selected, setSelected] = useState('');
+const CalendarModal = (props) => {
     LocaleConfig.locales['br'] = {
         monthNames: [
             'Janeiro',
@@ -25,44 +24,23 @@ const CalendarModal = () => {
         today: "Hoje"
     };
 
-    const foto = [
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'
-    ]
-
     LocaleConfig.defaultLocale = 'br';
 
     return (
-        <View style={{ marginBottom: 30, marginHorizontal: 10 }}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                {foto.map((result, index) => (
-                    <TouchableOpacity>
-                        <Image
-                            source={{ uri: result }}
-                            key={index}
-                            style={{ width: 50, height: 50, borderRadius: 100, marginHorizontal: 10, marginVertical: 5 }}
-                        />
-                    </TouchableOpacity>
-                ))}
-            </View>
-
+        <View style={{ marginBottom: 10, marginHorizontal: 10 }}>
             <Calendar
                 onDayPress={day => {
-                    setSelected(day.dateString);
+                    props.setCalendar(day.dateString);
                 }}
                 markedDates={{
-                    [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+                    [props.date]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
                 }}
                 style={{
                     borderWidth: 1,
                     borderColor: '#000',
-                    height: 350,
+                    height: 320,
                     borderRadius: 20,
-                    marginTop: 15
+                    marginTop: 5
                 }}
                 theme={{
                     backgroundColor: '#181818',

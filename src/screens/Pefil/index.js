@@ -49,8 +49,6 @@ const Perfil = () => {
         }, 2000);
     };
 
-    const [foto, setFoto] = useState(false)
-
     const logout = () => {
         setShowAlert({
             ...showAlert,
@@ -169,9 +167,9 @@ const Perfil = () => {
             width: 400,
             height: 400,
             cropping: true,
-        }).then(images => {
+        }).then(image => {
             //console.log('IMAGEM: ', images);
-            setPhoto(images)
+            setPhoto(image.path)
             //updateUser()
         });
     }
@@ -179,9 +177,9 @@ const Perfil = () => {
     const createFormData = (photo) => {
         const data = new FormData();
 
-        data.append('photo', {
+        data.append('Foto', {
             name: 'user_profile.jpg',
-            type: photo.mime,
+            type: 'image/jpeg',
             uri: photo.path,
         });
         

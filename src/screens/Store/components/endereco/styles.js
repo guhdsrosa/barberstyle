@@ -5,6 +5,19 @@ const styles = StyleSheet.create({
         marginVertical: 20
     },
 
+    buttonAddress: { 
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: '#0000007f'
+    },
+
+    textAddress: { 
+        width: '45%',
+        height: 50,
+        alignSelf: 'center'
+    },
+
     twoOption: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -12,15 +25,16 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        color: '#141414',
-        paddingHorizontal: 5,
-        marginVertical: 5
+        color: '#181818',
+        fontSize: 18,
+        fontFamily: 'Quicksand-Regular',
     },
-
+    
     textInput: {
         borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
+        color: '#181818'
     }
 })
 

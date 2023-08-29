@@ -16,6 +16,7 @@ import Store from './screens/Store';
 import Explore from './screens/Explore';
 import Establishment from './screens/Establishment';
 import Statistics from './screens/Statistics';
+import Schedule from './screens/Schedule';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -44,13 +45,13 @@ const MyTabs = () => {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#fff"
-            inactiveColor="#4b4b4b"
+            activeColor="#14fef3"
+            inactiveColor="#03302e"
             shifting={true}
             sceneAnimationEnabled={true}
             labeled={false}
             barStyle={{
-                backgroundColor: '#191622',
+                backgroundColor: '#000000',
             }}
         >
             <Tab.Screen
@@ -141,6 +142,7 @@ function App() {
                 <Stack.Screen name="Store" component={Store} options={{ headerShown: false }} />
                 <Stack.Screen name="Explore" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Establishment" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="Schedule" component={Schedule} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

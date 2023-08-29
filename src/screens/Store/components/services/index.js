@@ -9,8 +9,12 @@ const Services = (props) => {
     const consumiveis = ['Cerveja', 'Coca-cola', 'Suco', 'Bolacha']
     const comodidades = ['Wifi', 'Cinuca', 'TV']
 
+    const selectService = (result) => {
+        props.select(result.IdTipoServico, result.NomeServico, result.Valor)
+    }
+
     useEffect(() => {
-        setServices(props.data.servico)
+        setServices(props.data.query)
     },[props.data])
 
     return (
@@ -20,11 +24,10 @@ const Services = (props) => {
             {services && services.map((result, index) =>
                 <View key={index} style={styles.optionsContainer}>
                     <Text style={styles.textOptions}>{result.NomeServico}</Text>
-
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.textOptions}>{`R$ ${result.Valor}`}</Text>
-                        <TouchableOpacity style={styles.plusButton} onPress={() => props.select(result.IdTipoServico, result.NomeServico)}>
-                            <Entypo style={styles.plusIcon} name="plus" size={20} color={'#fff'} />
+                        <TouchableOpacity style={styles.plusButton} onPress={() => selectService(result)}>
+                            <Entypo style={styles.plusIcon} name={props.selectService?.includes(`${result.IdTipoServico}`) ? "check" : "plus"} size={20} color={'#fff'} />
                         </TouchableOpacity>
                     </View>
                 </View>

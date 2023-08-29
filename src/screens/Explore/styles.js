@@ -70,13 +70,13 @@ export const styles = StyleSheet.create({
     },
 
     addressStore: {
-        position: 'absolute',
-        bottom: '10%'
+
     },
 
     establishmenAdress: {
         fontSize: 13,
         fontFamily: 'Quicksand-Light',
         color: '#131313',
+        width: '100%'
     }
 })
