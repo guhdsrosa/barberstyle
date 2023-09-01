@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -9,16 +9,21 @@ import { Searchbar } from "react-native-paper";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fotos from '../../assets/images/home/index'
+import { encode } from 'base-64';
 
 import callApi from '../../server/api'
 
 const Home = ({ route }) => {
 
+
     const navigation = useNavigation()
     const [user, setUser] = useState({});
     const [Senha, setSenha] = useState({});
+    const [fototeste, setFototeste] = useState({})
+    // const [foto, setFoto] = useState(false)
     const [foto, setFoto] = useState(false)
-    console.log(user?.Foto)
+    // console.log("Foto", user?.Foto)
+    const [imageUri, setImageUri] = useState('');
     const perfilPress = () => {
         navigation.navigate('Perfil')
     }
@@ -37,9 +42,18 @@ const Home = ({ route }) => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            //console.log(params)
+            const imageSource = {uri: params.Foto.replace(/\\/g, '/')};
+            
+
+            //console.log(params.Foto.data)
             setUser(params)
             setSenha(senha)
+            setFototeste(imageSource)
+
+           //console.log("Foto teste", fototeste)
+            
+
+
         } catch (e) {
             // error reading value
         }
@@ -57,7 +71,8 @@ const Home = ({ route }) => {
                         <TouchableOpacity onPress={perfilPress}>
                             <Image
                                 // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                                source={{uri: foto ? foto : user.Foto}}
+                                // source={{uri: foto ? foto : user.Foto}}
+                                source={fototeste}
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />
@@ -127,7 +142,7 @@ const Home = ({ route }) => {
                     </ScrollView>
                 </View>
 
-                <View style={[styles.body, {paddingBottom: 20}]}>
+                <View style={[styles.body, { paddingBottom: 20 }]}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Talvez você gostaria</Text>
                     </View>

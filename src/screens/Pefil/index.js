@@ -23,6 +23,7 @@ const Perfil = () => {
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
+    const [fototeste, setFototeste] = useState({})
     //const fs = require('fs')
     //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
@@ -71,9 +72,11 @@ const Perfil = () => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
+            const imageSource = {uri: user.Foto.replace(/\\/g, '/')}; 
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
+            setFototeste(imageSource)
         } catch (e) {
             // error reading value
         }
@@ -177,10 +180,14 @@ const Perfil = () => {
     const createFormData = (photo) => {
         const data = new FormData();
 
+        // const normalizedPath = photo.path.replace(/\\/g, '/');
+        // console.log(normalizedPath)
+
         data.append('Foto', {
             name: 'user_profile.jpg',
             type: 'image/jpeg',
-            uri: photo.path,
+            // uri: normalizedPath,
+            uri: photo.path
         });
         
         return data;
@@ -218,7 +225,9 @@ const Perfil = () => {
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
                         //source={{ uri: foto ? foto : user.Foto }}
-                        source={{ uri: photo?.path ? photo?.path : user.Foto }}
+                        // source={{ uri: photo?.path ? photo?.path : user.Foto }}
+                        source={fototeste ? fototeste : user.Foto}
+                        
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />

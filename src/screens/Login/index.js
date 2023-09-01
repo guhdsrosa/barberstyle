@@ -32,11 +32,13 @@ const Login = () => {
                 };
                 callApi(config)
                     .then(function (response) {
+                        console.log(response.status)
                         if (response.status == 200) {
                             console.log('[USER]', response.data)
                             
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
                             AsyncStorage.setItem('userSenha', JSON.stringify(response.data))
+                            AsyncStorage.setItem('userFoto', JSON.stringify(response.data.Foto))
                             navigation.navigate('Home')
                         }
                     })
@@ -57,8 +59,23 @@ const Login = () => {
         try {
             const value = await AsyncStorage.getItem('userInfo');
             const teste = await AsyncStorage.getItem('userSenha');
+            
             if (value !== null || teste !== null) {
-                navigation.navigate('Home')
+                                
+                // navigation.navigate('Home');
+                // const user = JSON.parse(value);
+                // // Decodifica a foto e converte para base64
+                // const photoArray = user.Foto.data;
+                // const photoBase64 = Buffer.from(photoArray).toString('base64');
+
+                // user.FotoBase64 = `data:image/jpeg;base64,${photoBase64}`;
+
+                // // Salva o usuário modificado de volta no armazenamento
+                // await AsyncStorage.setItem('userInfo', JSON.stringify(user));
+                // console.log('photoBase64 Login', photoBase64)
+
+                navigation.navigate('Home');
+                
             }
             setLoading(false)
         } catch (error) {
