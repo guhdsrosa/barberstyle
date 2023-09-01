@@ -4,14 +4,14 @@ import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import callApi from '../../server/api'
+import FastImage from "react-native-fast-image";
 
 import { Searchbar } from "react-native-paper";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fotos from '../../assets/images/home/index'
 import { encode } from 'base-64';
-
-import callApi from '../../server/api'
 
 const Home = ({ route }) => {
 
@@ -22,8 +22,8 @@ const Home = ({ route }) => {
     const [fototeste, setFototeste] = useState({})
     // const [foto, setFoto] = useState(false)
     const [foto, setFoto] = useState(false)
-    // console.log("Foto", user?.Foto)
-    const [imageUri, setImageUri] = useState('');
+    const [top5Establishment, setTop5Establishment] = useState([])
+
     const perfilPress = () => {
         navigation.navigate('Perfil')
     }
@@ -46,6 +46,7 @@ const Home = ({ route }) => {
             
 
             //console.log(params.Foto.data)
+
             setUser(params)
             setSenha(senha)
             setFototeste(imageSource)
@@ -55,12 +56,33 @@ const Home = ({ route }) => {
 
 
         } catch (e) {
-            // error reading value
+            console.log('[userGet error]', e)
+        }
+    }
+
+    const getRecomendedEstablishment = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: 'Estabelecimento/top5',
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        setTop5Establishment(response.data.query[0])
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                });
+        } catch (err) {
+            console.log('[error]', err)
         }
     }
 
     useEffect(() => {
         userGet()
+        getRecomendedEstablishment()
     }, [])
 
     return (
@@ -73,6 +95,7 @@ const Home = ({ route }) => {
                                 // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                                 // source={{uri: foto ? foto : user.Foto}}
                                 source={fototeste}
+
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />
@@ -114,29 +137,27 @@ const Home = ({ route }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView horizontal={true}>
-                        {lojas.map((result) =>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {top5Establishment.map((result, index) =>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Store', {
-                                    foto: `${result.foto}`,
-                                    name: `${result.name}`
-                                })}
+                                onPress={() => navigation.navigate('Store', { data: result })}
                                 style={styles.touchStore}
+                                key={index}
                             >
-                                <Image
-                                    source={{ uri: `${result.foto}` }}
+                                <FastImage
+                                    source={{ uri: `https://imagens-revista.vivadecora.com.br/uploads/2020/11/A-lumin%C3%A1ria-trilho-traz-uma-nova-perspectiva-par-aa-decora%C3%A7%C3%A3o-de-barbearia.-Fonte-Pinterest.jpg` }}
                                     style={styles.storeImage}
-                                    resizeMode='cover'
+                                    resizeMode="cover"
                                 />
 
                                 <View style={styles.textContent}>
-                                    <Text style={styles.textStore}>{result.name}</Text>
-                                    <Text style={styles.descriptionStore}>Alfenas-MG</Text>
+                                    <Text style={styles.textStore}>{result.NomeEstabelecimento}</Text>
+                                    <Text style={styles.descriptionStore}>{result.Cidade}</Text>
                                 </View>
-                                <View style={styles.starContent}>
+                                {/*<View style={styles.starContent}>
                                     <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
                                     <Text style={styles.descriptionStore}>5.5</Text>
-                                </View>
+                                </View>*/}
                             </TouchableOpacity>
                         )}
                     </ScrollView>
@@ -147,7 +168,7 @@ const Home = ({ route }) => {
                         <Text style={styles.titleText}>Talvez você gostaria</Text>
                     </View>
 
-                    <ScrollView horizontal={true}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         {lojas.map((result) =>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('Store', {
@@ -156,7 +177,7 @@ const Home = ({ route }) => {
                                 })}
                                 style={styles.touchStore}
                             >
-                                <Image
+                                <FastImage
                                     source={{ uri: `${result.foto}` }}
                                     style={styles.storeImage}
                                     resizeMode='cover'

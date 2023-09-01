@@ -44,13 +44,13 @@ const MyTabs = () => {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#fff"
-            inactiveColor="#4b4b4b"
+            activeColor="#14fef3"
+            inactiveColor="#03302e"
             shifting={true}
             sceneAnimationEnabled={true}
             labeled={false}
             barStyle={{
-                backgroundColor: '#191622',
+                backgroundColor: '#000000',
             }}
         >
             <Tab.Screen

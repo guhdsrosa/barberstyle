@@ -8,14 +8,13 @@ const Services = (props) => {
     const [services, setServices] = useState(null)
     const consumiveis = ['Cerveja', 'Coca-cola', 'Suco', 'Bolacha']
     const comodidades = ['Wifi', 'Cinuca', 'TV']
-    const teste = '1'
 
     const selectService = (result) => {
         props.select(result.IdTipoServico, result.NomeServico, result.Valor)
     }
 
     useEffect(() => {
-        setServices(props.data.servico)  
+        setServices(props.data.query)
     },[props.data])
 
     return (

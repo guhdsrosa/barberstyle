@@ -57,7 +57,7 @@ const Explore = () => {
     }, [])
 
     return (
-        <LinearGradient colors={['#ffffff', '#fafafa']} style={styles.container}>
+        <LinearGradient colors={['#fff', '#fff']} style={styles.container}>
             {loading &&
                 <View style={styles.loading}>
                     <FastImage
