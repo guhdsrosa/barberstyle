@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator, Alert } from "react-native";
 import CalendarModal from "./components/calendar";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
@@ -16,6 +16,9 @@ const Schedule = ({ route }) => {
     const [barber, setBarber] = useState(null)
     const [loading, setLoading] = useState(false)
     const [selected, setSelected] = useState('');
+    const [status, setStatus] = useState('');
+    const [tipoPagamento, setTipoPagamento] = useState('');
+    const [horario, setHorario] = useState('');
 
     const getBarber = async () => {
         try {
@@ -42,12 +45,49 @@ const Schedule = ({ route }) => {
         }
     }
 
+    const confirmReservation = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: '/Agenda/Create',
+                data: {
+                    IdCliente: IdUsuario,
+                    DataMarcada: selected,
+                    HorarioMarcado: data,
+                    IdServico: selectService,
+                    IdFuncionario: selectBarber,
+                    Status: status,
+                    TipoPagamento: tipoPagamento
+                    
+                }
+            };
+            console.log("Config", config)
+            callApi(config)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        console.log("Horário Reservado com Sucesso !")
+                    }
+                })
+                .catch(function (error) {
+                    console.log("Ocorreu um erro ao reservar seu horário: ", error)
+                })
+        } catch (err) {
+            console.log("Erro na requisição: ", err)
+        }
+    }
+
+    const buttonSalvar = () => {
+        confirmReservation();
+    }
+
     const selectBarberPress = (item) => {
-        console.log(item)
-        setSelectBarber(item)
+        console.log("Id Barbeiro", item.IdFuncionario)
+        setSelectBarber(item.IdFuncionario)       
+
     }
 
     setCalendar = (date) => {
+        console.log("Data", date)
         setSelected(date)
     }
 
@@ -55,11 +95,6 @@ const Schedule = ({ route }) => {
         if (IdEstabelecimento)
             getBarber()
     }, [IdEstabelecimento])
-
-
-
-
-
 
     const data = [
         { key: '1', value: '9:00 hrs' },
@@ -72,8 +107,10 @@ const Schedule = ({ route }) => {
         { key: '7', value: '19:00 hrs', disabled: true }
     ]
 
+
+
     useEffect(() => {
-        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
+        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected, 'barbeiro: ', selectBarber)
     }, [selected])
 
     return (
@@ -114,18 +151,18 @@ const Schedule = ({ route }) => {
                             date={selected}
                         />
 
-                        <View style={{marginHorizontal: 10}}>
+                        <View style={{ marginHorizontal: 10 }}>
                             <SelectList
-                                setSelected={(val) => console.log(val)}
+                                setSelected={(val) => console.log("Achei", val)}
                                 data={data}
                                 save="value"
                                 search={false}
-                                dropdownTextStyles={{color: '#181818'}}
-                                disabledTextStyles={{color: '#b3b3b3'}}
+                                dropdownTextStyles={{ color: '#181818' }}
+                                disabledTextStyles={{ color: '#b3b3b3' }}
                                 placeholder="Selecione horário"
                                 fontFamily="Quicksand-Medium"
-                                boxStyles={{backgroundColor: '#141414'}}
-                                inputStyles={{color: '#fff'}}
+                                boxStyles={{ backgroundColor: '#141414' }}
+                                inputStyles={{ color: '#fff' }}
                                 arrowicon={<Entypo name="chevron-small-down" color={'#fff'} size={20} />}
                             />
                         </View>
@@ -133,6 +170,11 @@ const Schedule = ({ route }) => {
                 }
 
 
+            </View>
+            <View style={styles.bottomConfirm}>
+                <TouchableOpacity style={styles.confirmButton} onPress={() => buttonSalvar()}>
+                    <Text style={styles.textButton}>Confirmar Horário</Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     )

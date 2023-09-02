@@ -41,7 +41,14 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 15,
         fontFamily: 'Quicksand-SemiBold',
-    }
+    },
+
+    bottomConfirm: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginBottom: 40,
+        alignItems: 'center',
+    },
 })
 
 export default styles

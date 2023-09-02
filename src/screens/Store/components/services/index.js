@@ -10,7 +10,7 @@ const Services = (props) => {
     const comodidades = ['Wifi', 'Cinuca', 'TV']
 
     const selectService = (result) => {
-        props.select(result.IdTipoServico, result.NomeServico, result.Valor)
+        props.select(result.IdTipoServico, result.NomeServico, result.Valor, result.IdServico)
     }
 
     useEffect(() => {
