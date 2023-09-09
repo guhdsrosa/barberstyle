@@ -14,7 +14,7 @@ const Horario = () => {
     return (
         <View style={styles.hourContainer}>
             <TouchableOpacity style={styles.weekTouch}>
-                <Text style={styles.weekText}>Terça-Feira</Text>
+                <Text style={styles.weekText}>Insira o horário de funcionamento</Text>
                 <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
                 <TextInput
                     placeholder="ex: 7:30"
@@ -262,25 +262,25 @@ const styles = StyleSheet.create({
     },
 
     hourContainer: {
-        marginHorizontal: 20,
+        //marginHorizontal: 20,
         marginVertical: 8
     },
 
     weekTouch: {
-        backgroundColor: '#F6F6F6',
+        //backgroundColor: '#F6F6F6',
         marginVertical: 10,
         marginHorizontal: 0,
         borderRadius: 20,
 
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3,
+        // },
+        // shadowOpacity: 0.27,
+        // shadowRadius: 4.65,
 
-        elevation: 6,
+        // elevation: 6,
     },
 
     weekText: {

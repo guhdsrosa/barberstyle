@@ -78,8 +78,8 @@ const Home = ({ route }) => {
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
                             <Image
-                                // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                                source={{ uri: foto ? foto : user.Foto }}
+                                source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                //source={{ uri: foto ? foto : user.Foto }}
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../server/api'
-
-import AwesomeAlert from 'react-native-awesome-alerts';
-import LinearGradient from "react-native-linear-gradient";
 
 //Screens
 import Geral from "./components/geral";
 import Horario from "./components/horario";
+import Profissionais from "./components/profissionais";
 
 import styles from "./styles";
 
 const Establishment = () => {
-    const [option, setOption] = useState('')
-    
+    const [option, setOption] = useState('Geral')
+    const [user, setUser] = useState('')
+    const [estab, setEstab] = useState(null)
+
     const [optionsSelect, setOptionsSelect] = useState([
         { name: 'Geral' },
         { name: 'Horarios' },
@@ -26,9 +25,52 @@ const Establishment = () => {
         { name: 'Comodidades' }
     ])
 
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            console.log(params)
+            setUser(params)
+        } catch (e) {
+            // error reading value
+        }
+    }
+
+    const GetEstablish = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Estabelecimento/returnDono',
+                data: {
+                    IdUsuario: user.IdUsuario
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setEstab(response.data.query[0])
+                    }
+                })
+                .catch(function (error) {
+                    Alert.alert('', 'Erro')
+                });
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
     const optionSelect = ({ opt }) => {
         setOption(opt)
     }
+
+    useEffect(() => {
+        if (user.IdUsuario)
+            GetEstablish()
+    }, [user])
+
+    useEffect(() => {
+        userGet()
+    }, [])
 
     return (
         <ScrollView style={styles.container}>
@@ -41,11 +83,15 @@ const Establishment = () => {
             </ScrollView>
 
             {option == 'Geral' &&
-                <Geral />
+                <Geral establishment={estab} />
             }
 
             {option == 'Horarios' &&
                 <Horario />
+            }
+
+            {option == 'Profissionais' &&
+                <Profissionais />
             }
 
 
