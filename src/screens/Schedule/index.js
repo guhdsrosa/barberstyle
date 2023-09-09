@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import { SelectList } from 'react-native-dropdown-select-list'
 import Entypo from "react-native-vector-icons/Entypo";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import styles from "./styles";
@@ -16,9 +17,11 @@ const Schedule = ({ route }) => {
     const [barber, setBarber] = useState(null)
     const [loading, setLoading] = useState(false)
     const [selected, setSelected] = useState('');
-    const [status, setStatus] = useState('');
-    const [tipoPagamento, setTipoPagamento] = useState('');
     const [horario, setHorario] = useState('');
+    const [showAlert, setShowAlert] = useState({
+        alert: false,
+        text: ''
+    });
 
     const getBarber = async () => {
         try {
@@ -32,7 +35,7 @@ const Schedule = ({ route }) => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
-                        console.log(response.data)
+                        //console.log(response.data)
                         setBarber(response.data.query)
                         setLoading(true)
                     }
@@ -46,6 +49,7 @@ const Schedule = ({ route }) => {
     }
 
     const confirmReservation = async () => {
+        //'idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected
         try {
             var config = {
                 method: 'post',
@@ -53,37 +57,45 @@ const Schedule = ({ route }) => {
                 data: {
                     IdCliente: IdUsuario,
                     DataMarcada: selected,
-                    HorarioMarcado: data,
+                    HoraMarcada: horario,
                     IdServico: selectService,
                     IdFuncionario: selectBarber,
-                    Status: status,
-                    TipoPagamento: tipoPagamento
-                    
+                    Status: "Ativo",
+                    TipoPagamento: "A vista",
+                    IdEstabelecimento: IdEstabelecimento
                 }
             };
+
+            // let data = JSON.stringify({
+            //     "IdCliente": 6,
+            //     "DataMarcada": "2023-09-03",
+            //     "HorarioMarcado": "10",
+            //     "IdServico": 1,
+            //     "IdFuncionario": 3,
+            //     "Status": "Ativo",
+            //     "TipoPagamento": "A vista",
+            //     "IdEstabelecimento": 1
+            //   });
             console.log("Config", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status === 200) {
-                        console.log("Horário Reservado com Sucesso !")
+                        setShowAlert({...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}`})
+
+                        //Alert.alert("Horário Reservado com Sucesso !", `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}`)
                     }
                 })
                 .catch(function (error) {
-                    console.log("Ocorreu um erro ao reservar seu horário: ", error)
+                    Alert.alert("Ocorreu um erro ao reservar seu horário: ", error)
                 })
         } catch (err) {
             console.log("Erro na requisição: ", err)
         }
     }
 
-    const buttonSalvar = () => {
-        confirmReservation();
-    }
-
     const selectBarberPress = (item) => {
-        console.log("Id Barbeiro", item.IdFuncionario)
-        setSelectBarber(item.IdFuncionario)       
-
+        //console.log(item.IdFuncionario)
+        setSelectBarber(item.IdFuncionario)
     }
 
     setCalendar = (date) => {
@@ -107,11 +119,9 @@ const Schedule = ({ route }) => {
         { key: '7', value: '19:00 hrs', disabled: true }
     ]
 
-
-
-    useEffect(() => {
-        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected, 'barbeiro: ', selectBarber)
-    }, [selected])
+    // useEffect(() => {
+    //     console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
+    // }, [selected])
 
     return (
         <ScrollView>
@@ -153,7 +163,7 @@ const Schedule = ({ route }) => {
 
                         <View style={{ marginHorizontal: 10 }}>
                             <SelectList
-                                setSelected={(val) => console.log("Achei", val)}
+                                setSelected={(val) => setHorario(val)}
                                 data={data}
                                 save="value"
                                 search={false}
@@ -169,13 +179,25 @@ const Schedule = ({ route }) => {
                     </>
                 }
 
-
-            </View>
-            <View style={styles.bottomConfirm}>
-                <TouchableOpacity style={styles.confirmButton} onPress={() => buttonSalvar()}>
-                    <Text style={styles.textButton}>Confirmar Horário</Text>
+                <TouchableOpacity onPress={() => confirmReservation()}>
+                    <Text>teste</Text>
                 </TouchableOpacity>
             </View>
+
+            <AwesomeAlert
+                show={showAlert.alert}
+                showProgress={false}
+                title={`Horário Reservado com Sucesso !`}
+                message={showAlert.text}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                confirmText={`Ok ;)`}
+                confirmButtonColor="#52cb5f"
+                onConfirmPressed={() =>
+                    navigation.navigate("Home")
+                }
+            />
         </ScrollView>
     )
 }

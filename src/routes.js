@@ -15,6 +15,7 @@ import Perfil from './screens/Pefil';
 import Store from './screens/Store';
 import Explore from './screens/Explore';
 import Establishment from './screens/Establishment';
+import Statistics from './screens/Statistics';
 import Schedule from './screens/Schedule';
 
 const Stack = createNativeStackNavigator();
@@ -43,7 +44,7 @@ const MyTabs = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Home"
+            initialRouteName="home"
             activeColor="#14fef3"
             inactiveColor="#03302e"
             shifting={true}
@@ -54,7 +55,7 @@ const MyTabs = () => {
             }}
         >
             <Tab.Screen
-                name="Home"
+                name="home"
                 component={Home}
                 options={{
                     tabBarLabel: 'Início',
@@ -87,7 +88,7 @@ const MyTabs = () => {
             {user.TipoUsuario == 'Dono' &&
                 <Tab.Screen
                     name="Relatório"
-                    component={Establishment}
+                    component={Statistics}
                     options={{
                         tabBarLabel: 'Relatório',
                         tabBarIcon: ({ color }) => <Entypo name="bar-graph" color={color} size={30} />,
@@ -99,7 +100,7 @@ const MyTabs = () => {
             {user.TipoUsuario == 'Funcionario' &&
                 <Tab.Screen
                     name="Relatório"
-                    component={Establishment}
+                    component={Statistics}
                     options={{
                         tabBarLabel: 'Relatório',
                         tabBarIcon: ({ color }) => <Entypo name="bar-graph" color={color} size={30} />,

@@ -20,7 +20,7 @@ const CalendarModal = (props) => {
         ],
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set.', 'Out', 'Nov', 'Dez'],
         dayNames: ['Domingo', 'Sábado', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
-        dayNamesShort: ['Dom', 'Sab', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
         today: "Hoje"
     };
 
