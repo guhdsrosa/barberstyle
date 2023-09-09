@@ -73,7 +73,7 @@ const Home = ({ route }) => {
 
     return (
         <LinearGradient colors={['#191919', '#000']} style={styles.container}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>

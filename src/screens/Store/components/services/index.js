@@ -10,6 +10,7 @@ const Services = (props) => {
     const comodidades = ['Wifi', 'Cinuca', 'TV']
 
     const selectService = (result) => {
+        console.log(result)
         props.select(result.IdTipoServico, result.NomeServico, result.Valor)
     }
 

@@ -5,7 +5,7 @@ import styles from "./styles";
 
 const Geral = () => {
     return (
-        <ScrollView>
+        <View>
             <TextInput
                 style={styles.inputText}
                 placeholder={'Nome do Estabelecimento*'}
@@ -46,7 +46,7 @@ const Geral = () => {
                 style={styles.inputText}
                 placeholder={'Sobre nós'}
             />
-        </ScrollView>
+        </View>
     )
 }
 

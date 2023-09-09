@@ -43,7 +43,7 @@ const MyTabs = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Home"
+            initialRouteName="home"
             activeColor="#14fef3"
             inactiveColor="#03302e"
             shifting={true}
@@ -54,7 +54,7 @@ const MyTabs = () => {
             }}
         >
             <Tab.Screen
-                name="Home"
+                name="home"
                 component={Home}
                 options={{
                     tabBarLabel: 'Início',
