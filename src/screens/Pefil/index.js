@@ -225,9 +225,8 @@ const Perfil = () => {
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
                         //source={{ uri: foto ? foto : user.Foto }}
-                        // source={{ uri: photo?.path ? photo?.path : user.Foto }}
-                        source={fototeste ? fototeste : user.Foto}
-                        
+                        //source={{ uri: photo?.path ? photo?.path : user.Foto }}
+                        source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />
@@ -258,8 +257,8 @@ const Perfil = () => {
                     <TextInput
                         style={styles.inputText}
                         placeholder={'Senha'}
-                        value={Senha.Senha}
-                        onChangeText={text => setSenha({ ...user, Senha: text })}
+                        value={Senha}
+                        onChangeText={setSenha}
                         secureTextEntry={true}
                     />
                     <TextInput
