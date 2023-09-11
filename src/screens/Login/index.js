@@ -36,7 +36,7 @@ const Login = () => {
                             console.log('[USER]', response.data)
                             
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
-                            AsyncStorage.setItem('userSenha', JSON.stringify(response.data))
+                            AsyncStorage.setItem('userSenha', JSON.stringify(login.Senha))
                             navigation.navigate('Home')
                         }
                     })
