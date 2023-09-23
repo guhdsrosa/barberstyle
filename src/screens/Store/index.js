@@ -97,7 +97,8 @@ const Store = ({ route }) => {
                 </TouchableOpacity>
 
                 {data && <Image
-                    source={{ uri: data?.FotoEstabelecimento }}
+                    source={{ uri: 'https://img.freepik.com/fotos-premium/espaco-masculino-interior-de-barbearia-moderna-gerado-por-ia_866663-5580.jpg' }}
+                    //source={{ uri: data?.FotoEstabelecimento }}
                     style={styles.storePhoto}
                     resizeMode='cover'
                     blurRadius={0}

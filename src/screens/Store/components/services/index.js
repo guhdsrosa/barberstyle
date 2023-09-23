@@ -28,7 +28,7 @@ const Services = (props) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.textOptions}>{`R$ ${result.Valor}`}</Text>
                         <TouchableOpacity style={styles.plusButton} onPress={() => selectService(result)}>
-                            <Entypo style={styles.plusIcon} name={props.selectService?.includes(`${result.IdTipoServico}`) ? "check" : "plus"} size={20} color={'#fff'} />
+                            <Entypo style={styles.plusIcon} name={props.selectService?.includes(`${result.IdTipoServico}`) ? "check" : "plus"} size={20} color={'#181818'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -37,7 +37,7 @@ const Services = (props) => {
             <Text style={styles.title}>Consumivéis</Text>
 
             {consumiveis.map((result, index) =>
-                <View key={index} style={styles.optionsContainer}>
+                <View key={index} style={[styles.optionsContainer, {paddingVertical:10}]}>
                     <Text style={styles.textOptions}>{result}</Text>
 
                     <View style={{ alignItems: 'center', }}>
@@ -49,7 +49,7 @@ const Services = (props) => {
             <Text style={styles.title}>Comodidades</Text>
 
             {comodidades.map((result, index) =>
-                <View key={index} style={styles.optionsContainer}>
+                <View key={index} style={[styles.optionsContainer, {paddingVertical:10}]}>
                     <Text style={styles.textOptions}>{result}</Text>
 
                     <View style={{ alignItems: 'center' }}>

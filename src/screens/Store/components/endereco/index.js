@@ -33,7 +33,7 @@ const Endereco = (props) => {
             </View>
 
             <TouchableOpacity
-                onPress={() => openGoogleMaps(`${props.data.Rua}, ${props.data.NumeroEstabelecimento}, ${props.data.Cidade} ${props.data.Estado}, ${props.data.Bairro}`)}
+                onPress={() => openGoogleMaps(`${props.data.Rua}, ${props.data.NumeroEstabelecimento} - ${props.data.Bairro}, ${props.data.Cidade} - ${props.data.Estado} `)}
                 style={styles.buttonAddress}
             >
                 <Image
