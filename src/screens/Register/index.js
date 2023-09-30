@@ -5,30 +5,18 @@ import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePicker from 'react-native-image-crop-picker';
-//import ImagePicker from 'react-native-image-picker';
 
 import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Perfil from "../Pefil";
-
 
 const Register = ({ route }) => {
 
     const navigation = useNavigation()
     const [screen, setScreen] = useState(0);
-    const [checked, setChecked] = useState(false);
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
-    const [idEstabFunc, setIdEstabFunc] = useState(null)
-    const [file, setFoto] = useState()
-    const [uri, setUri] = useState()
-    const [location, setLocation] = useState('')
-    const [key, setKey] = useState('')
-    const [photo, setPhoto] = React.useState(null);
     const [avatar, setAvatar] = useState('');
-    const [originalname, setoriginalName] = useState('')
-    const data = new FormData();
 
     const [user, setUser] = useState({
         Nome: '',
@@ -36,7 +24,6 @@ const Register = ({ route }) => {
         Senha: '',
         ConfirmSenha: '',
         TipoUsuario: '',
-        File: '',
         Telefone: ''
     })
     const [establishment, setEstablishment] = useState({
@@ -138,10 +125,6 @@ const Register = ({ route }) => {
 
     const insertUser = async () => {
         try {
-
-            // const formData = createFormData(photo);
-            // console.log("FormData", formData); // Verifique se os dados da imagem estão corretos aqui
-
             var config = {
                 method: 'post',
                 url: 'Usuario/Register',
@@ -151,7 +134,7 @@ const Register = ({ route }) => {
                     Senha: user.Senha,
                     confirmpassword: user.Senha,
                     TipoUsuario: option,
-                    File: file,
+                    File: avatar.path,
                     Telefone: user.Telefone,
                     NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
@@ -167,7 +150,6 @@ const Register = ({ route }) => {
                     RedeSocial: establishment.RedeSocial
                 }
             };
-            console.log("Config: ", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
@@ -229,47 +211,17 @@ const Register = ({ route }) => {
         }
     }
 
-    const imagePickerCallback = () =>  {
+    const imagePickerCallback = () => {
         ImagePicker.openPicker({
             width: 400,
             height: 400,
             cropping: true
         }).then(image => {
-            //const data = new FormData();
-            const pathParts = image.path.split('/');
-            const filename = pathParts.pop();
+            console.log(image)
+            setAvatar(image)
+        })
 
-            data.append('File', {
-                originalname: filename,
-                type: image.mime,
-                uri: image.path
-            })
-
-            setUri(image.path)
-            setoriginalName(filename)
-            
-            console.log("Image: ", image)
-            console.log("Data: ", data)
-
-            console.log("Data    f:", JSON.stringify(Object.fromEntries(data._parts)));
-            setFoto(data)
-        })      
-        
     }
-
-    function createFormData () {
-        const data = new FormData();
-
-        data.append('avatar', {
-            filename: avatar.fileName,
-            uri: avatar.uri,
-            type: avatar.type,
-            
-        });
-        console.log("Data", data)
-        return data;
-        
-    };
 
     const resetAlert = ({ option }) => {
         if (option == 'perfil') {
@@ -382,31 +334,24 @@ const Register = ({ route }) => {
                             secureTextEntry={true}
                         />
 
-                        {/* <TextInput
-                            style={styles.inputText}
-                            placeholder={'Foto'}
-                            value={user.Foto}
-                            placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setUser({ ...user, Foto: text })}
-                        /> */}
-
-                        {/* <TouchableOpacity style={styles.inputText} onPress={() => imagePickerPress()}>
-                            <Image
-
-                                source={{ uri: foto ? foto : user.Foto }}
-                                style={styles.userLogo}
-                                resizeMode={'contain'}
-                                onPre
-                            />
-                        </TouchableOpacity> */}
+                        <Text style={[styles.menuTitle, { fontSize: 18, textAlign: 'center', marginTop: 20 }]}>Carregar foto</Text>
 
                         <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerCallback()}>
-                            <Image
-                                //source={{ uri: foto ? foto : user.Foto }}
-                                source={{ uri: uri ? uri : user.Foto }}
-                                style={styles.userLogo}
-                                resizeMode={'contain'}
-                            />
+                            {avatar ?
+                                <Image
+                                    //source={{ uri: foto ? foto : user.Foto }}
+                                    source={{ uri: avatar.path }}
+                                    style={styles.userLogo}
+                                    resizeMode={'contain'}
+                                />
+                                :
+                                <Ionicons
+                                    name="share-outline"
+                                    size={35}
+                                    color={'#141414'}
+                                    style={{ marginVertical: 60 }}
+                                />
+                            }
                         </TouchableOpacity>
 
                         {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}

@@ -87,8 +87,6 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
     },
     containerUserLogo: {
-        zIndex: 1000, 
-        position: 'absolute', 
         alignSelf: 'center', 
     },
 
@@ -99,7 +97,7 @@ export const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#ffffff90',
         borderRadius: 100,
-        marginTop: 68,
+        marginTop: 5,
         zIndex: 1000,
     },
 })
