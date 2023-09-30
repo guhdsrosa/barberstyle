@@ -5,11 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePicker from 'react-native-image-crop-picker';
+//import ImagePicker from 'react-native-image-picker';
 
 import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Perfil from "../Pefil";
+
 
 const Register = ({ route }) => {
 
@@ -19,15 +21,22 @@ const Register = ({ route }) => {
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
     const [idEstabFunc, setIdEstabFunc] = useState(null)
-    const [foto, setFoto] = useState(false)
+    const [file, setFoto] = useState()
+    const [uri, setUri] = useState()
+    const [location, setLocation] = useState('')
+    const [key, setKey] = useState('')
     const [photo, setPhoto] = React.useState(null);
+    const [avatar, setAvatar] = useState('');
+    const [originalname, setoriginalName] = useState('')
+    const data = new FormData();
+
     const [user, setUser] = useState({
         Nome: '',
         Email: '',
         Senha: '',
         ConfirmSenha: '',
         TipoUsuario: '',
-        Foto: '',
+        File: '',
         Telefone: ''
     })
     const [establishment, setEstablishment] = useState({
@@ -130,8 +139,8 @@ const Register = ({ route }) => {
     const insertUser = async () => {
         try {
 
-            const formData = createFormData(photo);
-            console.log("FormData", formData); // Verifique se os dados da imagem estão corretos aqui
+            // const formData = createFormData(photo);
+            // console.log("FormData", formData); // Verifique se os dados da imagem estão corretos aqui
 
             var config = {
                 method: 'post',
@@ -142,10 +151,7 @@ const Register = ({ route }) => {
                     Senha: user.Senha,
                     confirmpassword: user.Senha,
                     TipoUsuario: option,
-                    //Foto: user.Foto,
-                    // Foto: foto ? foto : user.Foto,
-                    // Foto: createFormData(photo),
-                    Foto: formData,
+                    File: file,
                     Telefone: user.Telefone,
                     NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
@@ -161,6 +167,7 @@ const Register = ({ route }) => {
                     RedeSocial: establishment.RedeSocial
                 }
             };
+            console.log("Config: ", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
@@ -222,50 +229,46 @@ const Register = ({ route }) => {
         }
     }
 
-    const imagePickerPress = () => {
+    const imagePickerCallback = () =>  {
         ImagePicker.openPicker({
-            //multiple: true
             width: 400,
             height: 400,
-            cropping: true,
+            cropping: true
         }).then(image => {
-            //console.log('IMAGEM: ', images);
-            setPhoto(image.path)
-            console.log("Ftooooooooo",photo)
-            //updateUser()
-        });
+            //const data = new FormData();
+            const pathParts = image.path.split('/');
+            const filename = pathParts.pop();
+
+            data.append('File', {
+                originalname: filename,
+                type: image.mime,
+                uri: image.path
+            })
+
+            setUri(image.path)
+            setoriginalName(filename)
+            
+            console.log("Image: ", image)
+            console.log("Data: ", data)
+
+            console.log("Data    f:", JSON.stringify(Object.fromEntries(data._parts)));
+            setFoto(data)
+        })      
+        
     }
 
-    // const createFormData = (photo) => {
-    //     const data = new FormData();
-
-    //     // const normalizedPath = photo.path.replace(/\\/g, '/');
-    //     // console.log(normalizedPath)
-
-    //     data.append('Foto', {
-    //         name: 'user_profile.jpg',
-    //         type: 'image/jpeg',
-    //         // uri: normalizedPath,
-    //         uri: photo.path
-    //     });
-    //     console.log("Data", data)
-    //     return data;
-        
-    // };
-
-    const createFormData = (photoUri) => {
+    function createFormData () {
         const data = new FormData();
-        
-        const uriParts = photoUri.split('.');
-        const fileType = uriParts[uriParts.length - 1];
-    
-        data.append('Foto', {
-            uri: photoUri,
-            name: `user_profile.${fileType}`,
-            type: `image/${fileType}`,
+
+        data.append('avatar', {
+            filename: avatar.fileName,
+            uri: avatar.uri,
+            type: avatar.type,
+            
         });
         console.log("Data", data)
         return data;
+        
     };
 
     const resetAlert = ({ option }) => {
@@ -397,10 +400,10 @@ const Register = ({ route }) => {
                             />
                         </TouchableOpacity> */}
 
-                        <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
+                        <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerCallback()}>
                             <Image
                                 //source={{ uri: foto ? foto : user.Foto }}
-                                source={{ uri: photo?.path ? photo?.path : user.Foto }}
+                                source={{ uri: uri ? uri : user.Foto }}
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />

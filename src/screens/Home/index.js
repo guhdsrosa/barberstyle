@@ -25,6 +25,7 @@ const Home = ({ route }) => {
     const [top5Establishment, setTop5Establishment] = useState([])
 
     const perfilPress = () => {
+        console.log("Antes de ir para o perfil: ", user)
         navigation.navigate('Perfil')
     }
 
@@ -42,16 +43,17 @@ const Home = ({ route }) => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            const imageSource = {uri: params.Foto.replace(/\\/g, '/')};
+            // const imageSource = {uri: params.Foto.replace(/\\/g, '/')};
+            const imageSource = {uri: params.Foto};
             
 
             //console.log(params.Foto.data)
 
             setUser(params)
             setSenha(senha)
-            setFototeste(imageSource)
+            setFototeste(imageSource.uri)
 
-           //console.log("Foto teste", fototeste)
+            console.log("Foto testesss", user.Foto)
             
 
 
@@ -92,8 +94,8 @@ const Home = ({ route }) => {
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
                             <Image
-                                source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                                //source={{ uri: foto ? foto : user.Foto }}
+                                // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                source={{ uri: foto ? foto : user.Foto }}
                                 style={styles.userLogo}
                                 resizeMode={'contain'}
                             />

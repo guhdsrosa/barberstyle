@@ -13,7 +13,6 @@ import LinearGradient from "react-native-linear-gradient";
 import styles from "./style";
 
 const Perfil = () => {
-
     const navigation = useNavigation()
 
     const [typeUser, setTypeUser] = useState('estabelecimento')
@@ -23,7 +22,8 @@ const Perfil = () => {
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
-    const [fototeste, setFototeste] = useState({})
+    const [File, setFile] = useState({})
+    const [foto, setFoto] = useState(false)
     //const fs = require('fs')
     //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
@@ -72,11 +72,11 @@ const Perfil = () => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            const imageSource = {uri: user.Foto.replace(/\\/g, '/')}; 
+            
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
-            setFototeste(imageSource)
+            console.log("User Perfil: ", user)
         } catch (e) {
             // error reading value
         }
@@ -92,8 +92,8 @@ const Perfil = () => {
                     Nome: user.Nome,
                     Email: user.Email,
                     Senha: Senha.Senha,
-                    //Foto: user.Foto,
-                    Foto: createFormData(photo),
+                    File: user.File,
+                    //Foto: createFormData(photo),
                     Telefone: user.Telefone
                 }
             };
@@ -172,7 +172,7 @@ const Perfil = () => {
             cropping: true,
         }).then(image => {
             //console.log('IMAGEM: ', images);
-            setPhoto(image.path)
+            setFile(image.path)
             //updateUser()
         });
     }
@@ -195,6 +195,7 @@ const Perfil = () => {
 
     useEffect(() => {
         userGet()
+
     }, [])
 
     useEffect(() => {
@@ -226,7 +227,8 @@ const Perfil = () => {
                     <Image
                         //source={{ uri: foto ? foto : user.Foto }}
                         //source={{ uri: photo?.path ? photo?.path : user.Foto }}
-                        source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                        // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                        source={{ uri: foto ? foto : user.Foto }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />
