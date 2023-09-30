@@ -5,11 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePicker from 'react-native-image-crop-picker';
+//import ImagePicker from 'react-native-image-picker';
 
 import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Perfil from "../Pefil";
+
 
 const Register = ({ route }) => {
 
@@ -19,14 +21,22 @@ const Register = ({ route }) => {
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
     const [idEstabFunc, setIdEstabFunc] = useState(null)
-    const [foto, setFoto] = useState(false)
+    const [file, setFoto] = useState()
+    const [uri, setUri] = useState()
+    const [location, setLocation] = useState('')
+    const [key, setKey] = useState('')
+    const [photo, setPhoto] = React.useState(null);
+    const [avatar, setAvatar] = useState('');
+    const [originalname, setoriginalName] = useState('')
+    const data = new FormData();
+
     const [user, setUser] = useState({
         Nome: '',
         Email: '',
         Senha: '',
         ConfirmSenha: '',
         TipoUsuario: '',
-        Foto: '',
+        File: '',
         Telefone: ''
     })
     const [establishment, setEstablishment] = useState({
@@ -128,6 +138,10 @@ const Register = ({ route }) => {
 
     const insertUser = async () => {
         try {
+
+            // const formData = createFormData(photo);
+            // console.log("FormData", formData); // Verifique se os dados da imagem estão corretos aqui
+
             var config = {
                 method: 'post',
                 url: 'Usuario/Register',
@@ -137,8 +151,7 @@ const Register = ({ route }) => {
                     Senha: user.Senha,
                     confirmpassword: user.Senha,
                     TipoUsuario: option,
-                    //Foto: user.Foto,
-                    Foto: foto ? foto : user.Foto,
+                    File: file,
                     Telefone: user.Telefone,
                     NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
@@ -154,6 +167,7 @@ const Register = ({ route }) => {
                     RedeSocial: establishment.RedeSocial
                 }
             };
+            console.log("Config: ", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
@@ -215,99 +229,47 @@ const Register = ({ route }) => {
         }
     }
 
-    // const insertEstablishment = async () => {
-    //     try {
-    //         var config = {
-    //             method: 'post',
-    //             url: 'Estabelecimento/Register',
-    //             data: {
-    //                 NomeEstabelecimento: establishment.NomeEstab,
-    //                 CEP: establishment.CEP,
-    //                 Rua: establishment.Rua,
-    //                 Bairro: establishment.Bairro,
-    //                 Estado: establishment.Estado,
-    //                 Cidade: establishment.Cidade,
-    //                 NumeroEstabelecimento: establishment.Numero,
-    //                 CNPJ: establishment.CNPJ,
-    //                 Telefone1: establishment.TelefoneEstab,
-    //                 Telefone2: establishment.TelefoneEstab1,
-    //                 SobreNos: establishment.Sobre,
-    //                 RedeSocial: establishment.RedeSocial
-    //             }
-    //         };
-    //         callApi(config)
-    //             .then(function (response) {
-    //                 console.log('[RES] ', response.data)
-    //                 // setIdEstabFunc(null)
-    //                 // insertEstablishmentFunc()
-    //             })
-    //             .catch(function (error) {
-    //                 setShowAlert({
-    //                     ...showAlert,
-    //                     show: true,
-    //                     title: 'Erro',
-    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-    //                     errorButtom: '',
-    //                     successButtom: '',
-    //                     showCancelButton: true,
-    //                     showConfirmButton: false,
-    //                     cancelText: 'Ok',
-    //                     confirmText: '',
-    //                     option: false
-    //                 })
-    //             });
-    //     } catch (err) {
-    //         console.log('[ERRORs]', err)
-    //     }
-    // }
+    const imagePickerCallback = () =>  {
+        ImagePicker.openPicker({
+            width: 400,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            //const data = new FormData();
+            const pathParts = image.path.split('/');
+            const filename = pathParts.pop();
 
-    // insertEstablishmentFunc = async () => {
-    //     try {
-    //         var config = {
-    //             method: 'post',
-    //             url: '/EstabFunc/Create',
-    //             data: {
-    //                 IdEstabelecimento: idEstabFunc
-    //             }
-    //         };
-    //         callApi(config)
-    //             .then(function (response) {
-    //                 if (response.status == 200) {
-    //                     return setShowAlert({
-    //                         ...showAlert,
-    //                         show: true,
-    //                         title: 'Oba!',
-    //                         message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
-    //                         errorButtom: 'perfil',
-    //                         successButtom: 'explorar',
-    //                         showCancelButton: true,
-    //                         showConfirmButton: true,
-    //                         cancelText: 'Ir para perfil',
-    //                         confirmText: 'Explorar',
-    //                         option: false,
-    //                         color: true
-    //                     })
-    //                 }
-    //             })
-    //             .catch(function (error) {
-    //                 setShowAlert({
-    //                     ...showAlert,
-    //                     show: true,
-    //                     title: 'Erro',
-    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-    //                     errorButtom: '',
-    //                     successButtom: '',
-    //                     showCancelButton: true,
-    //                     showConfirmButton: false,
-    //                     cancelText: 'Ok',
-    //                     confirmText: '',
-    //                     option: false
-    //                 })
-    //             });
-    //     } catch (err) {
-    //         console.log('[ERRORs]', err)
-    //     }
-    // }
+            data.append('File', {
+                originalname: filename,
+                type: image.mime,
+                uri: image.path
+            })
+
+            setUri(image.path)
+            setoriginalName(filename)
+            
+            console.log("Image: ", image)
+            console.log("Data: ", data)
+
+            console.log("Data    f:", JSON.stringify(Object.fromEntries(data._parts)));
+            setFoto(data)
+        })      
+        
+    }
+
+    function createFormData () {
+        const data = new FormData();
+
+        data.append('avatar', {
+            filename: avatar.fileName,
+            uri: avatar.uri,
+            type: avatar.type,
+            
+        });
+        console.log("Data", data)
+        return data;
+        
+    };
 
     const resetAlert = ({ option }) => {
         if (option == 'perfil') {
@@ -360,18 +322,6 @@ const Register = ({ route }) => {
         navigation.goBack()
     }
 
-    const imagePickerPress = () => {
-        ImagePicker.openPicker({
-            //multiple: true
-            width: 400,
-            height: 400,
-            cropping: true,
-        }).then(images => {
-            //console.log('IMAGEM: ', images);
-            setFoto(images.path)
-            //updateUser()
-        });
-    }
 
     return (
         <ScrollView style={styles.container}>
@@ -440,15 +390,24 @@ const Register = ({ route }) => {
                             onChangeText={text => setUser({ ...user, Foto: text })}
                         /> */}
 
-                    <TouchableOpacity style={styles.inputText} onPress={() => imagePickerPress()}>
-                    <Image
-                        
-                        source={{uri: foto ? foto : user.Foto}}
-                        style={styles.userLogo}
-                        resizeMode={'contain'}
-                        onPre
-                    />
-                    </TouchableOpacity>
+                        {/* <TouchableOpacity style={styles.inputText} onPress={() => imagePickerPress()}>
+                            <Image
+
+                                source={{ uri: foto ? foto : user.Foto }}
+                                style={styles.userLogo}
+                                resizeMode={'contain'}
+                                onPre
+                            />
+                        </TouchableOpacity> */}
+
+                        <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerCallback()}>
+                            <Image
+                                //source={{ uri: foto ? foto : user.Foto }}
+                                source={{ uri: uri ? uri : user.Foto }}
+                                style={styles.userLogo}
+                                resizeMode={'contain'}
+                            />
+                        </TouchableOpacity>
 
                         {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}
                     </>

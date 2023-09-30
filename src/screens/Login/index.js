@@ -32,11 +32,13 @@ const Login = () => {
                 };
                 callApi(config)
                     .then(function (response) {
+                        console.log(response.status)
                         if (response.status == 200) {
                             console.log('[USER]', response.data)
                             
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
-                            AsyncStorage.setItem('userSenha', JSON.stringify(login.Senha))
+                            AsyncStorage.setItem('userSenha', JSON.stringify(response.data.Senha))
+                            //AsyncStorage.setItem('userFoto', JSON.stringify(response.data.Foto))
                             navigation.navigate('Home')
                         }
                     })
@@ -57,8 +59,12 @@ const Login = () => {
         try {
             const value = await AsyncStorage.getItem('userInfo');
             const teste = await AsyncStorage.getItem('userSenha');
+            
             if (value !== null || teste !== null) {
-                navigation.navigate('Home')
+                                
+                console.log("uSUARIO LOGIN: ", value)
+                navigation.navigate('Home');
+                
             }
             setLoading(false)
         } catch (error) {

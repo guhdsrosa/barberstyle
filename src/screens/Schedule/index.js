@@ -99,6 +99,7 @@ const Schedule = ({ route }) => {
     }
 
     setCalendar = (date) => {
+        console.log("Data", date)
         setSelected(date)
     }
 

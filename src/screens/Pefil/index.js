@@ -13,7 +13,6 @@ import LinearGradient from "react-native-linear-gradient";
 import styles from "./style";
 
 const Perfil = () => {
-
     const navigation = useNavigation()
 
     const [typeUser, setTypeUser] = useState('estabelecimento')
@@ -23,7 +22,10 @@ const Perfil = () => {
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
-    
+    const [File, setFile] = useState({})
+    const [foto, setFoto] = useState(false)
+    //const fs = require('fs')
+    //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
         show: false,
         title: '',
@@ -70,9 +72,11 @@ const Perfil = () => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
+            
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
+            console.log("User Perfil: ", user)
         } catch (e) {
             // error reading value
         }
@@ -176,10 +180,14 @@ const Perfil = () => {
     const createFormData = (photo) => {
         const data = new FormData();
 
+        // const normalizedPath = photo.path.replace(/\\/g, '/');
+        // console.log(normalizedPath)
+
         data.append('Foto', {
             name: 'user_profile.jpg',
             type: 'image/jpeg',
-            uri: photo.path,
+            // uri: normalizedPath,
+            uri: photo.path
         });
         
         return data;
@@ -187,6 +195,7 @@ const Perfil = () => {
 
     useEffect(() => {
         userGet()
+
     }, [])
 
     useEffect(() => {
