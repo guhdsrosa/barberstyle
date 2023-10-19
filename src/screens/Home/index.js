@@ -43,25 +43,16 @@ const Home = ({ route }) => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            // const imageSource = {uri: params.Foto.replace(/\\/g, '/')};
             const imageSource = {uri: params.Foto};
-            
-
-            //console.log(params.Foto.data)
 
             setUser(params)
             setSenha(senha)
             setFototeste(imageSource.uri)
-
-            console.log("Foto testesss", user.Foto)
-            
-
-
         } catch (e) {
             console.log('[userGet error]', e)
         }
     }
-
+console.log(user)
     const getRecomendedEstablishment = async () => {
         try {
             var config = {
@@ -169,13 +160,14 @@ const Home = ({ route }) => {
                     </View>
 
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {lojas.map((result) =>
+                        {lojas.map((result, index) =>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('Store', {
                                     foto: `${result.foto}`,
                                     name: `${result.name}`
                                 })}
                                 style={styles.touchStore}
+                                key={index}
                             >
                                 <FastImage
                                     source={{ uri: `${result.foto}` }}

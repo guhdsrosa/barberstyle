@@ -34,9 +34,10 @@ const Login = () => {
                     .then(function (response) {
                         console.log(response.status)
                         if (response.status == 200) {
-                            console.log('[USER]', response.data)
+                            console.log('[USER]', response.data.cliente)
                             
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
+                            AsyncStorage.setItem('userClient', JSON.stringify(response.data.cliente))
                             AsyncStorage.setItem('userSenha', JSON.stringify(response.data.Senha))
                             //AsyncStorage.setItem('userFoto', JSON.stringify(response.data.Foto))
                             navigation.navigate('Home')
@@ -61,10 +62,7 @@ const Login = () => {
             const teste = await AsyncStorage.getItem('userSenha');
             
             if (value !== null || teste !== null) {
-                                
-                console.log("uSUARIO LOGIN: ", value)
                 navigation.navigate('Home');
-                
             }
             setLoading(false)
         } catch (error) {

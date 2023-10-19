@@ -30,8 +30,9 @@ const Store = ({ route }) => {
     const reservationPress = () => {
         navigation.navigate('Schedule', {
             selectService: selectService,
-            IdUsuario: user.IdUsuario,
-            IdEstabelecimento: data.IdEstabelecimento
+            IdUsuario: user.params.IdUsuario,
+            IdEstabelecimento: data.IdEstabelecimento,
+            idCliente: user.userClient.IdCliente
         })
     }
 
@@ -73,8 +74,10 @@ const Store = ({ route }) => {
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
+            const jsonValueCliente = await AsyncStorage.getItem('userClient')
             const params = JSON.parse(jsonValue)
-            setUser(params)
+            const paramsClient = JSON.parse(jsonValueCliente)
+            setUser({ params: params, userClient: paramsClient })
         } catch (e) {
             console.log(e)
         }

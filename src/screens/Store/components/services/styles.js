@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         borderRadius: 10,
         borderColor: '#cccccc',
-        backgroundColor: '#181818',
+        backgroundColor: '#fff',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
     textOptions: {
         fontFamily: 'Quicksand-Medium',
         fontSize: 16,
-        color: '#fff',
+        color: '#000',
         alignSelf: 'center'
     },
 
     plusButton: {
-        backgroundColor: '#fff',
+        backgroundColor: '#000000cf',
         borderRadius: 100,
         marginTop: 4,
     },

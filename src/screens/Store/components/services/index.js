@@ -28,7 +28,7 @@ const Services = (props) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.textOptions}>{`R$ ${result.Valor}`}</Text>
                         <TouchableOpacity style={styles.plusButton} onPress={() => selectService(result)}>
-                            <Entypo style={styles.plusIcon} name={props.selectService?.includes(`${result.IdTipoServico}`) ? "check" : "plus"} size={20} color={'#181818'} />
+                            <Entypo style={styles.plusIcon} name={props.selectService?.includes(`${result.IdTipoServico}`) ? "check" : "plus"} size={20} color={'#fff'} />
                         </TouchableOpacity>
                     </View>
                 </View>

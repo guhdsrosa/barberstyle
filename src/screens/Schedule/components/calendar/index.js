@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import moment from 'moment/moment';
 
 const CalendarModal = (props) => {
+    const today = moment().format('YYYY-MM-DD');
+
+
+
     LocaleConfig.locales['br'] = {
         monthNames: [
             'Janeiro',
@@ -29,6 +34,8 @@ const CalendarModal = (props) => {
     return (
         <View style={{ marginBottom: 10, marginHorizontal: 10 }}>
             <Calendar
+                minDate={today}
+                disableMonthChange={true}
                 onDayPress={day => {
                     props.setCalendar(day.dateString);
                 }}

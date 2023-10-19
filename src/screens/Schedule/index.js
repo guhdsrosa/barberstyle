@@ -11,13 +11,14 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import styles from "./styles";
 
 const Schedule = ({ route }) => {
-    const { selectService, IdUsuario, IdEstabelecimento } = route?.params
+    const { selectService, IdUsuario, IdEstabelecimento, idCliente } = route?.params
     const navigation = useNavigation()
     const [selectBarber, setSelectBarber] = useState(null)
     const [barber, setBarber] = useState(null)
     const [loading, setLoading] = useState(false)
     const [selected, setSelected] = useState('');
     const [horario, setHorario] = useState('');
+    const [dataHour, setDataHour] = useState([]);
     const [showAlert, setShowAlert] = useState({
         alert: false,
         text: ''
@@ -48,6 +49,39 @@ const Schedule = ({ route }) => {
         }
     }
 
+    const getHours = async () => {
+        const regex = /(\d{2}:\d{2})/;
+        try {
+            var config = {
+                method: 'post',
+                url: 'Horario/disponivel',
+                data: {
+                    IdEstabelecimento: IdEstabelecimento,
+                    IdFuncionario: selectBarber,
+                    DataFront: selected
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        const novoArray = response.data.horario[0].map(item => {
+                            return {
+                                ...item,
+                                disabled: item.disabled,
+                                value: regex.exec(item.value)[1]
+                            };
+                        });
+                        setDataHour(novoArray)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
     const confirmReservation = async () => {
         //'idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected
         try {
@@ -55,7 +89,7 @@ const Schedule = ({ route }) => {
                 method: 'post',
                 url: '/Agenda/Create',
                 data: {
-                    IdCliente: IdUsuario,
+                    IdCliente: idCliente,
                     DataMarcada: selected,
                     HoraMarcada: horario,
                     IdServico: selectService,
@@ -66,21 +100,11 @@ const Schedule = ({ route }) => {
                 }
             };
 
-            // let data = JSON.stringify({
-            //     "IdCliente": 6,
-            //     "DataMarcada": "2023-09-03",
-            //     "HorarioMarcado": "10",
-            //     "IdServico": 1,
-            //     "IdFuncionario": 3,
-            //     "Status": "Ativo",
-            //     "TipoPagamento": "A vista",
-            //     "IdEstabelecimento": 1
-            //   });
             console.log("Config", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status === 200) {
-                        setShowAlert({...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}`})
+                        setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}` })
 
                         //Alert.alert("Horário Reservado com Sucesso !", `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}`)
                     }
@@ -99,7 +123,6 @@ const Schedule = ({ route }) => {
     }
 
     setCalendar = (date) => {
-        console.log("Data", date)
         setSelected(date)
     }
 
@@ -108,21 +131,11 @@ const Schedule = ({ route }) => {
             getBarber()
     }, [IdEstabelecimento])
 
-    const data = [
-        { key: '1', value: '9:00 hrs' },
-        { key: '2', value: '10:00 hrs' },
-        { key: '3', value: '13:00 hrs', disabled: true },
-        { key: '4', value: '14:00 hrs', disabled: true },
-        { key: '5', value: '15:00 hrs' },
-        { key: '6', value: '16:00 hrs' },
-        { key: '7', value: '18:00 hrs' },
-        { key: '7', value: '19:00 hrs', disabled: true }
-    ]
-
-    // useEffect(() => {
-    //     console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
-    // }, [selected])
-
+    useEffect(() => {
+        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
+        getHours()
+    }, [selected])
+    console.log('horario', horario)
     return (
         <ScrollView>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -161,10 +174,10 @@ const Schedule = ({ route }) => {
                             date={selected}
                         />
 
-                        <View style={{ marginHorizontal: 10 }}>
+                        {selected && <View style={{ marginHorizontal: 10 }}>
                             <SelectList
                                 setSelected={(val) => setHorario(val)}
-                                data={data}
+                                data={dataHour}
                                 save="value"
                                 search={false}
                                 dropdownTextStyles={{ color: '#181818' }}
@@ -175,7 +188,7 @@ const Schedule = ({ route }) => {
                                 inputStyles={{ color: '#fff' }}
                                 arrowicon={<Entypo name="chevron-small-down" color={'#fff'} size={20} />}
                             />
-                        </View>
+                        </View>}
                     </>
                 }
 

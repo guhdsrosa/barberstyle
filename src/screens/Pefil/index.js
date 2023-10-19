@@ -91,7 +91,7 @@ const Perfil = () => {
                     IdUsuario: user.IdUsuario,
                     Nome: user.Nome,
                     Email: user.Email,
-                    Senha: Senha.Senha,
+                    Senha: Senha.user.Senha,
                     //Foto: user.Foto,
                     Foto: photo,
                     Telefone: user.Telefone
