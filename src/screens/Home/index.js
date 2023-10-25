@@ -84,11 +84,10 @@ console.log(user)
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
-                            <Image
-                                // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            <FastImage
                                 source={{ uri: foto ? foto : user.Foto }}
                                 style={styles.userLogo}
-                                resizeMode={'contain'}
+                                resizeMode="cover"
                             />
                         </TouchableOpacity>
 
@@ -96,14 +95,6 @@ console.log(user)
                             <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{user.Nome ? user.Nome.split(" ")[0] : null}</Text></Text>
                         </View>
                     </View>
-
-                    {/*<TouchableOpacity style={styles.filterHeader}>
-                        <Image
-                            source={Fotos.hamb}
-                            resizeMode={'contain'}
-                            style={styles.filterLogo}
-                        />
-                    </TouchableOpacity>*/}
                 </View>
 
                 <View style={styles.header}>
@@ -112,8 +103,6 @@ console.log(user)
 
                 <Searchbar
                     placeholder="Pesquisar"
-                    //onChangeText={onChangeSearch}
-                    //value={searchQuery}
                     style={styles.searchbarStyle}
                     elevation={0}
                     iconColor={'#131313'}
@@ -145,16 +134,12 @@ console.log(user)
                                     <Text style={styles.textStore}>{result.NomeEstabelecimento}</Text>
                                     <Text style={styles.descriptionStore}>{result.Cidade}</Text>
                                 </View>
-                                {/*<View style={styles.starContent}>
-                                    <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
-                                    <Text style={styles.descriptionStore}>5.5</Text>
-                                </View>*/}
                             </TouchableOpacity>
                         )}
                     </ScrollView>
                 </View>
 
-                <View style={[styles.body, { paddingBottom: 20 }]}>
+                {/* <View style={[styles.body, { paddingBottom: 20 }]}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Talvez você gostaria</Text>
                     </View>
@@ -186,7 +171,7 @@ console.log(user)
                             </TouchableOpacity>
                         )}
                     </ScrollView>
-                </View>
+                </View> */}
             </ScrollView>
         </LinearGradient>
     )

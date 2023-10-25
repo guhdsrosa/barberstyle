@@ -16,6 +16,7 @@ const Schedule = ({ route }) => {
     const [selectBarber, setSelectBarber] = useState(null)
     const [barber, setBarber] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [reserveLoading, setReserveLoading] = useState(false)
     const [selected, setSelected] = useState('');
     const [horario, setHorario] = useState('');
     const [dataHour, setDataHour] = useState([]);
@@ -84,6 +85,7 @@ const Schedule = ({ route }) => {
 
     const confirmReservation = async () => {
         //'idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected
+        setReserveLoading(true)
         try {
             var config = {
                 method: 'post',
@@ -91,7 +93,8 @@ const Schedule = ({ route }) => {
                 data: {
                     IdCliente: idCliente,
                     DataMarcada: selected,
-                    HoraMarcada: horario,
+                    HoraMarcada: horario.value,
+                    IdHorario: horario.key,
                     IdServico: selectService,
                     IdFuncionario: selectBarber,
                     Status: "Ativo",
@@ -105,12 +108,12 @@ const Schedule = ({ route }) => {
                 .then(function (response) {
                     if (response.status === 200) {
                         setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}` })
-
-                        //Alert.alert("Horário Reservado com Sucesso !", `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}`)
                     }
+                    setReserveLoading(false)
                 })
                 .catch(function (error) {
                     Alert.alert("Ocorreu um erro ao reservar seu horário: ", error)
+                    setReserveLoading(false)
                 })
         } catch (err) {
             console.log("Erro na requisição: ", err)
@@ -174,27 +177,34 @@ const Schedule = ({ route }) => {
                             date={selected}
                         />
 
-                        {selected && <View style={{ marginHorizontal: 10 }}>
-                            <SelectList
-                                setSelected={(val) => setHorario(val)}
-                                data={dataHour}
-                                save="value"
-                                search={false}
-                                dropdownTextStyles={{ color: '#181818' }}
-                                disabledTextStyles={{ color: '#b3b3b3' }}
-                                placeholder="Selecione horário"
-                                fontFamily="Quicksand-Medium"
-                                boxStyles={{ backgroundColor: '#141414' }}
-                                inputStyles={{ color: '#fff' }}
-                                arrowicon={<Entypo name="chevron-small-down" color={'#fff'} size={20} />}
-                            />
+                        {selected && <View style={styles.hourContainer}>
+                            {dataHour.map((res) => (
+                                res.disabled == null && (
+                                    <TouchableOpacity style={styles.hourContent} onPress={() => setHorario(res)}>
+                                        <Text style={[styles.hourText, { backgroundColor: horario.value === res.value ? '#0db2aa' : '#141414' }]}>{res.value}</Text>
+                                    </TouchableOpacity>
+                                )
+                            ))}
                         </View>}
                     </>
                 }
 
-                <TouchableOpacity onPress={() => confirmReservation()}>
-                    <Text>teste</Text>
-                </TouchableOpacity>
+                {horario &&
+                    <TouchableOpacity onPress={() => confirmReservation()} style={styles.buttomAccept}>
+                        {!reserveLoading ?
+                            (<Text style={styles.buttomAcceptText}>Reservar Horário</Text>)
+                            :
+                            (<Text style={styles.buttomAcceptText}>
+                                <ActivityIndicator
+                                    size={20}
+                                    color={'#fff'}
+                                />
+                            </Text>)
+                        }
+
+                    </TouchableOpacity>
+                }
+
             </View>
 
             <AwesomeAlert
