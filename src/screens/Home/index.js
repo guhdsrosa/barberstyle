@@ -79,7 +79,7 @@ console.log(user)
     }, [])
 
     return (
-        <LinearGradient colors={['#191919', '#000']} style={styles.container}>
+        <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>

@@ -76,7 +76,6 @@ const Perfil = () => {
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
-            console.log("User Perfil: ", user)
         } catch (e) {
             // error reading value
         }

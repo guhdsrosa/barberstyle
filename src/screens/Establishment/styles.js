@@ -2,8 +2,12 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 10,
-        paddingHorizontal: 18
+        paddingHorizontal: 0
+    },
+
+    scrollContent: {
+        backgroundColor: '#181818',
+        paddingVertical: 10
     },
 
     touchOption: {

@@ -11,18 +11,16 @@ import Profissionais from "./components/profissionais";
 import styles from "./styles";
 
 const Establishment = () => {
-    const [option, setOption] = useState('Geral')
+    const [option, setOption] = useState('Agenda')
     const [user, setUser] = useState('')
     const [estab, setEstab] = useState(null)
+    const [services, setServices] = useState(null)
 
     const [optionsSelect, setOptionsSelect] = useState([
-        { name: 'Geral' },
+        { name: 'Agenda' },
+        { name: 'Estabelecimento' },
         { name: 'Horarios' },
-        { name: 'Profissionais' },
-        { name: 'Cadastro' },
-        { name: 'Redes' },
-        { name: 'Consumiveis' },
-        { name: 'Comodidades' }
+        { name: 'Profissionais' }
     ])
 
     const userGet = async () => {
@@ -72,17 +70,23 @@ const Establishment = () => {
         userGet()
     }, [])
 
+    // console.log(estab)
+
     return (
         <ScrollView style={styles.container}>
             <ScrollView style={styles.scrollContent} horizontal={true}>
                 {optionsSelect.map((result, index) =>
                     <TouchableOpacity onPress={() => { optionSelect({ opt: result.name }) }} style={styles.touchOption} key={index}>
-                        <Text style={[styles.textOption, { color: option == result.name ? '#0fcbc2' : '#181818' }]}>{result.name}</Text>
+                        <Text style={[styles.textOption, { color: option == result.name ? '#0fcbc2' : '#fff' }]}>{result.name}</Text>
                     </TouchableOpacity>
                 )}
             </ScrollView>
 
-            {option == 'Geral' &&
+            {option == 'Agenda' &&
+                null
+            }
+
+            {option == 'Estabelecimento' &&
                 <Geral establishment={estab} />
             }
 
@@ -91,7 +95,7 @@ const Establishment = () => {
             }
 
             {option == 'Profissionais' &&
-                <Profissionais />
+                <Profissionais establishment={estab} />
             }
 
 

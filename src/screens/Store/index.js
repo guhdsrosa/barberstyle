@@ -55,7 +55,8 @@ const Store = ({ route }) => {
                     }
                 })
                 .catch(function (error) {
-                    console.log('[error]', error)
+                    console.log('[errors]', error)
+                    setAlert(true)
                 })
         } catch (err) {
             console.log('[ERROR]', err)
@@ -85,11 +86,6 @@ const Store = ({ route }) => {
         }
     }
 
-    const errorLoading = () => {
-        if(services)
-            setAlert(true)
-    }
-
     useEffect(() => {
         userGet()
     }, [])
@@ -98,12 +94,6 @@ const Store = ({ route }) => {
         if (data)
             serviceEstab()
     }, [data])
-
-    useEffect(() => {
-        const tempoEmMilissegundos = 20000; // 20 segundos
-        const timerId = setTimeout(errorLoading, tempoEmMilissegundos);
-        console.log('teste')
-    }, [])
 
     return (
         <View style={styles.container}>
@@ -152,8 +142,22 @@ const Store = ({ route }) => {
                     </View>
                 </ScrollView>
             ) : (
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <ActivityIndicator size={50} color={'#181818'} />
+                <View>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                            <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
+                        </TouchableOpacity>
+
+                        {data && <Image
+                            source={{ uri: 'https://img.freepik.com/fotos-premium/espaco-masculino-interior-de-barbearia-moderna-gerado-por-ia_866663-5580.jpg' }}
+                            //source={{ uri: data?.FotoEstabelecimento }}
+                            style={styles.storePhoto}
+                            resizeMode='cover'
+                            blurRadius={0}
+                        />}
+                        {data && <Text style={styles.storeName}>{data?.NomeEstabelecimento}</Text>}
+                    </View>
+                    <ActivityIndicator size={50} color={'#181818'} style={{marginTop: 20}}/>
                     <Text style={[styles.textButton, { color: '#181818' }]}>Carregando...</Text>
                 </View>
             )}
@@ -161,9 +165,9 @@ const Store = ({ route }) => {
             <AwesomeAlert
                 show={alert}
                 title={`Ops!`}
-                message={`Parece que aconteceu um erro ao carregar o estabelecimento`}
+                message={`Parece que aconteceu um erro ao carregar o estabelecimento :(`}
                 showConfirmButton={true}
-                confirmText={`Tentar novamente`}
+                confirmText={`Voltar ao inicío`}
                 confirmButtonColor="#52cb5f"
                 onConfirmPressed={() =>
                     navigation.goBack()
