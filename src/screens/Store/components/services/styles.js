@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 20
+        marginVertical: 10
     },
     
     title: {
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     optionsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 15,
+        marginBottom: 10,
         borderWidth: 1,
         paddingHorizontal: 10,
         paddingVertical: 6,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     },
 
     plusButton: {
-        backgroundColor: '#131313',
+        backgroundColor: '#000000cf',
         borderRadius: 100,
         marginTop: 4,
     },

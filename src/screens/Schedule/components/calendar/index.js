@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import moment from 'moment/moment';
 
 const CalendarModal = (props) => {
+    const today = moment().format('YYYY-MM-DD');
+
+
+
     LocaleConfig.locales['br'] = {
         monthNames: [
             'Janeiro',
@@ -20,7 +25,7 @@ const CalendarModal = (props) => {
         ],
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set.', 'Out', 'Nov', 'Dez'],
         dayNames: ['Domingo', 'Sábado', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
-        dayNamesShort: ['Dom', 'Sab', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
         today: "Hoje"
     };
 
@@ -29,6 +34,8 @@ const CalendarModal = (props) => {
     return (
         <View style={{ marginBottom: 10, marginHorizontal: 10 }}>
             <Calendar
+                minDate={today}
+                disableMonthChange={true}
                 onDayPress={day => {
                     props.setCalendar(day.dateString);
                 }}

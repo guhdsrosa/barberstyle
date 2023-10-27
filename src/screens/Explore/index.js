@@ -80,11 +80,12 @@ const Explore = () => {
                         iconColor={'#131313'}
                     />
 
-                    <ScrollView>
-                        {establishment.map((result) =>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {establishment.map((result, index) =>
                             <TouchableOpacity
                                 onPress={() => establishmentPress(result)}
                                 style={styles.establishmentContent}
+                                key={index}
                             >
                                 <FastImage
                                     style={styles.establishmentPhoto}

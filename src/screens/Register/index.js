@@ -9,24 +9,21 @@ import ImagePicker from 'react-native-image-crop-picker';
 import AwesomeAlert from "react-native-awesome-alerts";
 import { styles } from './styles'
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Perfil from "../Pefil";
 
 const Register = ({ route }) => {
 
     const navigation = useNavigation()
     const [screen, setScreen] = useState(0);
-    const [checked, setChecked] = useState(false);
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
-    const [idEstabFunc, setIdEstabFunc] = useState(null)
-    const [foto, setFoto] = useState(false)
+    const [avatar, setAvatar] = useState('');
+
     const [user, setUser] = useState({
         Nome: '',
         Email: '',
         Senha: '',
         ConfirmSenha: '',
         TipoUsuario: '',
-        Foto: '',
         Telefone: ''
     })
     const [establishment, setEstablishment] = useState({
@@ -137,8 +134,7 @@ const Register = ({ route }) => {
                     Senha: user.Senha,
                     confirmpassword: user.Senha,
                     TipoUsuario: option,
-                    //Foto: user.Foto,
-                    Foto: foto ? foto : user.Foto,
+                    File: avatar.path,
                     Telefone: user.Telefone,
                     NomeEstabelecimento: establishment.NomeEstab,
                     CEP: establishment.CEP,
@@ -215,99 +211,17 @@ const Register = ({ route }) => {
         }
     }
 
-    // const insertEstablishment = async () => {
-    //     try {
-    //         var config = {
-    //             method: 'post',
-    //             url: 'Estabelecimento/Register',
-    //             data: {
-    //                 NomeEstabelecimento: establishment.NomeEstab,
-    //                 CEP: establishment.CEP,
-    //                 Rua: establishment.Rua,
-    //                 Bairro: establishment.Bairro,
-    //                 Estado: establishment.Estado,
-    //                 Cidade: establishment.Cidade,
-    //                 NumeroEstabelecimento: establishment.Numero,
-    //                 CNPJ: establishment.CNPJ,
-    //                 Telefone1: establishment.TelefoneEstab,
-    //                 Telefone2: establishment.TelefoneEstab1,
-    //                 SobreNos: establishment.Sobre,
-    //                 RedeSocial: establishment.RedeSocial
-    //             }
-    //         };
-    //         callApi(config)
-    //             .then(function (response) {
-    //                 console.log('[RES] ', response.data)
-    //                 // setIdEstabFunc(null)
-    //                 // insertEstablishmentFunc()
-    //             })
-    //             .catch(function (error) {
-    //                 setShowAlert({
-    //                     ...showAlert,
-    //                     show: true,
-    //                     title: 'Erro',
-    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-    //                     errorButtom: '',
-    //                     successButtom: '',
-    //                     showCancelButton: true,
-    //                     showConfirmButton: false,
-    //                     cancelText: 'Ok',
-    //                     confirmText: '',
-    //                     option: false
-    //                 })
-    //             });
-    //     } catch (err) {
-    //         console.log('[ERRORs]', err)
-    //     }
-    // }
+    const imagePickerCallback = () => {
+        ImagePicker.openPicker({
+            width: 400,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            console.log(image)
+            setAvatar(image)
+        })
 
-    // insertEstablishmentFunc = async () => {
-    //     try {
-    //         var config = {
-    //             method: 'post',
-    //             url: '/EstabFunc/Create',
-    //             data: {
-    //                 IdEstabelecimento: idEstabFunc
-    //             }
-    //         };
-    //         callApi(config)
-    //             .then(function (response) {
-    //                 if (response.status == 200) {
-    //                     return setShowAlert({
-    //                         ...showAlert,
-    //                         show: true,
-    //                         title: 'Oba!',
-    //                         message: `Sua conta foi criada com sucesso! Acesse seu perfil para editar sua conta ou explore estabelecimentos :D`,
-    //                         errorButtom: 'perfil',
-    //                         successButtom: 'explorar',
-    //                         showCancelButton: true,
-    //                         showConfirmButton: true,
-    //                         cancelText: 'Ir para perfil',
-    //                         confirmText: 'Explorar',
-    //                         option: false,
-    //                         color: true
-    //                     })
-    //                 }
-    //             })
-    //             .catch(function (error) {
-    //                 setShowAlert({
-    //                     ...showAlert,
-    //                     show: true,
-    //                     title: 'Erro',
-    //                     message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-    //                     errorButtom: '',
-    //                     successButtom: '',
-    //                     showCancelButton: true,
-    //                     showConfirmButton: false,
-    //                     cancelText: 'Ok',
-    //                     confirmText: '',
-    //                     option: false
-    //                 })
-    //             });
-    //     } catch (err) {
-    //         console.log('[ERRORs]', err)
-    //     }
-    // }
+    }
 
     const resetAlert = ({ option }) => {
         if (option == 'perfil') {
@@ -360,18 +274,6 @@ const Register = ({ route }) => {
         navigation.goBack()
     }
 
-    const imagePickerPress = () => {
-        ImagePicker.openPicker({
-            //multiple: true
-            width: 400,
-            height: 400,
-            cropping: true,
-        }).then(images => {
-            //console.log('IMAGEM: ', images);
-            setFoto(images.path)
-            //updateUser()
-        });
-    }
 
     return (
         <ScrollView style={styles.container}>
@@ -432,23 +334,25 @@ const Register = ({ route }) => {
                             secureTextEntry={true}
                         />
 
-                        {/* <TextInput
-                            style={styles.inputText}
-                            placeholder={'Foto'}
-                            value={user.Foto}
-                            placeholderTextColor={'#BDBDBD'}
-                            onChangeText={text => setUser({ ...user, Foto: text })}
-                        /> */}
+                        <Text style={[styles.menuTitle, { fontSize: 18, textAlign: 'center', marginTop: 20 }]}>Carregar foto</Text>
 
-                    <TouchableOpacity style={styles.inputText} onPress={() => imagePickerPress()}>
-                    <Image
-                        
-                        source={{uri: foto ? foto : user.Foto}}
-                        style={styles.userLogo}
-                        resizeMode={'contain'}
-                        onPre
-                    />
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerCallback()}>
+                            {avatar ?
+                                <Image
+                                    //source={{ uri: foto ? foto : user.Foto }}
+                                    source={{ uri: avatar.path }}
+                                    style={styles.userLogo}
+                                    resizeMode={'contain'}
+                                />
+                                :
+                                <Ionicons
+                                    name="share-outline"
+                                    size={35}
+                                    color={'#141414'}
+                                    style={{ marginVertical: 60 }}
+                                />
+                            }
+                        </TouchableOpacity>
 
                         {passError && <Text style={[styles.checkText, { color: '#ff0002', marginTop: 10, marginLeft: 5 }]}>Sua senha está diferente</Text>}
                     </>

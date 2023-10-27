@@ -26,7 +26,7 @@ const MyTabs = () => {
     theme.colors.secondaryContainer = "transperent"
 
     const [user, setUser] = useState({})
-    const [foto, setFoto] = useState(false)
+    const foto = 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'
 
     const userGet = async () => {
         try {
@@ -44,7 +44,7 @@ const MyTabs = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Home"
+            initialRouteName={user.TipoUsuario === 'Cliente' ? "home" : "Establishment"}
             activeColor="#14fef3"
             inactiveColor="#03302e"
             shifting={true}
@@ -54,24 +54,29 @@ const MyTabs = () => {
                 backgroundColor: '#000000',
             }}
         >
-            <Tab.Screen
-                name="Home"
-                component={Home}
-                options={{
-                    tabBarLabel: 'Início',
-                    tabBarIcon: ({ color }) => <Entypo name="home" color={color} size={30} />,
-                    headerShown: false,
-                }}
-            />
-            <Tab.Screen
-                name="Explore"
-                component={Explore}
-                options={{
-                    tabBarLabel: 'Explorar',
-                    tabBarIcon: ({ color }) => <Entypo name="magnifying-glass" color={color} size={30} />,
-                    headerShown: false,
-                }}
-            />
+            {user.TipoUsuario === 'Cliente' &&
+                <Tab.Screen
+                    name="home"
+                    component={Home}
+                    options={{
+                        tabBarLabel: 'Início',
+                        tabBarIcon: ({ color }) => <Entypo name="home" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
+
+            {user.TipoUsuario === 'Cliente' &&
+                <Tab.Screen
+                    name="Explore"
+                    component={Explore}
+                    options={{
+                        tabBarLabel: 'Explorar',
+                        tabBarIcon: ({ color }) => <Entypo name="magnifying-glass" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
 
             {user.TipoUsuario == 'Dono' &&
                 <Tab.Screen
@@ -116,8 +121,7 @@ const MyTabs = () => {
                     tabBarLabel: 'Perfil',
                     tabBarIcon: () =>
                         <Image
-                            // source={user.Foto ? user.Foto : { uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
-                            source={{uri: foto ? foto : user.Foto}}
+                            source={{ uri: user.Foto ? user.Foto : foto }}
                             style={{ width: 30, height: 30, borderRadius: 100 }}
                             resizeMode={'contain'}
                         />,

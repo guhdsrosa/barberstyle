@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -11,16 +11,21 @@ import { Searchbar } from "react-native-paper";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fotos from '../../assets/images/home/index'
+import { encode } from 'base-64';
 
 const Home = ({ route }) => {
+
 
     const navigation = useNavigation()
     const [user, setUser] = useState({});
     const [Senha, setSenha] = useState({});
+    const [fototeste, setFototeste] = useState({})
+    // const [foto, setFoto] = useState(false)
     const [foto, setFoto] = useState(false)
     const [top5Establishment, setTop5Establishment] = useState([])
 
     const perfilPress = () => {
+        console.log("Antes de ir para o perfil: ", user)
         navigation.navigate('Perfil')
     }
 
@@ -38,14 +43,16 @@ const Home = ({ route }) => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
+            const imageSource = {uri: params.Foto};
 
             setUser(params)
             setSenha(senha)
+            setFototeste(imageSource.uri)
         } catch (e) {
             console.log('[userGet error]', e)
         }
     }
-
+console.log(user)
     const getRecomendedEstablishment = async () => {
         try {
             var config = {
@@ -72,16 +79,15 @@ const Home = ({ route }) => {
     }, [])
 
     return (
-        <LinearGradient colors={['#191919', '#000']} style={styles.container}>
-            <ScrollView>
+        <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
-                            <Image
-                                // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                            <FastImage
                                 source={{ uri: foto ? foto : user.Foto }}
                                 style={styles.userLogo}
-                                resizeMode={'contain'}
+                                resizeMode="cover"
                             />
                         </TouchableOpacity>
 
@@ -89,14 +95,6 @@ const Home = ({ route }) => {
                             <Text style={styles.userHello}>Olá!{'\n'}<Text style={styles.userName}>{user.Nome ? user.Nome.split(" ")[0] : null}</Text></Text>
                         </View>
                     </View>
-
-                    {/*<TouchableOpacity style={styles.filterHeader}>
-                        <Image
-                            source={Fotos.hamb}
-                            resizeMode={'contain'}
-                            style={styles.filterLogo}
-                        />
-                    </TouchableOpacity>*/}
                 </View>
 
                 <View style={styles.header}>
@@ -105,8 +103,6 @@ const Home = ({ route }) => {
 
                 <Searchbar
                     placeholder="Pesquisar"
-                    //onChangeText={onChangeSearch}
-                    //value={searchQuery}
                     style={styles.searchbarStyle}
                     elevation={0}
                     iconColor={'#131313'}
@@ -138,28 +134,25 @@ const Home = ({ route }) => {
                                     <Text style={styles.textStore}>{result.NomeEstabelecimento}</Text>
                                     <Text style={styles.descriptionStore}>{result.Cidade}</Text>
                                 </View>
-                                {/*<View style={styles.starContent}>
-                                    <AntDesign name="star" size={15} style={styles.seeAllIcon} color={'#ffc500'} />
-                                    <Text style={styles.descriptionStore}>5.5</Text>
-                                </View>*/}
                             </TouchableOpacity>
                         )}
                     </ScrollView>
                 </View>
 
-                <View style={[styles.body, { paddingBottom: 20 }]}>
+                {/* <View style={[styles.body, { paddingBottom: 20 }]}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Talvez você gostaria</Text>
                     </View>
 
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {lojas.map((result) =>
+                        {lojas.map((result, index) =>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('Store', {
                                     foto: `${result.foto}`,
                                     name: `${result.name}`
                                 })}
                                 style={styles.touchStore}
+                                key={index}
                             >
                                 <FastImage
                                     source={{ uri: `${result.foto}` }}
@@ -178,7 +171,7 @@ const Home = ({ route }) => {
                             </TouchableOpacity>
                         )}
                     </ScrollView>
-                </View>
+                </View> */}
             </ScrollView>
         </LinearGradient>
     )

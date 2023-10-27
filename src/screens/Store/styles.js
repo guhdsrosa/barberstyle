@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     },
 
     header: {
-
+        minHeight: 50
     },
 
     backButton: {

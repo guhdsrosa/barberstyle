@@ -1,293 +1,103 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../server/api'
 
-import AwesomeAlert from 'react-native-awesome-alerts';
-import LinearGradient from "react-native-linear-gradient";
-
 //Screens
 import Geral from "./components/geral";
+import Horario from "./components/horario";
+import Profissionais from "./components/profissionais";
 
 import styles from "./styles";
 
 const Establishment = () => {
-    const [option, setOption] = useState('')
-    const [week, setWeek] = useState({
-        segunda: false,
-        terca: false,
-        quarta: false,
-        quinta: false,
-        sexta: false,
-        sabado: false,
-    })
+    const [option, setOption] = useState('Agenda')
+    const [user, setUser] = useState('')
+    const [estab, setEstab] = useState(null)
+    const [services, setServices] = useState(null)
+
     const [optionsSelect, setOptionsSelect] = useState([
-        { id: 0, name: 'Geral' },
-        { id: 0, name: 'Horarios' },
-        { id: 0, name: 'Profissionais' },
-        { id: 0, name: 'Cadastro' },
-        { id: 0, name: 'Redes' },
-        { id: 0, name: 'Consumiveis' },
-        { id: 0, name: 'Comodidades' }
+        { name: 'Agenda' },
+        { name: 'Estabelecimento' },
+        { name: 'Horarios' },
+        { name: 'Profissionais' }
     ])
 
-    console.log(week)
-
-    const optionSelect = ({ opt }) => {
-        if (opt == 'Geral') {
-            setOption('geral')
+    const userGet = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('userInfo')
+            const params = JSON.parse(jsonValue)
+            setUser(params)
+        } catch (e) {
+            // error reading value
         }
-
-        if (opt == 'Horarios') {
-            setOption('horarios')
-        }
-
-        if (opt == 'Profissionais') {
-            setOption('profissionais')
-        }
-
-        if (opt == 'Cadastro') {
-            setOption('cadastro')
-        }
-
-        if (opt == 'Redes') {
-            setOption('redes')
-        }
-
-        if (opt == 'Consumiveis') {
-            setOption('consumiveis')
-        }
-
-        if (opt == 'Comodidades') {
-            setOption('comodidades')
+    }
+    const GetEstablish = async () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Estabelecimento/returnDono',
+                data: {
+                    IdUsuario: user.IdUsuario
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setEstab(response.data.query[0])
+                    }
+                })
+                .catch(function (error) {
+                    Alert.alert('', 'Erro')
+                });
+        } catch (err) {
+            console.log('[ERROR]', err)
         }
     }
 
+    const optionSelect = ({ opt }) => {
+        setOption(opt)
+    }
+
+    useEffect(() => {
+        if (user.IdUsuario)
+            GetEstablish()
+    }, [user])
+
+    useEffect(() => {
+        userGet()
+    }, [])
+
+    // console.log(estab)
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <ScrollView style={styles.scrollContent} horizontal={true}>
-                {optionsSelect.map((result) =>
-                    <TouchableOpacity onPress={() => { optionSelect({ opt: result.name }) }} style={styles.touchOption}>
-                        <Text style={styles.textOption}>{result.name}</Text>
+                {optionsSelect.map((result, index) =>
+                    <TouchableOpacity onPress={() => { optionSelect({ opt: result.name }) }} style={styles.touchOption} key={index}>
+                        <Text style={[styles.textOption, { color: option == result.name ? '#0fcbc2' : '#fff' }]}>{result.name}</Text>
                     </TouchableOpacity>
                 )}
             </ScrollView>
 
-            {option == 'geral' &&
-                <Geral />
+            {option == 'Agenda' &&
+                null
             }
 
-            {option == 'horarios' &&
-                <View style={styles.hourContainer}>
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, segunda: !week.segunda })}>
-                        <Text style={styles.weekText}>Segunda-Feira</Text>
-                        {week.segunda == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
+            {option == 'Estabelecimento' &&
+                <Geral establishment={estab} />
+            }
 
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
+            {option == 'Horarios' &&
+                <Horario />
+            }
 
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, terca: !week.terca })}>
-                        <Text style={styles.weekText}>Terça-Feira</Text>
-                        {week.terca == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, quarta: !week.quarta })}>
-                        <Text style={styles.weekText}>Quarta-Feira</Text>
-                        {week.quarta == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, quinta: !week.quinta })}>
-                        <Text style={styles.weekText}>Quinta-Feira</Text>
-                        {week.quinta == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, sexta: !week.sexta })}>
-                        <Text style={styles.weekText}>Sexta-Feira</Text>
-                        {week.sexta == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, sabado: !week.sabado })}>
-                        <Text style={styles.weekText}>Sábado</Text>
-                        {week.sabado == true &&
-                            <>
-                                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 7:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                                <TextInput
-                                    placeholder="ex: 12:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <TextInput
-                                    placeholder="ex: 13:30"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-
-                                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                                <TextInput
-                                    placeholder="ex: 17:00"
-                                    keyboardType="decimal-pad"
-                                    style={styles.inputStyle}
-                                />
-                            </>
-                        }
-                    </TouchableOpacity>
-                </View>
+            {option == 'Profissionais' &&
+                <Profissionais establishment={estab} />
             }
 
 
-        </View>
+        </ScrollView>
     )
 }
 

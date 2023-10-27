@@ -13,7 +13,6 @@ import LinearGradient from "react-native-linear-gradient";
 import styles from "./style";
 
 const Perfil = () => {
-
     const navigation = useNavigation()
 
     const [typeUser, setTypeUser] = useState('estabelecimento')
@@ -23,6 +22,8 @@ const Perfil = () => {
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
+    const [File, setFile] = useState({})
+    const [foto, setFoto] = useState(false)
     //const fs = require('fs')
     //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
@@ -71,6 +72,7 @@ const Perfil = () => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
+            
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
@@ -88,9 +90,9 @@ const Perfil = () => {
                     IdUsuario: user.IdUsuario,
                     Nome: user.Nome,
                     Email: user.Email,
-                    Senha: Senha.Senha,
+                    Senha: Senha.user.Senha,
                     //Foto: user.Foto,
-                    Foto: createFormData(photo),
+                    Foto: photo,
                     Telefone: user.Telefone
                 }
             };
@@ -168,7 +170,7 @@ const Perfil = () => {
             height: 400,
             cropping: true,
         }).then(image => {
-            //console.log('IMAGEM: ', images);
+            console.log('IMAGEM: ', image);
             setPhoto(image.path)
             //updateUser()
         });
@@ -177,10 +179,14 @@ const Perfil = () => {
     const createFormData = (photo) => {
         const data = new FormData();
 
+        // const normalizedPath = photo.path.replace(/\\/g, '/');
+        // console.log(normalizedPath)
+
         data.append('Foto', {
             name: 'user_profile.jpg',
             type: 'image/jpeg',
-            uri: photo.path,
+            // uri: normalizedPath,
+            uri: photo.path
         });
         
         return data;
@@ -188,6 +194,7 @@ const Perfil = () => {
 
     useEffect(() => {
         userGet()
+
     }, [])
 
     useEffect(() => {
@@ -218,7 +225,8 @@ const Perfil = () => {
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
                         //source={{ uri: foto ? foto : user.Foto }}
-                        source={{ uri: photo?.path ? photo?.path : user.Foto }}
+                        source={{ uri: photo ? photo : user.Foto }}
+                        // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />
@@ -249,8 +257,8 @@ const Perfil = () => {
                     <TextInput
                         style={styles.inputText}
                         placeholder={'Senha'}
-                        value={Senha.Senha}
-                        onChangeText={text => setSenha({ ...user, Senha: text })}
+                        value={Senha}
+                        onChangeText={setSenha}
                         secureTextEntry={true}
                     />
                     <TextInput

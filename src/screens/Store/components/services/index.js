@@ -10,6 +10,7 @@ const Services = (props) => {
     const comodidades = ['Wifi', 'Cinuca', 'TV']
 
     const selectService = (result) => {
+        console.log(result)
         props.select(result.IdTipoServico, result.NomeServico, result.Valor)
     }
 
@@ -36,7 +37,7 @@ const Services = (props) => {
             <Text style={styles.title}>Consumivéis</Text>
 
             {consumiveis.map((result, index) =>
-                <View key={index} style={styles.optionsContainer}>
+                <View key={index} style={[styles.optionsContainer, {paddingVertical:10}]}>
                     <Text style={styles.textOptions}>{result}</Text>
 
                     <View style={{ alignItems: 'center', }}>
@@ -48,7 +49,7 @@ const Services = (props) => {
             <Text style={styles.title}>Comodidades</Text>
 
             {comodidades.map((result, index) =>
-                <View key={index} style={styles.optionsContainer}>
+                <View key={index} style={[styles.optionsContainer, {paddingVertical:10}]}>
                     <Text style={styles.textOptions}>{result}</Text>
 
                     <View style={{ alignItems: 'center' }}>
