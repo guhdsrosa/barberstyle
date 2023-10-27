@@ -27,13 +27,11 @@ const Establishment = () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const params = JSON.parse(jsonValue)
-            console.log(params)
             setUser(params)
         } catch (e) {
             // error reading value
         }
     }
-
     const GetEstablish = async () => {
         try {
             var config = {
