@@ -149,7 +149,7 @@ const Schedule = ({ route }) => {
                     <View style={styles.container}>
                         <View style={styles.barberContainer}>
                             {barber.map((result, index) => (
-                                <TouchableOpacity key={index} onPress={() => selectBarberPress(result)}>
+                                <TouchableOpacity style={{marginHorizontal: 10}} key={index} onPress={() => selectBarberPress(result)}>
                                     <View style={{ alignItems: 'center' }}>
                                         <Image
                                             source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import callApi from '../../../../server/api'
 
@@ -8,7 +8,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 const Horario = (props) => {
     const [user, setUser] = useState({})
     const [funcionarioId, setFuncionarioId] = useState({})
-
+    const [loading, setLoading] = useState(false)
+    const [horaMessage, setHoraMessage] = useState('')
     const [abertura, setAbertura] = useState({
         visible: false,
         hora: ''
@@ -83,7 +84,7 @@ const Horario = (props) => {
                     }
                 })
                 .catch(function (error) {
-                    Alert.alert('', 'Erro')
+                    console.log('Erro')
                 });
         } catch (err) {
             console.log('[ERROR]', err)
@@ -113,6 +114,34 @@ const Horario = (props) => {
         }
     }
 
+    const getExistHour = () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Horario/existeHorario',
+                data: {
+                    IdEstabelecimento: props.establishment.IdEstabelecimento,
+                    IdFuncionario: funcionarioId
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        if(response.data.query[0].Existe == 1) {
+                            setHoraMessage('Você já possui um horario cadastrado')
+                        } else {
+                            setLoading(true)
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log('Erro')
+                });
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
     useEffect(() => {
         userGet()
     }, [])
@@ -121,46 +150,59 @@ const Horario = (props) => {
         getIdFuncionario()
     }, [user])
 
+    useEffect(() => {
+        if (funcionarioId){
+            getExistHour()
+        }
+    },[funcionarioId])
+
     return (
         <View style={styles.hourContainer}>
             <View style={styles.weekTouch}>
-                <Text style={styles.weekText}>Insira o horário de funcionamento</Text>
+                {loading && (
+                    <>
+                        <Text style={styles.weekText}>Insira o horário de funcionamento</Text>
 
-                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                <View style={styles.ButtonHour} >
-                    <Button title="Horário de abertura" onPress={() => setAbertura({ visible: true })} color={'#04bbb3'} />
-                </View>
-                <DateTimePickerModal
-                    isVisible={abertura.visible}
-                    mode="time"
-                    onConfirm={(date) => handleConfirm(date, 'abertura')}
-                    onCancel={() => setAbertura({ visible: false, hora: '' })}
-                    is24Hour
-                />
+                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
+                        <View style={styles.ButtonHour} >
+                            <Button title="Horário de abertura" onPress={() => setAbertura({ visible: true })} color={'#04bbb3'} />
+                        </View>
+                        <DateTimePickerModal
+                            isVisible={abertura.visible}
+                            mode="time"
+                            onConfirm={(date) => handleConfirm(date, 'abertura')}
+                            onCancel={() => setAbertura({ visible: false, hora: '' })}
+                            is24Hour
+                        />
 
-                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                <View style={styles.ButtonHour} >
-                    <Button title="Horário de fechamento" onPress={() => setFechamento({ visible: true })} color={'#04bbb3'} />
-                </View>
-                <DateTimePickerModal
-                    isVisible={fechamento.visible}
-                    mode="time"
-                    onConfirm={(date) => handleConfirm(date, 'fechamento')}
-                    onCancel={() => setFechamento({ visible: false, hora: '' })}
-                    is24Hour
-                />
+                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
+                        <View style={styles.ButtonHour} >
+                            <Button title="Horário de fechamento" onPress={() => setFechamento({ visible: true })} color={'#04bbb3'} />
+                        </View>
+                        <DateTimePickerModal
+                            isVisible={fechamento.visible}
+                            mode="time"
+                            onConfirm={(date) => handleConfirm(date, 'fechamento')}
+                            onCancel={() => setFechamento({ visible: false, hora: '' })}
+                            is24Hour
+                        />
 
-                <Text style={styles.textOption}>Qual o tempo estimado que você demora para o corte?</Text>
-                <View style={styles.ButtonHour} >
-                    <Button title="Horário estimado" onPress={() => setHrEstimada({ visible: true })} color={'#04bbb3'} />
-                </View>
-                <DateTimePickerModal
-                    isVisible={hrEstimada.visible}
-                    mode="time"
-                    onConfirm={(date) => handleConfirm(date, 'hrestimada')}
-                    onCancel={() => setHrEstimada({ visible: false, hora: '' })}
-                    is24Hour
-                />
+                        <Text style={styles.textOption}>Qual o tempo estimado que você demora para o corte?</Text>
+                        <View style={styles.ButtonHour} >
+                            <Button title="Horário estimado" onPress={() => setHrEstimada({ visible: true })} color={'#04bbb3'} />
+                        </View>
+                        <DateTimePickerModal
+                            isVisible={hrEstimada.visible}
+                            mode="time"
+                            onConfirm={(date) => handleConfirm(date, 'hrestimada')}
+                            onCancel={() => setHrEstimada({ visible: false, hora: '' })}
+                            is24Hour
+                        />
+                    </>
+                )}
+
+                {horaMessage != '' && <Text style={styles.textOption}>{horaMessage}</Text>}
+
             </View>
 
             {abertura.hora && fechamento.hora && hrEstimada.hora && <View style={styles.ButtonHour} >
