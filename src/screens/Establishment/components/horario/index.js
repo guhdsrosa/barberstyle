@@ -1,254 +1,302 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
-import styles from './styles';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Button,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import callApi from '../../../../server/api';
 
-const Horario = () => {
-    const [week, setWeek] = useState({
-        segunda: false,
-        terca: false,
-        quarta: false,
-        quinta: false,
-        sexta: false,
-        sabado: false,
-    })
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-    return (
-        <View style={styles.hourContainer}>
-            <TouchableOpacity style={styles.weekTouch}>
-                <Text style={styles.weekText}>Insira o horário de funcionamento</Text>
-                <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                <TextInput
-                    placeholder="ex: 7:30"
-                    keyboardType="decimal-pad"
-                    style={styles.inputStyle}
-                />
+const Horario = props => {
+  const [user, setUser] = useState({});
+  const [funcionarioId, setFuncionarioId] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [horaMessage, setHoraMessage] = useState('');
+  const [abertura, setAbertura] = useState({
+    visible: false,
+    hora: '',
+  });
+  const [fechamento, setFechamento] = useState({
+    visible: false,
+    hora: '',
+  });
+  const [hrEstimada, setHrEstimada] = useState({
+    visible: false,
+    hora: '',
+  });
 
-                <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                <TextInput
-                    placeholder="ex: 12:00"
-                    keyboardType="decimal-pad"
-                    style={styles.inputStyle}
-                />
+  const userGet = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      const params = JSON.parse(jsonValue);
+      setUser(params);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-                <TextInput
-                    placeholder="ex: 13:30"
-                    keyboardType="decimal-pad"
-                    style={styles.inputStyle}
-                />
+  const handleConfirm = (date, option) => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
 
-                <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                <TextInput
-                    placeholder="ex: 17:00"
-                    keyboardType="decimal-pad"
-                    style={styles.inputStyle}
-                />
+    if (option === 'abertura') {
+      setAbertura({
+        visible: false,
+        hora: formattedTime,
+      });
+    }
 
-            </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, segunda: !week.segunda })}>
-                <Text style={styles.weekText}>Segunda-Feira</Text>
-                {week.segunda == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+    if (option === 'fechamento') {
+      setFechamento({
+        visible: false,
+        hora: formattedTime,
+      });
+    }
 
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+    if (option === 'hrestimada') {
+      setHrEstimada({
+        visible: false,
+        hora: formattedTime,
+      });
+    }
 
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+    console.log('A date has been picked: ', formattedTime, option);
+    hideDatePicker();
+  };
 
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity>
+  const insertHour = () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Horario/Create',
+        data: {
+          duracao: hrEstimada.hora,
+          HorarioAbertura: abertura.hora,
+          HorarioTermino: fechamento.hora,
+          IdEstabelecimento: props.establishment.IdEstabelecimento,
+          IdFuncionario: funcionarioId,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            setEstab(response.data.query[0]);
+          }
+        })
+        .catch(function (error) {
+          console.log('Erro');
+        });
+    } catch (err) {
+      console.log('[ERROR]', err);
+    }
+  };
 
-            <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, terca: !week.terca })}>
-                <Text style={styles.weekText}>Terça-Feira</Text>
-                {week.terca == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+  const getIdFuncionario = () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Funcionario/findById',
+        data: {
+          IdUsuario: user.IdUsuario,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            setFuncionarioId(response.data.query.IdFuncionario);
+          }
+        })
+        .catch(function (error) {});
+    } catch (err) {
+      console.log('[ERROR]', err);
+    }
+  };
 
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+  const getExistHour = () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Horario/existeHorario',
+        data: {
+          IdEstabelecimento: props.establishment.IdEstabelecimento,
+          IdFuncionario: funcionarioId,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            if (response.data.query[0].Existe == 1) {
+              setHoraMessage('Você já possui um horario cadastrado');
+            } else {
+              setLoading(true);
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log('Erro');
+        });
+    } catch (err) {
+      console.log('[ERROR]', err);
+    }
+  };
 
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+  useEffect(() => {
+    userGet();
+  }, []);
 
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity>
+  useEffect(() => {
+    getIdFuncionario();
+  }, [user]);
 
-            <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, quarta: !week.quarta })}>
-                <Text style={styles.weekText}>Quarta-Feira</Text>
-                {week.quarta == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+  useEffect(() => {
+    if (funcionarioId) {
+      getExistHour();
+    }
+  }, [funcionarioId]);
 
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+  return (
+    <View style={styles.hourContainer}>
+      <View style={styles.weekTouch}>
+        {loading && (
+          <>
+            <Text style={styles.weekText}>
+              Insira o horário de funcionamento
+            </Text>
 
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+            <Text style={styles.textOption}>
+              Qual horário você abre o seu estabelecimento?
+            </Text>
+            <View style={styles.ButtonHour}>
+              <Button
+                title="Horário de abertura"
+                onPress={() => setAbertura({visible: true})}
+                color={'#04bbb3'}
+              />
+            </View>
+            <DateTimePickerModal
+              isVisible={abertura.visible}
+              mode="time"
+              onConfirm={date => handleConfirm(date, 'abertura')}
+              onCancel={() => setAbertura({visible: false, hora: ''})}
+              is24Hour
+            />
 
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity>
+            <Text style={styles.textOption}>
+              Qual horário você fecha o seu estabelecimento?
+            </Text>
+            <View style={styles.ButtonHour}>
+              <Button
+                title="Horário de fechamento"
+                onPress={() => setFechamento({visible: true})}
+                color={'#04bbb3'}
+              />
+            </View>
+            <DateTimePickerModal
+              isVisible={fechamento.visible}
+              mode="time"
+              onConfirm={date => handleConfirm(date, 'fechamento')}
+              onCancel={() => setFechamento({visible: false, hora: ''})}
+              is24Hour
+            />
 
-            <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, quinta: !week.quinta })}>
-                <Text style={styles.weekText}>Quinta-Feira</Text>
-                {week.quinta == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+            <Text style={styles.textOption}>
+              Qual o tempo estimado que você demora para o corte?
+            </Text>
+            <View style={styles.ButtonHour}>
+              <Button
+                title="Horário estimado"
+                onPress={() => setHrEstimada({visible: true})}
+                color={'#04bbb3'}
+              />
+            </View>
+            <DateTimePickerModal
+              isVisible={hrEstimada.visible}
+              mode="time"
+              onConfirm={date => handleConfirm(date, 'hrestimada')}
+              onCancel={() => setHrEstimada({visible: false, hora: ''})}
+              is24Hour
+            />
+          </>
+        )}
 
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
+        {horaMessage != '' && (
+          <Text style={styles.textOption}>{horaMessage}</Text>
+        )}
+      </View>
 
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, sexta: !week.sexta })}>
-                <Text style={styles.weekText}>Sexta-Feira</Text>
-                {week.sexta == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.weekTouch} onPress={() => setWeek({ ...week, sabado: !week.sabado })}>
-                <Text style={styles.weekText}>Sábado</Text>
-                {week.sabado == true &&
-                    <>
-                        <Text style={styles.textOption}>Qual horário você abre o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 7:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <Text style={styles.textOption}>Qual horário você tira para o almoço?</Text>
-                        <TextInput
-                            placeholder="ex: 12:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <TextInput
-                            placeholder="ex: 13:30"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-
-                        <Text style={styles.textOption}>Qual horário você fecha o seu estabelecimento?</Text>
-                        <TextInput
-                            placeholder="ex: 17:00"
-                            keyboardType="decimal-pad"
-                            style={styles.inputStyle}
-                        />
-                    </>
-                }
-            </TouchableOpacity> */}
+      {abertura.hora && fechamento.hora && hrEstimada.hora && (
+        <View style={styles.ButtonHour}>
+          <Button
+            title="Confirmar Horário"
+            onPress={() => insertHour()}
+            color={'#04bbb3'}
+          />
+          <Text style={[styles.textOption, {marginVertical: 3}]}>
+            Hora abertura: {abertura.hora}
+          </Text>
+          <Text style={[styles.textOption, {marginVertical: 3}]}>
+            Hora fechamento: {fechamento.hora}
+          </Text>
+          <Text style={[styles.textOption, {marginVertical: 3}]}>
+            Tempo estimado de corte: {hrEstimada.hora}
+          </Text>
         </View>
-    )
-}
+      )}
+    </View>
+  );
+};
 
 export default Horario;
+
+const styles = StyleSheet.create({
+  textOption: {
+    fontSize: 15,
+    color: '#141414',
+    fontFamily: 'Quicksand-SemiBold',
+    textAlign: 'center',
+    paddingHorizontal: 30,
+  },
+
+  hourContainer: {
+    marginVertical: 8,
+  },
+
+  weekTouch: {
+    marginVertical: 10,
+    marginHorizontal: 0,
+    borderRadius: 20,
+  },
+
+  weekText: {
+    fontSize: 19,
+    color: '#141414',
+    fontFamily: 'Quicksand-SemiBold',
+    textAlign: 'center',
+    paddingVertical: 30,
+  },
+
+  inputStyle: {
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#141414',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    marginVertical: 5,
+    marginHorizontal: 50,
+    paddingHorizontal: 10,
+  },
+
+  ButtonHour: {
+    paddingHorizontal: 30,
+    marginVertical: 10,
+    marginBottom: 30,
+  },
+});

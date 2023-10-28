@@ -19,9 +19,7 @@ const Establishment = () => {
 
     const [optionsSelect, setOptionsSelect] = useState([
         { name: 'Agenda' },
-        { name: 'Estabelecimento' },
         { name: 'Horarios' },
-        { name: 'Profissionais' }
     ])
 
 
@@ -30,10 +28,20 @@ const Establishment = () => {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const params = JSON.parse(jsonValue)
             setUser(params)
+
+            if (params.TipoUsuario === 'Dono') {
+                setOptionsSelect([
+                    { name: 'Agenda' },
+                    { name: 'Estabelecimento' },
+                    { name: 'Horarios' },
+                    { name: 'Profissionais' }
+                ])
+            }
         } catch (e) {
             // error reading value
         }
     }
+
     const GetEstablish = async () => {
         try {
             var config = {
@@ -46,6 +54,7 @@ const Establishment = () => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
+                        console.log(response.data.query)
                         setEstab(response.data.query[0])
                     }
                 })
@@ -62,7 +71,7 @@ const Establishment = () => {
     }
 
     useEffect(() => {
-        if (user.IdUsuario)
+        if (user)
             GetEstablish()
     }, [user])
 
@@ -70,16 +79,14 @@ const Establishment = () => {
         userGet()
     }, [])
 
-    // console.log(estab)
-
     return (
         <ScrollView style={styles.container}>
             <ScrollView style={styles.scrollContent} horizontal={true}>
-                {optionsSelect.map((result, index) =>
+                {optionsSelect.map((result, index) => (
                     <TouchableOpacity onPress={() => { optionSelect({ opt: result.name }) }} style={styles.touchOption} key={index}>
                         <Text style={[styles.textOption, { color: option == result.name ? '#0fcbc2' : '#fff' }]}>{result.name}</Text>
                     </TouchableOpacity>
-                )}
+                ))}
             </ScrollView>
 
             {option == 'Agenda' &&
@@ -91,7 +98,7 @@ const Establishment = () => {
             }
 
             {option == 'Horarios' &&
-                <Horario />
+                <Horario establishment={estab} />
             }
 
             {option == 'Profissionais' &&
