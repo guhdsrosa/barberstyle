@@ -91,6 +91,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         marginBottom: 10
+    },
+
+    //Infor
+    infoText: {
+        color: '#000',
+        fontWeight: 'bold',
+    },
+
+    inputInfoText: {
+        color: '#000',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 2,
+        marginBottom: 20,
+        paddingHorizontal: 10
     }
 })
 

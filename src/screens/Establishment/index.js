@@ -44,6 +44,7 @@ const Establishment = () => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
+                        console.log(response.data.query)
                         setEstab(response.data.query[0])
                     }
                 })
@@ -60,7 +61,7 @@ const Establishment = () => {
     }
 
     useEffect(() => {
-        if (user.IdUsuario)
+        if (user)
             GetEstablish()
     }, [user])
 
@@ -68,7 +69,7 @@ const Establishment = () => {
         userGet()
     }, [])
 
-    // console.log(estab)
+    console.log('estab', estab)
 
     return (
         <ScrollView style={styles.container}>
@@ -89,7 +90,7 @@ const Establishment = () => {
             }
 
             {option == 'Horarios' &&
-                <Horario />
+                <Horario establishment={estab} />
             }
 
             {option == 'Profissionais' &&

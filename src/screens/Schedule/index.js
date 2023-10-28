@@ -135,7 +135,6 @@ const Schedule = ({ route }) => {
     }, [IdEstabelecimento])
 
     useEffect(() => {
-        console.log('idServiço:', selectService, 'IdUsuario:', IdUsuario, 'idBarbeiro:', selectBarber, 'IdEstabelecimento:', IdEstabelecimento, 'Data:', selected)
         getHours()
     }, [selected])
     console.log('horario', horario)

@@ -111,7 +111,8 @@ const Geral = (props) => {
                 titulo: 'Adicionar um novo corte',
                 nome: 'Nome do corte',
                 valor: 'Valor do corte',
-                nomeBotao: 'Adicionar'
+                nomeBotao: 'Adicionar',
+                option: option
             })
         }
 
@@ -121,7 +122,8 @@ const Geral = (props) => {
                 titulo: 'Adicionar um novo consumivel',
                 nome: 'Nome',
                 valor: 'Valor do produto',
-                nomeBotao: 'Adicionar'
+                nomeBotao: 'Adicionar',
+                option: option
             })
         }
 
@@ -132,7 +134,8 @@ const Geral = (props) => {
                 nome: 'Nome',
                 valor: 'Valor do produto',
                 showValor: false,
-                nomeBotao: 'Adicionar'
+                nomeBotao: 'Adicionar',
+                option: option
             })
         }
     }
@@ -150,6 +153,7 @@ const Geral = (props) => {
                 mod: mod,
                 IdTipoServico: service.IdTipoServico,
                 IdServico: service.IdServico,
+                option: option
             })
         }
 
@@ -164,6 +168,7 @@ const Geral = (props) => {
                 option: option,
                 mod: mod,
                 Id: service.Id,
+                option: option
             })
         }
 
@@ -178,6 +183,7 @@ const Geral = (props) => {
                 option: option,
                 mod: mod,
                 Id: service.Id,
+                option: option
             })
         }
     }
@@ -216,6 +222,7 @@ const Geral = (props) => {
                             })
                             setNovoItemNome('')
                             setNovoItemPreco('')
+                            serviceEstab()
                         }
                     })
                     .catch(function (error) {
@@ -261,6 +268,7 @@ const Geral = (props) => {
                             })
                             setNovoItemNome('')
                             setNovoItemPreco('')
+                            consumiveisEstab()
                         }
                     })
                     .catch(function (error) {
@@ -303,7 +311,7 @@ const Geral = (props) => {
                             })
                             setNovoItemNome('')
                             setNovoItemPreco('')
-                            return
+                            comodidadesEstab()
                         }
                     })
                     .catch(function (error) {
@@ -350,6 +358,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            serviceEstab()
                         }
                     })
                     .catch(function (error) {
@@ -389,6 +398,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            consumiveisEstab()
                         }
                     })
                     .catch(function (error) {
@@ -427,6 +437,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            comodidadesEstab()
                         }
                     })
                     .catch(function (error) {
@@ -466,6 +477,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            serviceEstab()
                         }
                     })
                     .catch(function (error) {
@@ -503,6 +515,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            consumiveisEstab()
                         }
                     })
                     .catch(function (error) {
@@ -540,6 +553,7 @@ const Geral = (props) => {
                                 valor: 0,
                                 nomeBotao: ''
                             })
+                            comodidadesEstab()
                         }
                     })
                     .catch(function (error) {
@@ -563,8 +577,61 @@ const Geral = (props) => {
         consumiveisEstab()
         comodidadesEstab()
     }, [props])
+    //services
 
-    //\services
+    //Infos
+    const [info, setInfo] = useState({})
+
+    const getInfo = () => {
+        try {
+            var config = {
+                method: 'get',
+                url: 'Estabelecimento/findById',
+                params: {
+                    IdEstabelecimento: props.establishment.IdEstabelecimento
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setInfo(response.data.estab)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[errors]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
+    const updateInfo = () => {
+        let data = JSON.stringify(info);
+        try {
+            var config = {
+                method: 'post',
+                url: 'Estabelecimento/Update',
+                data: info
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        Alert.alert('Sucesso', response.data.sucess)
+                        getInfo()
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[errors]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+    console.log(info)
+    useEffect(() => {
+        getInfo()
+    }, [])
+    //Infos
 
     return (
         <View style={styles.container}>
@@ -715,21 +782,47 @@ const Geral = (props) => {
 
                     {option == 'address' &&
                         <View>
-                            <Text style={styles.text}>Rua</Text>
-                            <Text style={styles.text}>Número:</Text>
-                            <Text style={styles.text}>CEP:</Text>
-                            <Text style={styles.text}>Bairro:</Text>
-                            <Text style={styles.text}>Cidade:</Text>
+                            <Text style={styles.infoText}>Rua:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.Rua}`} onChangeText={(text) => setInfo({ ...info, Rua: text })} />
+
+                            <Text style={styles.infoText}>CEP:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.CEP}`} onChangeText={(text) => setInfo({ ...info, CEP: text })} />
+
+                            <Text style={styles.infoText}>Numero do estabelecimento:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.NumeroEstabelecimento}`} onChangeText={(text) => setInfo({ ...info, NumeroEstabelecimento: text })} />
+                            
+                            <Text style={styles.infoText}>Bairro:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.Bairro}`} onChangeText={(text) => setInfo({ ...info, Bairro: text })} />
+                            
+                            <Text style={styles.infoText}>Cidade:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.Cidade}`} onChangeText={(text) => setInfo({ ...info, Cidade: text })} />
+                        
+                            <TouchableOpacity onPress={() => updateInfo()}>
+                                <Text style={[styles.text, styles.buttomAdd, {marginTop: -10, marginBottom: 10}]}>Atualizar</Text>
+                            </TouchableOpacity>
                         </View>
                     }
 
                     {option == 'more' &&
                         <View>
-                            <Text style={styles.text}>Sobre:</Text>
-                            <Text style={styles.text}>Rede Social:</Text>
-                            <Text style={styles.text}>Telefone:</Text>
-                            <Text style={styles.text}>Telefone:</Text>
-                            <Text style={styles.text}>CNPJ:</Text>
+                            <Text style={styles.infoText}>Sobre:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.SobreNos}`} onChangeText={(text) => setInfo({ ...info, SobreNos: text })} />
+
+                            <Text style={styles.infoText}>Rede social:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.RedeSocial}`} onChangeText={(text) => setInfo({ ...info, RedeSocial: text })} />
+
+                            <Text style={styles.infoText}>Telefone 1:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.Telefone1}`} onChangeText={(text) => setInfo({ ...info, Telefone1: text })} />
+
+                            <Text style={styles.infoText}>Telefone 2:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.Telefone2}`} onChangeText={(text) => setInfo({ ...info, Telefone2: text })} />
+
+                            <Text style={styles.infoText}>CNPJ:</Text>
+                            <TextInput style={styles.inputInfoText} value={`${info.CNPJ}`} onChangeText={(text) => setInfo({ ...info, CNPJ: text })} />
+                        
+                            <TouchableOpacity onPress={() => updateInfo()}>
+                                <Text style={[styles.text, styles.buttomAdd, {marginTop: -10, marginBottom: 10}]}>Atualizar</Text>
+                            </TouchableOpacity>
                         </View>
                     }
                 </View>
@@ -758,12 +851,12 @@ const Geral = (props) => {
                             style={styles.inputModal}
                             onChangeText={setNovoItemNome}
                         />
-                        <TextInput
+                        {modal.option != 'comodidades' && <TextInput
                             placeholder={'R$' + modal.valor}
                             style={styles.inputModal}
                             onChangeText={setNovoItemPreco}
                             keyboardType="numeric"
-                        />
+                        />}
                         <TouchableOpacity onPress={() => addServicePress()}>
                             <Text
                                 style={{
@@ -815,12 +908,12 @@ const Geral = (props) => {
                             editable={modalMod.editar}
                             onChangeText={(text) => setModalMod({ ...modalMod, nome: text })}
                         />
-                        <TextInput
+                        {modalMod.option != 'comodidades' && <TextInput
                             value={modalMod.valor}
                             style={styles.inputModal}
                             editable={modalMod.editar}
                             onChangeText={(text) => setModalMod({ ...modalMod, valor: text })}
-                        />
+                        />}
                         <TouchableOpacity onPress={() => {
                             if (modalMod.mod === 'editar') {
                                 editServicePress()
@@ -854,60 +947,3 @@ const Geral = (props) => {
 }
 
 export default Geral;
-
-// <View>
-//     {!loading &&
-//         <>
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Nome do Estabelecimento*'}
-//                 value={props.establishment.NomeEstabelecimento}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'CEP*'}
-//                 value={props.establishment.CEP}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Rua*'}
-//                 value={props.establishment.Rua}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Bairro*'}
-//                 value={props.establishment.Bairro}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Estado*'}
-//                 value={props.establishment.Estado}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Número*'}
-//                 value={props.establishment.NumeroEstabelecimento}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'CNPJ'}
-//                 value={props.establishment.CNPJ}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Telefone'}
-//                 value={props.establishment.Telefone1}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Telefone'}
-//                 value={props.establishment.Telefone2}
-//             />
-//             <TextInput
-//                 style={styles.inputText}
-//                 placeholder={'Sobre nós'}
-//                 value={props.establishment.SobreNos}
-//             />
-//         </>
-//     }
-// </View>

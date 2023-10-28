@@ -90,6 +90,18 @@ const MyTabs = () => {
                 />
             }
 
+            {user.TipoUsuario == 'Funcionario' &&
+                <Tab.Screen
+                    name="Estabelecimento"
+                    component={Establishment}
+                    options={{
+                        tabBarLabel: 'Estabelecimento',
+                        tabBarIcon: ({ color }) => <Entypo name="shop" color={color} size={30} />,
+                        headerShown: false,
+                    }}
+                />
+            }
+
             {user.TipoUsuario == 'Dono' &&
                 <Tab.Screen
                     name="Relatório"
