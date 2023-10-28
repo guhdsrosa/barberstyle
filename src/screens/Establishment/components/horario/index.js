@@ -107,7 +107,7 @@ const Horario = (props) => {
                     }
                 })
                 .catch(function (error) {
-                    Alert.alert('', 'Erro')
+                    
                 });
         } catch (err) {
             console.log('[ERROR]', err)
