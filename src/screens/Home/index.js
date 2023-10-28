@@ -29,21 +29,13 @@ const Home = ({ route }) => {
         navigation.navigate('Perfil')
     }
 
-    const lojas = [
-        { name: 'Barbearia Alfred Richard Vas VAS', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
-        { name: 'Barbearia Lesley', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
-        { name: 'Barbearia Joe', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
-        { name: 'Barbearia Charles', foto: 'https://i0.wp.com/blog.iluminim.com.br/wp-content/uploads/2021/01/capa-post-iluminacao-para-barbearia-scaled.jpg' },
-        { name: 'Barbearia Hobert', foto: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' },
-    ]
-
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            const imageSource = {uri: params.Foto};
+            const imageSource = { uri: params.Foto };
 
             setUser(params)
             setSenha(senha)
@@ -52,7 +44,7 @@ const Home = ({ route }) => {
             console.log('[userGet error]', e)
         }
     }
-console.log(user)
+    console.log(user)
     const getRecomendedEstablishment = async () => {
         try {
             var config = {
@@ -110,6 +102,14 @@ console.log(user)
 
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
+                        <Text style={styles.titleText}>Horários Agendados</Text>
+                        <TouchableOpacity style={styles.seeAllContent} onPress={() => null}>
+                            <Text style={[styles.titleText, { fontSize: 15 }]}>Ver histórico</Text>
+                            <AntDesign name="right" size={15} style={styles.seeAllIcon} color={'#fff'} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Recomendados</Text>
                         <TouchableOpacity style={styles.seeAllContent} onPress={() => navigation.navigate('Explore')}>
                             <Text style={[styles.titleText, { fontSize: 15 }]}>Ver mais</Text>
@@ -125,7 +125,7 @@ console.log(user)
                                 key={index}
                             >
                                 <FastImage
-                                    source={{ uri: `https://imagens-revista.vivadecora.com.br/uploads/2020/11/A-lumin%C3%A1ria-trilho-traz-uma-nova-perspectiva-par-aa-decora%C3%A7%C3%A3o-de-barbearia.-Fonte-Pinterest.jpg` }}
+                                    source={{ uri: result.FotoEstabelecimento != 'null' ? result.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
                                     style={styles.storeImage}
                                     resizeMode="cover"
                                 />

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Image, Modal, Alert } from "react-native";
+import ImagePicker from 'react-native-image-crop-picker';
+import axios from "axios";
 
 import callApi from '../../../../server/api'
 
@@ -627,23 +629,94 @@ const Geral = (props) => {
             console.log('[ERROR]', err)
         }
     }
-    console.log(info)
+
     useEffect(() => {
         getInfo()
     }, [])
     //Infos
 
+    //Foto estab
+    const [estabPhotoSelect, setEstabPhotoSelect] = useState()
+    const [saveButtonImage, setSaveButtonImage] = useState(false)
+
+    const imagePickerCallback = () => {
+        ImagePicker.openPicker({
+            width: 400,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            setEstabPhotoSelect(image)
+            setSaveButtonImage(true)
+        })
+    }
+
+    const setEstabPhoto = () => {
+        const formData = new FormData();
+
+        formData.append('IdEstabelecimento', props.establishment.IdEstabelecimento);
+
+        const regex = /\/([^/]+)\.jpg$/;
+        const url = estabPhotoSelect.path.match(regex);
+        const nomeImagem = url[0].replace(/^\//, '')
+
+        formData.append('File', {
+            uri: estabPhotoSelect.path,
+            type: 'image/jpeg', // Tipo da imagem (pode variar)
+            name: nomeImagem,
+        });
+
+        try {
+            axios.post('http://18.230.154.41:3000/Estabelecimento/updateFotoEstabelecimento', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Importante definir o cabeçalho correto
+                },
+            })
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setSaveButtonImage(false)
+                        Alert.alert('Sucesso', response.data.msg)
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                    setSaveButtonImage(false)
+                });
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+    //Foto estab
+
     return (
         <View style={styles.container}>
             <ScrollView>
                 <View style={styles.header}>
-                    <Image
-                        source={{ uri: 'https://img.freepik.com/fotos-premium/espaco-masculino-interior-de-barbearia-moderna-gerado-por-ia_866663-5580.jpg' }}
-                        //source={{ uri: data?.FotoEstabelecimento }}
-                        style={styles.storePhoto}
-                        resizeMode='cover'
-                        blurRadius={0}
-                    />
+                    <TouchableOpacity onPress={() => imagePickerCallback()}>
+                        {saveButtonImage && (
+                            <TouchableOpacity style={{ position: 'absolute', zIndex: 100 }} onPress={() => setEstabPhoto()}>
+                                <Text style={{
+                                    color: "#000",
+                                    backgroundColor: '#ffffff9f',
+                                    paddingHorizontal: 20,
+                                    paddingVertical: 5,
+                                    borderRadius: 100,
+                                    marginTop: 10,
+                                    marginLeft: 10
+                                }}>Salvar</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {props.establishment?.FotoEstabelecimento &&
+                            <Image
+                                source={{
+                                    uri: props.establishment.FotoEstabelecimento != 'null' ?
+                                        props.establishment.FotoEstabelecimento : estabPhotoSelect?.path ? estabPhotoSelect?.path : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn'
+                                }}
+                                style={styles.storePhoto}
+                                resizeMode='cover'
+                                blurRadius={0}
+                            />}
+                    </TouchableOpacity>
                     <Text style={styles.storeName}>{props?.establishment?.NomeEstabelecimento}</Text>
                 </View>
 
@@ -790,15 +863,15 @@ const Geral = (props) => {
 
                             <Text style={styles.infoText}>Numero do estabelecimento:</Text>
                             <TextInput style={styles.inputInfoText} value={`${info.NumeroEstabelecimento}`} onChangeText={(text) => setInfo({ ...info, NumeroEstabelecimento: text })} />
-                            
+
                             <Text style={styles.infoText}>Bairro:</Text>
                             <TextInput style={styles.inputInfoText} value={`${info.Bairro}`} onChangeText={(text) => setInfo({ ...info, Bairro: text })} />
-                            
+
                             <Text style={styles.infoText}>Cidade:</Text>
                             <TextInput style={styles.inputInfoText} value={`${info.Cidade}`} onChangeText={(text) => setInfo({ ...info, Cidade: text })} />
-                        
+
                             <TouchableOpacity onPress={() => updateInfo()}>
-                                <Text style={[styles.text, styles.buttomAdd, {marginTop: -10, marginBottom: 10}]}>Atualizar</Text>
+                                <Text style={[styles.text, styles.buttomAdd, { marginTop: -10, marginBottom: 10 }]}>Atualizar</Text>
                             </TouchableOpacity>
                         </View>
                     }
@@ -819,9 +892,9 @@ const Geral = (props) => {
 
                             <Text style={styles.infoText}>CNPJ:</Text>
                             <TextInput style={styles.inputInfoText} value={`${info.CNPJ}`} onChangeText={(text) => setInfo({ ...info, CNPJ: text })} />
-                        
+
                             <TouchableOpacity onPress={() => updateInfo()}>
-                                <Text style={[styles.text, styles.buttomAdd, {marginTop: -10, marginBottom: 10}]}>Atualizar</Text>
+                                <Text style={[styles.text, styles.buttomAdd, { marginTop: -10, marginBottom: 10 }]}>Atualizar</Text>
                             </TouchableOpacity>
                         </View>
                     }

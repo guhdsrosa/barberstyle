@@ -3,9 +3,9 @@ import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, RefreshCont
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../server/api'
+import axios from "axios";
 import ImagePicker from 'react-native-image-crop-picker';
-
-import logo from '../../assets/images/logo.png'
+import fs from 'react-native-fs'
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 import LinearGradient from "react-native-linear-gradient";
@@ -18,12 +18,9 @@ const Perfil = () => {
     const [typeUser, setTypeUser] = useState('estabelecimento')
     const [user, setUser] = useState({})
     const [userName, setUserName] = useState('')
-    const [userPass, setUserPass] = useState('')
     const [Senha, setSenha] = useState('')
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
-    const [File, setFile] = useState({})
-    const [foto, setFoto] = useState(false)
     //const fs = require('fs')
     //https://www.npmjs.com/package/react-native-fs
     const [showAlert, setShowAlert] = useState({
@@ -72,7 +69,7 @@ const Perfil = () => {
             const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
             const senha = JSON.parse(jsonValueSenha)
-            
+
             setUserName(params.Nome)
             setUser(params)
             setSenha(senha)
@@ -81,22 +78,43 @@ const Perfil = () => {
         }
     }
 
+    const imagePickerPress = () => {
+        const dataFile = new FormData()
+        ImagePicker.openPicker({
+            //multiple: true
+            width: 400,
+            height: 400,
+            cropping: true,
+        }).then(image => {
+            setPhoto(image)
+            //updateUser()
+        });
+    }
+
     const updateUser = async () => {
+        const formData = new FormData();
+
+        formData.append('IdUsuario', user.IdUsuario);
+        formData.append('Nome', user.Nome);
+        formData.append('Email', user.Email);
+        formData.append('Senha', '123123');
+        formData.append('Telefone', user.Telefone);
+
+        const regex = /\/([^/]+)\.jpg$/;
+        const url = photo.path.match(regex);
+        const nomeImagem = url[0].replace(/^\//, '')
+
+        formData.append('File', {
+            uri: photo.path,
+            type: 'image/jpeg', // Tipo da imagem (pode variar)
+            name: nomeImagem,
+        });
         try {
-            var config = {
-                method: 'post',
-                url: 'Usuario/Update',
-                data: {
-                    IdUsuario: user.IdUsuario,
-                    Nome: user.Nome,
-                    Email: user.Email,
-                    Senha: Senha.user.Senha,
-                    //Foto: user.Foto,
-                    Foto: photo,
-                    Telefone: user.Telefone
-                }
-            };
-            callApi(config)
+            axios.post('http://18.230.154.41:3000/Usuario/Update', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Importante definir o cabeçalho correto
+                },
+            })
                 .then(function (response) {
                     if (response.status == 200) {
                         setShowAlert({
@@ -163,19 +181,6 @@ const Perfil = () => {
         })
     }
 
-    const imagePickerPress = () => {
-        ImagePicker.openPicker({
-            //multiple: true
-            width: 400,
-            height: 400,
-            cropping: true,
-        }).then(image => {
-            console.log('IMAGEM: ', image);
-            setPhoto(image.path)
-            //updateUser()
-        });
-    }
-
     const createFormData = (photo) => {
         const data = new FormData();
 
@@ -188,7 +193,7 @@ const Perfil = () => {
             // uri: normalizedPath,
             uri: photo.path
         });
-        
+
         return data;
     };
 
@@ -224,9 +229,7 @@ const Perfil = () => {
 
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
-                        //source={{ uri: foto ? foto : user.Foto }}
                         source={{ uri: photo ? photo : user.Foto }}
-                        // source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />
@@ -274,7 +277,7 @@ const Perfil = () => {
                     />*/}
 
 
-                    <TouchableOpacity style={styles.saveButton} onPress={updateUser}>
+                    <TouchableOpacity style={styles.saveButton} onPress={() => updateUser()}>
                         <Text style={styles.saveButtonText}>Salvar</Text>
                     </TouchableOpacity>
                 </View>
