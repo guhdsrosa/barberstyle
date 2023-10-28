@@ -7,11 +7,12 @@ import callApi from '../../server/api'
 import Geral from "./components/geral";
 import Horario from "./components/horario";
 import Profissionais from "./components/profissionais";
+import ScheduleDaily from "./components/scheduleDaily";
 
 import styles from "./styles";
 
 const Establishment = () => {
-    const [option, setOption] = useState('Agenda')
+    const [option, setOption] = useState('')
     const [user, setUser] = useState('')
     const [estab, setEstab] = useState(null)
     const [services, setServices] = useState(null)
@@ -22,6 +23,7 @@ const Establishment = () => {
         { name: 'Horarios' },
         { name: 'Profissionais' }
     ])
+
 
     const userGet = async () => {
         try {
@@ -81,7 +83,7 @@ const Establishment = () => {
             </ScrollView>
 
             {option == 'Agenda' &&
-                null
+                <ScheduleDaily/>
             }
 
             {option == 'Estabelecimento' &&
