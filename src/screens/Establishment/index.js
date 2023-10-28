@@ -12,7 +12,7 @@ import ScheduleDaily from "./components/scheduleDaily";
 import styles from "./styles";
 
 const Establishment = () => {
-    const [option, setOption] = useState('')
+    const [option, setOption] = useState('Agenda')
     const [user, setUser] = useState('')
     const [estab, setEstab] = useState(null)
     const [services, setServices] = useState(null)
