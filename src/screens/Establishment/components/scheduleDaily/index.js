@@ -59,7 +59,10 @@ const ScheduleDaily = () => {
           <ScrollView style={{flex: 1}}>
             <View style={styles.container}>
               {selected === ' ' ? (
-                <Text style={styles.title}>Selecione uma data</Text>
+                <>
+                  <Text style={styles.title}>Selecione uma data</Text>
+                  <CalendarModal setCalendar={setCalendar} date={selected} />
+                </>
               ) : (
                 <View>
                   <View
@@ -82,31 +85,22 @@ const ScheduleDaily = () => {
                         }}
                       />
                     </TouchableOpacity>
-                    <Text style={styles.title}>{selected}</Text>
+                    <Text style={styles.dateTitle}>{selected}</Text>
+                  </View>
+                  <View style={styles.hourContainer}>
+                    <View style={styles.viewFlex}>
+                      <Text style={styles.contentHoursDays}>Horario</Text>
+                      <Text style={styles.contentHoursDays}>Cliente</Text>
+                    </View>
+                    <View style={styles.viewFlex}>
+                      <Text style={styles.contentHoursDays}>16:21</Text>
+                      <Text style={styles.contentHoursDays}>Gilmarzinho</Text>
+                    </View>
                   </View>
                 </View>
               )}
             </View>
-            {selected === ' ' && (
-              <CalendarModal setCalendar={setCalendar} date={selected} />
-            )}
           </ScrollView>
-        </>
-      )}
-      {selected !== ' ' && !loading && (
-        <>
-          <View style={styles.hourContainer}>
-            <View style={styles.viewFlex}>
-              <View style={styles.viewFlex}>
-                <Text style={styles.contentHoursDays}>Horario</Text>
-                <Text style={styles.contentHoursDays}>Cliente</Text>
-              </View>
-              <View style={styles.viewFlex}>
-                <Text style={styles.contentHoursDays}>10:00</Text>
-                <Text style={styles.contentHoursDays}>GUILMARZINHO</Text>
-              </View>
-            </View>
-          </View>
         </>
       )}
     </LinearGradient>
