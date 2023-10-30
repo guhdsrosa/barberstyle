@@ -17,6 +17,7 @@ import Explore from './screens/Explore';
 import Establishment from './screens/Establishment';
 import Statistics from './screens/Statistics';
 import Schedule from './screens/Schedule';
+import AgendHistoric from './screens/AgendHistoric';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -159,6 +160,7 @@ function App() {
                 <Stack.Screen name="Explore" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Establishment" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Schedule" component={Schedule} options={{ headerShown: false }} />
+                <Stack.Screen name="AgendHistoric" component={AgendHistoric} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
