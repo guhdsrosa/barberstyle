@@ -13,7 +13,7 @@ const Statistics = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState([]);
- 
+
   const data = [
     {key: '1', value: 'do dia'},
     {key: '2', value: '3 dias'},
@@ -54,24 +54,6 @@ const Statistics = () => {
       )}
       {!loading && (
         <>
-          <View style={{marginTop: 10, marginHorizontal: 10}}>
-            <SelectList
-              setSelected={setValue}
-              data={data}
-              save="value"
-              d
-              search={false}
-              dropdownTextStyles={{color: '#181818'}}
-              disabledTextStyles={{color: '#DCDCDC'}}
-              placeholder="Selecione o Período"
-              fontFamily="Quicksand-Medium"
-              boxStyles={{backgroundColor: '#141414'}}
-              inputStyles={{color: '#fff'}}
-              arrowicon={
-                <Entypo name="chevron-small-down" color={'#fff'} size={20} />
-              }
-            />
-          </View>
           <ScrollView style={{flex: 1}}>
             <View style={style.container}>
               <Text style={style.title}>Estatisticas</Text>
@@ -81,7 +63,73 @@ const Statistics = () => {
                 sliceColor={colorGraphic}
                 //coverRadius={0.70}
               />
-              <View style={{height: 200}} />
+              <View style={{height:30}}/>
+              <Text style={styles.title}>Selecione o Período</Text>
+              <View
+                style={{
+                  marginTop: 10,
+                  width: '100%',
+                  justifyContent: 'space-around',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  minHeight: 20,
+                  minWidth: 100,
+                }}>
+                <Text style={{fontSize: 20}}>Data inicial</Text>
+                <SelectList
+                  style={{minWidth: 100}}
+                  setSelected={setValue}
+                  data={data}
+                  save="value"
+                  search={false}
+                  dropdownTextStyles={{color: '#181818'}}
+                  disabledTextStyles={{color: '#DCDCDC'}}
+                  placeholder="Selecione "
+                  fontFamily="Quicksand-Medium"
+                  boxStyles={{backgroundColor: '#141414'}}
+                  inputStyles={{color: '#fff'}}
+                  arrowicon={
+                    <Entypo
+                      name="chevron-small-down"
+                      color={'#fff'}
+                      size={20}
+                    />
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                  width: '100%',
+                  justifyContent: 'space-around',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  minHeight: 20,
+                  minWidth: 100,
+                }}>
+                <Text style={{fontSize: 20}}>Data Final</Text>
+                <SelectList
+                  style={{minWidth: 100}}
+                  setSelected={setValue}
+                  data={data}
+                  save="value"
+                  search={false}
+                  dropdownTextStyles={{color: '#181818'}}
+                  disabledTextStyles={{color: '#DCDCDC'}}
+                  placeholder="Selecione "
+                  fontFamily="Quicksand-Medium"
+                  boxStyles={{backgroundColor: '#141414'}}
+                  inputStyles={{color: '#fff'}}
+                  arrowicon={
+                    <Entypo
+                      name="chevron-small-down"
+                      color={'#fff'}
+                      size={20}
+                    />
+                  }
+                />
+              </View>
+              <View style={{height:90}}/>
               <View
                 style={{
                   justifyContent: 'space-around',
@@ -91,7 +139,7 @@ const Statistics = () => {
                   width: '100%',
                   display: 'flex',
                 }}>
-                <View >
+                <View>
                   <Text>Produção</Text>
                   <Text />
                   <PieChart
@@ -119,7 +167,7 @@ const Statistics = () => {
                   <PieChart
                     widthAndHeight={30}
                     series={[1]}
-                    sliceColor={['#DCDCDC',]}
+                    sliceColor={['#DCDCDC']}
                     coverFill={'#FFF'}
                   />
                   <Text>{value}</Text>
