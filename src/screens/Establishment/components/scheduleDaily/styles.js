@@ -3,13 +3,16 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: '100%',
+    paddingBottom: 10
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     width: '100%',
     textAlign: 'center',
     marginBottom: 20,
+    color: '#000'
   },
   dateTitle: {
     fontSize: 24,
@@ -28,30 +31,25 @@ export const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Medium',
     color: '#131313',
     textAlign: 'center',
-    marginTop: -30,
+    marginTop: 30,
   },
   hourContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'grey',
-    borderRadius: 20,
+    borderRadius: 10,
     width: '95%',
-    minHeight: 40,
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     marginLeft:10,
     marginTop:10,
+    backgroundColor: '#141414'
   },
   contentHoursDays: {
     flexDirection: 'row',
-    fontSize: 17,
+    fontSize: 15,
     fontFamily: 'Quicksand-SemiBold',
-    color: '#131313',
+    color: '#fff',
   },
   viewFlex: {
     width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-   
   },
   backButton: {
     margin: 14,

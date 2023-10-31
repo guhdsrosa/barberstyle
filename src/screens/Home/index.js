@@ -121,6 +121,30 @@ const Home = ({ route }) => {
         );
     };
 
+    const cancelAgendamento = (item) => {
+        return console.log(item)
+        try {
+            var config = {
+                method: 'post',
+                url: 'Usuario/horariosUsuarioDay',
+                data: {
+                    IdUsuario: user.IdUsuario
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        console.log(response.data)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                });
+        } catch (err) {
+            console.log('[error]', err)
+        }
+    };
+
     useEffect(() => {
         userGet()
         getRecomendedEstablishment()
@@ -253,7 +277,7 @@ const Home = ({ route }) => {
                                 />
                             </TouchableOpacity>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => cancelAgendamento(modal?.item)}>
                                 <Text style={stylesModal.buttom}>Mudei de ideia quero cancelar</Text>
                             </TouchableOpacity>
 

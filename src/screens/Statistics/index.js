@@ -1,44 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {SelectList} from 'react-native-dropdown-select-list';
-import {StyleSheet, ScrollView, View, Text} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { SelectList } from 'react-native-dropdown-select-list';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, ScrollView, View, Text, ActivityIndicator } from 'react-native';
+
+import { styles } from './styles';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
-import {styles} from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingGif from '../../assets/images/loading/loading.gif';
 import Entypo from 'react-native-vector-icons/Entypo';
-import PieChart from 'react-native-pie-chart';
+
 import callApi from '../../server/api';
 
 const Statistics = () => {
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState([]);
   const [estab, setEstab] = useState(null);
   const [dataInitial, setDataInitial] = useState(null);
-  const [dataFinal, setDataFinal] = useState(null);
-  const [produto, setProduto] = useState({valor: null, quantidade: null});
+  const [produto, setProduto] = useState('');
   const data = [
-    {key: '1', value: 'do dia'},
-    {key: '2', value: '3 dias'},
-    {key: '3', value: '5 dias'},
-    {key: '4', value: '15 dias'},
-    {key: '5', value: '20 dias'},
+    { key: 'Hoje', value: 'Hoje' },
+    { key: '1', value: '1 dia atrás' },
+    { key: '5', value: '5 dias atrás' },
+    { key: '15', value: '15 dias atrás' },
+    { key: '20', value: '20 dias atrás' },
+    { key: 'Mês', value: 'Mês inteiro' },
   ];
-  const [value, setValue] = useState('do dia');
-  const valueGraphic = [100, 30, 50];
-  const colorGraphic = ['#2eb830', '#0066ff', '#DCDCDC'];
-  const style = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-    },
-    title: {
-      fontSize: 24,
-      margin: 10,
-    },
-  });
+
   const GetEstablish = async () => {
     try {
       var config = {
@@ -51,118 +38,117 @@ const Statistics = () => {
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
-            // console.log(response.data.query);
             setEstab(response.data.query[0]);
+            setLoading(false)
           }
         })
         .catch(function (error) {
-          //Alert.alert('', 'Erro');
+          console.log('Erro');
         });
     } catch (err) {
       console.log('[ERROR]', err);
     }
   };
+
   const GetProdution = async () => {
+    const currentDate = new Date();
+    const dataIni = new Date(currentDate);
+    const dataFin = new Date(currentDate);
+
+    if (dataInitial === '1') {
+      dataIni.setDate(dataIni.getDate() - 1);
+    }
+    if (dataInitial === '5') {
+      dataIni.setDate(dataIni.getDate() - 5);
+    }
+    if (dataInitial === '15') {
+      dataIni.setDate(dataIni.getDate() - 15);
+    }
+    if (dataInitial === '20') {
+      dataIni.setDate(dataIni.getDate() - 20);
+    }
+    if (dataInitial === 'Mês') {
+      dataIni.setDate(1);
+    }
+
+    const formattedDataInicial = dataIni.toISOString().split('T')[0];
+    const formattedDataFinal = dataFin.toISOString().split('T')[0];
+
     try {
       var config = {
         method: 'post',
         url: 'Funcionario/relatorio',
         data: {
           IdUsuario: user.IdUsuario,
-          IdFuncionario: estab.IdUsuario,
-          DataInicital: dataInitial,
-          DataFinal: dataFinal,
+          IdEstabelecimento: estab.IdEstabelecimento,
+          DataInicial: formattedDataInicial,
+          DataFinal: formattedDataFinal,
         },
       };
-
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
-            // console.log(response.data.query);
-            setProduto.valor(response.data.query[0]);
-            setProduto.quantidade(response.data.query[1]);
+            setProduto(response.data.query[0].ValorTotal);
           }
         })
         .catch(function (error) {
-          //Alert.alert('', 'Erro');
+          console.log('[ERROR]', error);
         });
     } catch (err) {
       console.log('[ERROR]', err);
     }
   };
+
   const userGet = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('userInfo');
       const params = JSON.parse(jsonValue);
+      setUser(params)
     } catch (e) {
-      // error reading value
+      console.log(e)
     }
   };
 
   useEffect(() => {
-    setLoading(false);
-    //     getUserId()
-  }, []);
-  useEffect(() => {
-    if (user) GetEstablish();
+    if (user)
+      GetEstablish();
   }, [user]);
+
   useEffect(() => {
     userGet();
   }, []);
-  console.log(user);
+
   useEffect(() => {
     GetProdution();
-    //     getUserId()
-  }, [dataInitial, dataFinal]);
+  }, [dataInitial]);
 
   return (
-    <LinearGradient colors={['#ffffff', '#fafafa']} style={styles.container}>
+    <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
       {loading && (
         <View style={styles.loading}>
-          <FastImage
-            style={{height: 200, width: 200}}
-            source={LoadingGif}
-            resizeMode={FastImage.resizeMode.contain}
-          />
+          <ActivityIndicator size={30} color={'#36cbc5'} />
           <Text style={styles.loadingText}>Carregando</Text>
         </View>
       )}
       {!loading && (
         <>
-          <ScrollView style={{flex: 1}}>
+          <ScrollView>
             <View style={style.container}>
-              <Text style={style.title}>Estatisticas</Text>
-              <PieChart
-                widthAndHeight={250}
-                series={valueGraphic}
-                sliceColor={colorGraphic}
-                //coverRadius={0.70}
-              />
-              <View style={{height: 30}} />
-              <Text style={styles.title}>Selecione o Período</Text>
-              <View
-                style={{
-                  marginTop: 10,
-                  width: '100%',
-                  justifyContent: 'space-around',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  minHeight: 20,
-                  minWidth: 100,
-                }}>
-                <Text style={{fontSize: 20}}>Data inicial</Text>
+              <Text style={[style.title, { fontSize: 20 }]}>Estatisticas</Text>
+
+              <Text style={style.title}>Selecione o Período</Text>
+              <View style={style.dateContent}>
                 <SelectList
-                  style={{minWidth: 100}}
                   setSelected={setDataInitial}
                   data={data}
-                  save="value"
+                  save="key"
                   search={false}
-                  dropdownTextStyles={{color: '#181818'}}
-                  disabledTextStyles={{color: '#DCDCDC'}}
+                  dropdownTextStyles={{ color: '#fff' }}
+                  disabledTextStyles={{ color: '#DCDCDC' }}
                   placeholder="Selecione "
                   fontFamily="Quicksand-Medium"
-                  boxStyles={{backgroundColor: '#141414'}}
-                  inputStyles={{color: '#fff'}}
+                  boxStyles={{ backgroundColor: 'transparent' }}
+                  inputStyles={{ color: '#fff' }}
                   arrowicon={
                     <Entypo
                       name="chevron-small-down"
@@ -172,70 +158,9 @@ const Statistics = () => {
                   }
                 />
               </View>
-              <View
-                style={{
-                  marginTop: 10,
-                  width: '100%',
-                  justifyContent: 'space-around',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  minHeight: 20,
-                  minWidth: 100,
-                }}>
-                <Text style={{fontSize: 20}}>Data Final</Text>
-                <SelectList
-                  style={{minWidth: 100}}
-                  setSelected={setDataFinal}
-                  data={data}
-                  save="value"
-                  search={false}
-                  dropdownTextStyles={{color: '#181818'}}
-                  disabledTextStyles={{color: '#DCDCDC'}}
-                  placeholder="Selecione "
-                  fontFamily="Quicksand-Medium"
-                  boxStyles={{backgroundColor: '#141414'}}
-                  inputStyles={{color: '#fff'}}
-                  arrowicon={
-                    <Entypo
-                      name="chevron-small-down"
-                      color={'#fff'}
-                      size={20}
-                    />
-                  }
-                />
-              </View>
-              <View style={{height: 90}} />
-              <View
-                style={{
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  height: 100,
-                  width: '100%',
-                  display: 'flex',
-                }}>
-                <View>
-                  <Text>Valor</Text>
-                  <Text>Produzido</Text>
-                  <PieChart
-                    widthAndHeight={30}
-                    series={[1]}
-                    sliceColor={['#2eb830']}
-                    coverFill={'#FFF'}
-                  />
-                  <Text>{value}</Text>
-                </View>
-                <View>
-                  <Text>Quantidade</Text>
-                  <Text>Serviço</Text>
-                  <PieChart
-                    widthAndHeight={30}
-                    series={[1]}
-                    sliceColor={['#0066ff']}
-                    coverFill={'#FFF'}
-                  />
-                  <Text>{value}</Text>
-                </View>
+
+              <View style={style.valores}>
+                {produto && <Text style={[style.valorReceb, {fontSize: 20, fontWeight: 'bold'}]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>}
               </View>
             </View>
           </ScrollView>
@@ -246,3 +171,35 @@ const Statistics = () => {
 };
 
 export default Statistics;
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: '30%'
+  },
+  title: {
+    fontSize: 18,
+    margin: 10,
+    color: '#fff',
+    fontFamily: 'Quicksand-SemiBold'
+  },
+
+  dateContent: {
+    width: '90%',
+    marginTop: 20
+  },
+
+  valores: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: 100,
+    width: '100%',
+    display: 'flex',
+  },
+
+  valorReceb: {
+    color: '#fff'
+  }
+});
