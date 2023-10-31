@@ -104,11 +104,20 @@ const Schedule = ({ route }) => {
                 }
             };
 
-           // console.log("Config", config)
+            // console.log("Config", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status === 200) {
-                        setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${response.data.agenda.DataMarcada}, às ${response.data.agenda.HoraMarcada}` })
+                        const data = new Date(response.data.agenda.DataMarcada);
+                        const hora = new Date(response.data.agenda.HoraMarcada);
+
+                        // Formate a data para o formato desejado (DD/MM/YYYY)
+                        const dataFormatada = data.toLocaleDateString('pt-BR');
+
+                        // Formate a hora para o formato desejado (HH:mm)
+                        const horaFormatada = hora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                        setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${dataFormatada}, às ${horaFormatada}` })
                     }
                     setReserveLoading(false)
                 })
@@ -143,7 +152,7 @@ const Schedule = ({ route }) => {
     useEffect(() => {
         getHours()
     }, [selected])
-    
+
     return (
         <ScrollView>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -155,10 +164,10 @@ const Schedule = ({ route }) => {
                     <View style={styles.container}>
                         <View style={styles.barberContainer}>
                             {barber.map((result, index) => (
-                                <TouchableOpacity style={{marginHorizontal: 10}} key={index} onPress={() => selectBarberPress(result)}>
+                                <TouchableOpacity style={{ marginHorizontal: 10 }} key={index} onPress={() => selectBarberPress(result)}>
                                     <View style={{ alignItems: 'center' }}>
                                         <Image
-                                            source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                            source={{ uri: result.Foto != null ? result.Foto : 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                                             resizeMode="contain"
                                             style={styles.barberImage}
                                         />
@@ -183,9 +192,9 @@ const Schedule = ({ route }) => {
                         />
 
                         {selected && <View style={styles.hourContainer}>
-                            {dataHour.map((res) => (
+                            {dataHour.map((res, index) => (
                                 res.disabled == null && (
-                                    <TouchableOpacity style={styles.hourContent} onPress={() => setHorario(res)}>
+                                    <TouchableOpacity style={styles.hourContent} index={index} onPress={() => setHorario(res)}>
                                         <Text style={[styles.hourText, { backgroundColor: horario.value === res.value ? '#0db2aa' : '#141414' }]}>{res.value}</Text>
                                     </TouchableOpacity>
                                 )

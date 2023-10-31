@@ -195,32 +195,28 @@ const Home = ({ route }) => {
                 />
 
                 <View style={styles.body}>
-                    {hrAgendada.length > 0 && (
-                        <>
-                            <View style={styles.bodyContent}>
-                                <Text style={styles.titleText}>Horários Agendados</Text>
-                                <TouchableOpacity style={styles.seeAllContent} onPress={() => navigation.navigate('AgendHistoric')}>
-                                    <Text style={[styles.titleText, { fontSize: 15 }]}>Ver histórico</Text>
-                                    <AntDesign name="right" size={15} style={styles.seeAllIcon} color={'#fff'} />
+                    <View style={styles.bodyContent}>
+                        <Text style={styles.titleText}>Horários Agendados</Text>
+                        <TouchableOpacity style={styles.seeAllContent} onPress={() => navigation.navigate('AgendHistoric')}>
+                            <Text style={[styles.titleText, { fontSize: 15 }]}>Ver histórico</Text>
+                            <AntDesign name="right" size={15} style={styles.seeAllIcon} color={'#fff'} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View>
+                        {hrAgendada.length > 0 && hrAgendada.map((res) => (
+                            <View style={stylesCard.container}>
+                                <View>
+                                    <Text style={{ color: "#fff" }}>{res.Estabelecimento}</Text>
+                                    <Text style={{ color: "#fff" }}>Data marcada: {res.DataMarcada}</Text>
+                                    <Text style={{ color: "#fff" }}>Horário: {res.Horario.slice(11, 16)}</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => moreAgendaPress(res)}>
+                                    <Text style={{ color: "#fff" }}>Mais detalhes</Text>
                                 </TouchableOpacity>
                             </View>
-
-                            <View>
-                                {hrAgendada.map((res) => (
-                                    <View style={stylesCard.container}>
-                                        <View>
-                                            <Text style={{ color: "#fff" }}>{res.Estabelecimento}</Text>
-                                            <Text style={{ color: "#fff" }}>Data marcada: {res.DataMarcada}</Text>
-                                            <Text style={{ color: "#fff" }}>Horário: {res.Horario.slice(11, 16)}</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={() => moreAgendaPress(res)}>
-                                            <Text style={{ color: "#fff" }}>Mais detalhes</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                ))}
-                            </View>
-                        </>
-                    )}
+                        ))}
+                    </View>
 
                     <View style={styles.bodyContent}>
                         <Text style={styles.titleText}>Estabelecimentos</Text>

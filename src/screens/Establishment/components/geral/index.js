@@ -636,7 +636,7 @@ const Geral = (props) => {
     //Infos
 
     //Foto estab
-    const [estabPhotoSelect, setEstabPhotoSelect] = useState()
+    const [estabPhotoSelect, setEstabPhotoSelect] = useState(null)
     const [saveButtonImage, setSaveButtonImage] = useState(false)
 
     const imagePickerCallback = () => {
@@ -686,7 +686,6 @@ const Geral = (props) => {
         }
     }
     //Foto estab
-
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -706,16 +705,15 @@ const Geral = (props) => {
                             </TouchableOpacity>
                         )}
 
-                        {props.establishment?.FotoEstabelecimento &&
-                            <Image
-                                source={{
-                                    uri: props.establishment.FotoEstabelecimento != 'null' ?
-                                        props.establishment.FotoEstabelecimento : estabPhotoSelect?.path ? estabPhotoSelect?.path : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn'
-                                }}
-                                style={styles.storePhoto}
-                                resizeMode='cover'
-                                blurRadius={0}
-                            />}
+                        <Image
+                            source={{
+                                uri: props.establishment.FotoEstabelecimento != null ?
+                                    props.establishment.FotoEstabelecimento : estabPhotoSelect ? estabPhotoSelect?.path : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn'
+                            }}
+                            style={styles.storePhoto}
+                            resizeMode='cover'
+                            blurRadius={0}
+                        />
                     </TouchableOpacity>
                     <Text style={styles.storeName}>{props?.establishment?.NomeEstabelecimento}</Text>
                 </View>

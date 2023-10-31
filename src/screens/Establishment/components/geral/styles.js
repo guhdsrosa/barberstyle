@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 
     storePhoto: {
         width: '100%',
-        height: 305,
+        height: 305
     },
 
     storeName: {

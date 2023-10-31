@@ -16,7 +16,8 @@ const Statistics = () => {
   const [user, setUser] = useState([]);
   const [estab, setEstab] = useState(null);
   const [dataInitial, setDataInitial] = useState(null);
-  const [produto, setProduto] = useState('');
+  const [produto, setProduto] = useState(null);
+  const [servicos, setServicos] = useState(null);
   const data = [
     { key: 'Hoje', value: 'Hoje' },
     { key: '1', value: '1 dia atrás' },
@@ -74,28 +75,31 @@ const Statistics = () => {
     const formattedDataInicial = dataIni.toISOString().split('T')[0];
     const formattedDataFinal = dataFin.toISOString().split('T')[0];
 
-    try {
-      var config = {
-        method: 'post',
-        url: 'Funcionario/relatorio',
-        data: {
-          IdUsuario: user.IdUsuario,
-          IdEstabelecimento: estab.IdEstabelecimento,
-          DataInicial: formattedDataInicial,
-          DataFinal: formattedDataFinal,
-        },
-      };
-      callApi(config)
-        .then(function (response) {
-          if (response.status == 200) {
-            setProduto(response.data.query[0].ValorTotal);
-          }
-        })
-        .catch(function (error) {
-          console.log('[ERROR]', error);
-        });
-    } catch (err) {
-      console.log('[ERROR]', err);
+    if(estab.IdEstabelecimento){
+      try {
+        var config = {
+          method: 'post',
+          url: 'Funcionario/relatorio',
+          data: {
+            IdUsuario: user.IdUsuario,
+            IdEstabelecimento: estab.IdEstabelecimento,
+            DataInicial: formattedDataInicial,
+            DataFinal: formattedDataFinal,
+          },
+        };
+        callApi(config)
+          .then(function (response) {
+            if (response.status == 200) {
+              setServicos(response.data.query[0].QTDServico)
+              setProduto(response.data.query[0].ValorTotal);
+            }
+          })
+          .catch(function (error) {
+            console.log('[ERROR]', error);
+          });
+      } catch (err) {
+        console.log('[ERROR]', err);
+      }
     }
   };
 
@@ -121,13 +125,12 @@ const Statistics = () => {
   useEffect(() => {
     GetProdution();
   }, [dataInitial]);
-
+  console.log(servicos, produto)
   return (
     <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size={30} color={'#36cbc5'} />
-          <Text style={styles.loadingText}>Carregando</Text>
         </View>
       )}
       {!loading && (
@@ -160,7 +163,18 @@ const Statistics = () => {
               </View>
 
               <View style={style.valores}>
-                {produto && <Text style={[style.valorReceb, {fontSize: 20, fontWeight: 'bold'}]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>}
+                {servicos != 0 && (
+                  <View>
+                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 20, textAlign: 'center' }]}>Quantidade de serviços</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, fontWeight: 'bold', marginTop: 0, textAlign: 'center' }]}>{servicos}</Text>
+                  </View>
+                )}
+                {produto != null && (
+                  <View>
+                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 15, textAlign: 'center' }]}>Total ganho dia</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, fontWeight: 'bold', marginTop: 0, textAlign: 'center' }]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                  </View>
+                )}
               </View>
             </View>
           </ScrollView>
@@ -191,12 +205,7 @@ const style = StyleSheet.create({
   },
 
   valores: {
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 100,
-    width: '100%',
-    display: 'flex',
+
   },
 
   valorReceb: {

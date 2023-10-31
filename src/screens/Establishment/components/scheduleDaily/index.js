@@ -92,7 +92,7 @@ const ScheduleDaily = () => {
   }, [selected])
 
   return (
-    <LinearGradient colors={['#ffffff', '#fafafa']} style={styles.container}>
+    <LinearGradient colors={['#ffffff', '#fff']} style={styles.container}>
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size={30} color={'#36cbc5'} />

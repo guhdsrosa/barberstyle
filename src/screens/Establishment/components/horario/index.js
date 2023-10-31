@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -99,23 +99,25 @@ const Horario = props => {
   };
 
   const getIdFuncionario = () => {
-    try {
-      var config = {
-        method: 'post',
-        url: 'Funcionario/findById',
-        data: {
-          IdUsuario: user.IdUsuario,
-        },
-      };
-      callApi(config)
-        .then(function (response) {
-          if (response.status == 200) {
-            setFuncionarioId(response.data.query.IdFuncionario);
-          }
-        })
-        .catch(function (error) {});
-    } catch (err) {
-      console.log('[ERROR]', err);
+    if(user?.IdUsuario){
+      try {
+        var config = {
+          method: 'post',
+          url: 'Funcionario/findById',
+          data: {
+            IdUsuario: user.IdUsuario,
+          },
+        };
+        callApi(config)
+          .then(function (response) {
+            if (response.status == 200) {
+              setFuncionarioId(response.data.query.IdFuncionario);
+            }
+          })
+          .catch(function (error) { });
+      } catch (err) {
+        console.log('[ERROR]', err);
+      }
     }
   };
 
@@ -129,6 +131,7 @@ const Horario = props => {
           IdFuncionario: funcionarioId,
         },
       };
+      console.log(config)
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
@@ -140,7 +143,7 @@ const Horario = props => {
           }
         })
         .catch(function (error) {
-          console.log('Erro');
+          console.log('Erro', error);
         });
     } catch (err) {
       console.log('[ERROR]', err);
@@ -160,7 +163,7 @@ const Horario = props => {
       getExistHour();
     }
   }, [funcionarioId]);
-
+  console.log(abertura)
   return (
     <View style={styles.hourContainer}>
       <View style={styles.weekTouch}>
@@ -176,7 +179,7 @@ const Horario = props => {
             <View style={styles.ButtonHour}>
               <Button
                 title="Horário de abertura"
-                onPress={() => setAbertura({visible: true})}
+                onPress={() => setAbertura({ visible: true })}
                 color={'#04bbb3'}
               />
             </View>
@@ -184,7 +187,7 @@ const Horario = props => {
               isVisible={abertura.visible}
               mode="time"
               onConfirm={date => handleConfirm(date, 'abertura')}
-              onCancel={() => setAbertura({visible: false, hora: ''})}
+              onCancel={() => setAbertura({ visible: false, hora: '' })}
               is24Hour
             />
 
@@ -194,7 +197,7 @@ const Horario = props => {
             <View style={styles.ButtonHour}>
               <Button
                 title="Horário de fechamento"
-                onPress={() => setFechamento({visible: true})}
+                onPress={() => setFechamento({ visible: true })}
                 color={'#04bbb3'}
               />
             </View>
@@ -202,7 +205,7 @@ const Horario = props => {
               isVisible={fechamento.visible}
               mode="time"
               onConfirm={date => handleConfirm(date, 'fechamento')}
-              onCancel={() => setFechamento({visible: false, hora: ''})}
+              onCancel={() => setFechamento({ visible: false, hora: '' })}
               is24Hour
             />
 
@@ -212,7 +215,7 @@ const Horario = props => {
             <View style={styles.ButtonHour}>
               <Button
                 title="Horário estimado"
-                onPress={() => setHrEstimada({visible: true})}
+                onPress={() => setHrEstimada({ visible: true })}
                 color={'#04bbb3'}
               />
             </View>
@@ -220,7 +223,7 @@ const Horario = props => {
               isVisible={hrEstimada.visible}
               mode="time"
               onConfirm={date => handleConfirm(date, 'hrestimada')}
-              onCancel={() => setHrEstimada({visible: false, hora: ''})}
+              onCancel={() => setHrEstimada({ visible: false, hora: '' })}
               is24Hour
             />
           </>
@@ -238,17 +241,21 @@ const Horario = props => {
             onPress={() => insertHour()}
             color={'#04bbb3'}
           />
-          <Text style={[styles.textOption, {marginVertical: 3}]}>
+          <Text style={[styles.textOption, { marginVertical: 3 }]}>
             Hora abertura: {abertura.hora}
           </Text>
-          <Text style={[styles.textOption, {marginVertical: 3}]}>
+          <Text style={[styles.textOption, { marginVertical: 3 }]}>
             Hora fechamento: {fechamento.hora}
           </Text>
-          <Text style={[styles.textOption, {marginVertical: 3}]}>
+          <Text style={[styles.textOption, { marginVertical: 3 }]}>
             Tempo estimado de corte: {hrEstimada.hora}
           </Text>
         </View>
       )}
+
+      <TouchableOpacity>
+        <Text style={styles.attButton}>Atualizar Horário</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -299,4 +306,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginBottom: 30,
   },
+
+  attButton: {
+    textAlign: 'center',
+    color: "#fff",
+    backgroundColor: "#141414",
+    marginHorizontal: 20,
+    marginVertical: 20,
+    paddingVertical: 10,
+    borderRadius: 10
+  }
 });

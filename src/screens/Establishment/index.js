@@ -10,7 +10,6 @@ import Profissionais from './components/profissionais';
 import ScheduleDaily from './components/scheduleDaily';
 
 import styles from './styles';
-import Statistics from '../Statistics';
 
 const Establishment = () => {
   const [option, setOption] = useState('Agenda');
@@ -34,8 +33,7 @@ const Establishment = () => {
           {name: 'Agenda'},
           {name: 'Estabelecimento'},
           {name: 'Horarios'},
-          {name: 'Profissionais'},
-          {name: 'Estatisticas'},
+          {name: 'Profissionais'}
         ]);
       }
     } catch (e) {
@@ -103,8 +101,6 @@ const Establishment = () => {
       </ScrollView>
 
       {option == 'Agenda' && <ScheduleDaily item={[user]} />}
-
-      {option == 'Estatisticas' && <Statistics ID={user.IdUsuario} />}
 
       {option == 'Estabelecimento' && <Geral establishment={estab} />}
 

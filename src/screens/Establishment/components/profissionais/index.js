@@ -148,7 +148,7 @@ const Profissionais = (props) => {
         setEstab(props.establishment)
         getBarber()
     }, [props.establishment])
-
+    barber
     return (
         <View style={styles.container}>
             <View style={styles.barberContainer}>
@@ -156,7 +156,7 @@ const Profissionais = (props) => {
                     <View style={{ marginHorizontal: 10 }} key={index} onPress={() => null}>
                         <View style={{ alignItems: 'center' }}>
                             <Image
-                                source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
+                                source={{ uri: result.Foto != null ? result.Foto : 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
                                 resizeMode="contain"
                                 style={styles.barberImage}
                             />
