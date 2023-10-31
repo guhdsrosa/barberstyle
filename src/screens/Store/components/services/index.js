@@ -7,7 +7,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 const Services = (props) => {
     const [services, setServices] = useState(null)
     const selectService = (result) => {
-        console.log(result)
+        //console.log(result)
         props.select(result.IdTipoServico, result.NomeServico, result.Valor)
     }
 

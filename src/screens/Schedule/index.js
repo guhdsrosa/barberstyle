@@ -104,7 +104,7 @@ const Schedule = ({ route }) => {
                 }
             };
 
-            console.log("Config", config)
+           // console.log("Config", config)
             callApi(config)
                 .then(function (response) {
                     if (response.status === 200) {
@@ -143,7 +143,7 @@ const Schedule = ({ route }) => {
     useEffect(() => {
         getHours()
     }, [selected])
-
+    
     return (
         <ScrollView>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>

@@ -12,42 +12,42 @@ const AgendHistoric = () => {
     const [cortes, setCortes] = useState([])
     const navigation = useNavigation()
 
-    const userGet = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('userInfo')
-            const params = JSON.parse(jsonValue)
-            setUser(params)
-        } catch (e) {
-            // error reading value
-        }
+  const userGet = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      const params = JSON.parse(jsonValue);
+      setUser(params);
+    } catch (e) {
+      // error reading value
     }
+  };
 
-    const userHistoric = () => {
-        try {
-            var config = {
-                method: 'post',
-                url: 'Usuario/horariosUsuarioHistory',
-                data: {
-                    IdUsuario: user.IdUsuario
-                }
-            };
-            callApi(config)
-                .then(function (response) {
-                    if (response.status === 200) {
-                        setCortes(response.data.query)
-                    }
-                })
-                .catch(function (error) {
-                    console.log('[error]', error)
-                });
-        } catch (err) {
-            console.log('[error]', err)
-        }
+  const userHistoric = () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Usuario/horariosUsuarioHistory',
+        data: {
+          IdUsuario: user.IdUsuario,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status === 200) {
+            setCortes(response.data.query);
+          }
+        })
+        .catch(function (error) {
+          console.log('[error]', error);
+        });
+    } catch (err) {
+      console.log('[error]', err);
     }
+  };
 
-    useEffect(() => {
-        userGet()
-    }, [])
+  useEffect(() => {
+    userGet();
+  }, []);
 
     useEffect(() => {
         if (user?.IdUsuario) {
