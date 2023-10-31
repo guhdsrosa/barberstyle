@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
         //padding: 15,
         marginRight: 6,
         marginLeft: 6,
-        maxWidth: 177
+        maxWidth: 177,
     },
 
     storeImage: {

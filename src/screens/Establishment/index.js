@@ -104,8 +104,6 @@ const Establishment = () => {
             {option == 'Profissionais' &&
                 <Profissionais establishment={estab} />
             }
-
-
         </ScrollView>
     )
 }

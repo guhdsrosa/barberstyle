@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView, Image } from "react-native";
-import { Checkbox } from "react-native-paper";
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import callApi from '../../server/api'
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -16,7 +15,7 @@ const Register = ({ route }) => {
     const [screen, setScreen] = useState(0);
     const [button, setButton] = useState(null)
     const [passError, setPassError] = useState(false)
-    const [avatar, setAvatar] = useState('');
+    const [userPhoto, setUserPhoto] = useState('');
 
     const [user, setUser] = useState({
         Nome: '',
@@ -26,6 +25,7 @@ const Register = ({ route }) => {
         TipoUsuario: '',
         Telefone: ''
     })
+
     const [establishment, setEstablishment] = useState({
         NomeEstab: '',
         CEP: '',
@@ -54,6 +54,7 @@ const Register = ({ route }) => {
         option: null,
         color: null
     })
+
     const { option } = route.params
 
     const registerPress = async () => {
@@ -124,33 +125,43 @@ const Register = ({ route }) => {
     }
 
     const insertUser = async () => {
+        const formData = new FormData();
+
+        formData.append('Nome', user.Nome);
+        formData.append('Email', user.Email);
+        formData.append('Senha', user.Senha);
+        formData.append('confirmpassword', user.Senha);
+        formData.append('TipoUsuario', option);
+        formData.append('Telefone', user.Telefone);
+        formData.append('NomeEstabelecimento', establishment.NomeEstab);
+        formData.append('CEP', establishment.CEP);
+        formData.append('Rua', establishment.Rua);
+        formData.append('Bairro', establishment.Bairro);
+        formData.append('Estado', establishment.Estado);
+        formData.append('Cidade', establishment.Cidade);
+        formData.append('NumeroEstabelecimento', establishment.Numero);
+        formData.append('CNPJ', establishment.CNPJ);
+        formData.append('Telefone1', establishment.TelefoneEstab);
+        formData.append('Telefone2', establishment.TelefoneEstab1);
+        formData.append('SobreNos', establishment.Sobre);
+        formData.append('RedeSocial', establishment.RedeSocial);
+
+        const regex = /\/([^/]+)\.jpg$/;
+        const url = userPhoto.path.match(regex);
+        const nomeImagem = url[0].replace(/^\//, '')
+
+        formData.append('File', {
+            uri: userPhoto.path,
+            type: 'image/jpeg', // Tipo da imagem (pode variar)
+            name: nomeImagem,
+        });
+
         try {
-            var config = {
-                method: 'post',
-                url: 'Usuario/Register',
-                data: {
-                    Nome: user.Nome,
-                    Email: user.Email,
-                    Senha: user.Senha,
-                    confirmpassword: user.Senha,
-                    TipoUsuario: option,
-                    File: avatar.path,
-                    Telefone: user.Telefone,
-                    NomeEstabelecimento: establishment.NomeEstab,
-                    CEP: establishment.CEP,
-                    Rua: establishment.Rua,
-                    Bairro: establishment.Bairro,
-                    Estado: establishment.Estado,
-                    Cidade: establishment.Cidade,
-                    NumeroEstabelecimento: establishment.Numero,
-                    CNPJ: establishment.CNPJ,
-                    Telefone1: establishment.TelefoneEstab,
-                    Telefone2: establishment.TelefoneEstab1,
-                    SobreNos: establishment.Sobre,
-                    RedeSocial: establishment.RedeSocial
-                }
-            };
-            callApi(config)
+            axios.post('http://18.230.154.41:3000/Usuario/Register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Importante definir o cabeçalho correto
+                },
+            })
                 .then(function (response) {
                     if (response.status == 200) {
                         console.log('[USER]', response.data.user)
@@ -172,22 +183,6 @@ const Register = ({ route }) => {
                                 color: true
                             })
                         }
-                        // if (option == 'Dono') {
-                        //     //insertEstablishment()
-                        //     setShowAlert({
-                        //         ...showAlert,
-                        //         show: true,
-                        //         title: 'Erro',
-                        //         message: `Algum erro inesperado aconteceu, por favor tente novamente`,
-                        //         errorButtom: '',
-                        //         successButtom: '',
-                        //         showCancelButton: true,
-                        //         showConfirmButton: false,
-                        //         cancelText: 'Ok',
-                        //         confirmText: '',
-                        //         option: false
-                        //     })
-                        // }
                     }
                 })
                 .catch(function (error) {
@@ -217,10 +212,8 @@ const Register = ({ route }) => {
             height: 400,
             cropping: true
         }).then(image => {
-            console.log(image)
-            setAvatar(image)
+            setUserPhoto(image)
         })
-
     }
 
     const resetAlert = ({ option }) => {
@@ -337,10 +330,10 @@ const Register = ({ route }) => {
                         <Text style={[styles.menuTitle, { fontSize: 18, textAlign: 'center', marginTop: 20 }]}>Carregar foto</Text>
 
                         <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerCallback()}>
-                            {avatar ?
+                            {userPhoto ?
                                 <Image
                                     //source={{ uri: foto ? foto : user.Foto }}
-                                    source={{ uri: avatar.path }}
+                                    source={{ uri: userPhoto.path }}
                                     style={styles.userLogo}
                                     resizeMode={'contain'}
                                 />

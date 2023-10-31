@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontFamily: 'Quicksand-SemiBold',
         color: '#131313',
+        marginHorizontal: 10
     },
 
     inputText: {
