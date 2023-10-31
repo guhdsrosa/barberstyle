@@ -51,6 +51,7 @@ const Schedule = ({ route }) => {
     }
 
     const getHours = async () => {
+        setDataHour([])
         const regex = /(\d{2}:\d{2})/;
         try {
             var config = {
@@ -122,6 +123,11 @@ const Schedule = ({ route }) => {
 
     const selectBarberPress = (item) => {
         //console.log(item.IdFuncionario)
+        setSelected('')
+        setDataHour([])
+        setHorario('')
+        setCalendar(null)
+        setSelectBarber(null)
         setSelectBarber(item.IdFuncionario)
     }
 
@@ -137,7 +143,7 @@ const Schedule = ({ route }) => {
     useEffect(() => {
         getHours()
     }, [selected])
-    console.log('horario', horario)
+
     return (
         <ScrollView>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>

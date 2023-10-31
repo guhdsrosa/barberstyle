@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderRadius: 10,
         marginVertical: 5,
-        borderColor: '#000000af'
+        borderColor: '#000000af',
+        color: '#000'
     },
 
     titleModal: {

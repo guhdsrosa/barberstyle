@@ -97,18 +97,23 @@ const Perfil = () => {
         formData.append('IdUsuario', user.IdUsuario);
         formData.append('Nome', user.Nome);
         formData.append('Email', user.Email);
-        formData.append('Senha', '123123');
+        formData.append('Senha', Senha);
         formData.append('Telefone', user.Telefone);
 
-        const regex = /\/([^/]+)\.jpg$/;
-        const url = photo.path.match(regex);
-        const nomeImagem = url[0].replace(/^\//, '')
+        if(photo){
+            const regex = /\/([^/]+)\.jpg$/;
+            const url = photo.path?.match(regex);
+            const nomeImagem = url[0].replace(/^\//, '')
+    
+            formData.append('File', {
+                uri: photo?.path,
+                type: 'image/jpeg', // Tipo da imagem (pode variar)
+                name: nomeImagem,
+            });
+        } else {
+            formData.append('File', undefined)
+        }
 
-        formData.append('File', {
-            uri: photo.path,
-            type: 'image/jpeg', // Tipo da imagem (pode variar)
-            name: nomeImagem,
-        });
         try {
             axios.post('http://18.230.154.41:3000/Usuario/Update', formData, {
                 headers: {
@@ -121,7 +126,7 @@ const Perfil = () => {
                             ...showAlert,
                             show: true,
                             title: 'Sucesso',
-                            message: `${response.data.sucesso}`,
+                            message: `Perfil atualizado com sucesso`,
                             errorButtom: '',
                             successButtom: '',
                             showCancelButton: false,
@@ -181,22 +186,6 @@ const Perfil = () => {
         })
     }
 
-    const createFormData = (photo) => {
-        const data = new FormData();
-
-        // const normalizedPath = photo.path.replace(/\\/g, '/');
-        // console.log(normalizedPath)
-
-        data.append('Foto', {
-            name: 'user_profile.jpg',
-            type: 'image/jpeg',
-            // uri: normalizedPath,
-            uri: photo.path
-        });
-
-        return data;
-    };
-
     useEffect(() => {
         userGet()
 
@@ -229,7 +218,7 @@ const Perfil = () => {
 
                 <TouchableOpacity style={styles.containerUserLogo} onPress={() => imagePickerPress()}>
                     <Image
-                        source={{ uri: photo ? photo : user.Foto }}
+                        source={{ uri: photo?.path ? photo.path : user.Foto }}
                         style={styles.userLogo}
                         resizeMode={'contain'}
                     />

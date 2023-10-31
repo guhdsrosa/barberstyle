@@ -72,15 +72,16 @@ export const styles = StyleSheet.create({
     Button: {
         alignSelf: 'center',
         backgroundColor: '#12dbc5',
-        borderRadius: 30,
+        borderRadius: 10,
         marginTop: 15,
+        width: '100%'
     },
 
     ButtonText: {
         fontSize: 16,
         color: '#fff',
-        marginHorizontal: 138,
-        paddingVertical: 16,
+        textAlign: 'center',
+        paddingVertical: 14,
         fontFamily: 'Quicksand-Bold',
     },
 

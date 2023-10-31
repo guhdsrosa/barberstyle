@@ -1,5 +1,5 @@
 import React, { useState, useEffect, cloneElement } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,9 +19,12 @@ const Store = ({ route }) => {
     const [option, setOption] = useState('services')
     const [services, setServices] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false);
     const [user, setUser] = useState(false)
     const [alert, setAlert] = useState(false)
     const [selectService, setSelectService] = useState([])
+    const [consumiveis, setConsumiveis] = useState([])
+    const [comodidades, setComodidades] = useState([])
     const [price, setPrice] = useState(null)
     const { data } = route.params
 
@@ -39,6 +42,7 @@ const Store = ({ route }) => {
     }
 
     const serviceEstab = async () => {
+        setServices(null)
         try {
             var config = {
                 method: 'post',
@@ -86,8 +90,70 @@ const Store = ({ route }) => {
         }
     }
 
+    const consumiveisEstab = () => {
+        setConsumiveis(null)
+        try {
+            var config = {
+                method: 'post',
+                url: '/Consumiveis/findAll',
+                data: {
+                    IdEstabelecimento: data.IdEstabelecimento
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setConsumiveis(response.data.find)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[errors]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
+    const comodidadesEstab = () => {
+        setComodidades(null)
+        try {
+            var config = {
+                method: 'post',
+                url: '/Comodidades/findAll',
+                data: {
+                    IdEstabelecimento: data.IdEstabelecimento
+                }
+            };
+            callApi(config)
+                .then(function (response) {
+                    if (response.status == 200) {
+                        setComodidades(response.data.find)
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[errors]', error)
+                })
+        } catch (err) {
+            console.log('[ERROR]', err)
+        }
+    }
+
+    const onRefresh = () => {
+        setLoading(false)
+        consumiveisEstab()
+        comodidadesEstab()
+        serviceEstab()
+
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
     useEffect(() => {
         userGet()
+        comodidadesEstab()
+        consumiveisEstab()
     }, [])
 
     useEffect(() => {
@@ -98,7 +164,14 @@ const Store = ({ route }) => {
     return (
         <View style={styles.container}>
             {services ? (
-                <ScrollView>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
+                >
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                             <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
@@ -128,7 +201,15 @@ const Store = ({ route }) => {
                             </TouchableOpacity>
                         </View>
 
-                        {loading && option == 'services' && <Services data={services} select={selectServicePress} selectService={selectService} />}
+                        {loading && option == 'services' &&
+                            <Services
+                                data={services}
+                                select={selectServicePress}
+                                selectService={selectService}
+                                consumiveis={consumiveis}
+                                comodidades={comodidades}
+                            />
+                        }
                         {option == 'address' && <Endereco data={data} />}
                         {option == 'more' && <Sobre data={data} />}
                     </View>
@@ -156,7 +237,7 @@ const Store = ({ route }) => {
                         />}
                         {data && <Text style={styles.storeName}>{data?.NomeEstabelecimento}</Text>}
                     </View>
-                    <ActivityIndicator size={50} color={'#181818'} style={{marginTop: 20}}/>
+                    <ActivityIndicator size={50} color={'#181818'} style={{ marginTop: 20 }} />
                     <Text style={[styles.textButton, { color: '#181818' }]}>Carregando...</Text>
                 </View>
             )}

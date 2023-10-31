@@ -856,19 +856,44 @@ const Geral = (props) => {
                     {option == 'address' &&
                         <View>
                             <Text style={styles.infoText}>Rua:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.Rua}`} onChangeText={(text) => setInfo({ ...info, Rua: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.Rua}`}
+                                onChangeText={(text) => setInfo({ ...info, Rua: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>CEP:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.CEP}`} onChangeText={(text) => setInfo({ ...info, CEP: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.CEP}`}
+                                onChangeText={(text) => setInfo({ ...info, CEP: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Numero do estabelecimento:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.NumeroEstabelecimento}`} onChangeText={(text) => setInfo({ ...info, NumeroEstabelecimento: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.NumeroEstabelecimento}`}
+                                onChangeText={(text) => setInfo({ ...info, NumeroEstabelecimento: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Bairro:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.Bairro}`} onChangeText={(text) => setInfo({ ...info, Bairro: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.Bairro}`}
+                                onChangeText={(text) => setInfo({ ...info, Bairro: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Cidade:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.Cidade}`} onChangeText={(text) => setInfo({ ...info, Cidade: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.Cidade}`}
+                                onChangeText={(text) => setInfo({ ...info, Cidade: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <TouchableOpacity onPress={() => updateInfo()}>
                                 <Text style={[styles.text, styles.buttomAdd, { marginTop: -10, marginBottom: 10 }]}>Atualizar</Text>
@@ -879,19 +904,44 @@ const Geral = (props) => {
                     {option == 'more' &&
                         <View>
                             <Text style={styles.infoText}>Sobre:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.SobreNos}`} onChangeText={(text) => setInfo({ ...info, SobreNos: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.SobreNos}`}
+                                onChangeText={(text) => setInfo({ ...info, SobreNos: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Rede social:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.RedeSocial}`} onChangeText={(text) => setInfo({ ...info, RedeSocial: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.RedeSocial}`}
+                                onChangeText={(text) => setInfo({ ...info, RedeSocial: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Telefone 1:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.Telefone1}`} onChangeText={(text) => setInfo({ ...info, Telefone1: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.Telefone1}`}
+                                onChangeText={(text) => setInfo({ ...info, Telefone1: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>Telefone 2:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.Telefone2}`} onChangeText={(text) => setInfo({ ...info, Telefone2: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.Telefone2}`}
+                                onChangeText={(text) => setInfo({ ...info, Telefone2: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <Text style={styles.infoText}>CNPJ:</Text>
-                            <TextInput style={styles.inputInfoText} value={`${info.CNPJ}`} onChangeText={(text) => setInfo({ ...info, CNPJ: text })} />
+                            <TextInput
+                                style={styles.inputInfoText}
+                                value={`${info.CNPJ}`}
+                                onChangeText={(text) => setInfo({ ...info, CNPJ: text })}
+                                placeholderTextColor={'#777777'}
+                            />
 
                             <TouchableOpacity onPress={() => updateInfo()}>
                                 <Text style={[styles.text, styles.buttomAdd, { marginTop: -10, marginBottom: 10 }]}>Atualizar</Text>
@@ -923,13 +973,16 @@ const Geral = (props) => {
                             placeholder={modal.nome}
                             style={styles.inputModal}
                             onChangeText={setNovoItemNome}
+                            placeholderTextColor={'#777777'}
                         />
-                        {modal.option != 'comodidades' && <TextInput
-                            placeholder={'R$' + modal.valor}
-                            style={styles.inputModal}
-                            onChangeText={setNovoItemPreco}
-                            keyboardType="numeric"
-                        />}
+                        {modal.option != 'comodidades' &&
+                            <TextInput
+                                placeholder={'R$' + modal.valor}
+                                style={styles.inputModal}
+                                onChangeText={setNovoItemPreco}
+                                keyboardType="numeric"
+                                placeholderTextColor={'#777777'}
+                            />}
                         <TouchableOpacity onPress={() => addServicePress()}>
                             <Text
                                 style={{
@@ -980,13 +1033,16 @@ const Geral = (props) => {
                             style={styles.inputModal}
                             editable={modalMod.editar}
                             onChangeText={(text) => setModalMod({ ...modalMod, nome: text })}
+                            placeholderTextColor={'#777777'}
                         />
-                        {modalMod.option != 'comodidades' && <TextInput
-                            value={modalMod.valor}
-                            style={styles.inputModal}
-                            editable={modalMod.editar}
-                            onChangeText={(text) => setModalMod({ ...modalMod, valor: text })}
-                        />}
+                        {modalMod.option != 'comodidades' &&
+                            <TextInput
+                                value={modalMod.valor}
+                                style={styles.inputModal}
+                                editable={modalMod.editar}
+                                onChangeText={(text) => setModalMod({ ...modalMod, valor: text })}
+                                placeholderTextColor={'#777777'}
+                            />}
                         <TouchableOpacity onPress={() => {
                             if (modalMod.mod === 'editar') {
                                 editServicePress()

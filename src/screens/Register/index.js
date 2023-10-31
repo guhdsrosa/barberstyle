@@ -146,15 +146,17 @@ const Register = ({ route }) => {
         formData.append('SobreNos', establishment.Sobre);
         formData.append('RedeSocial', establishment.RedeSocial);
 
-        const regex = /\/([^/]+)\.jpg$/;
-        const url = userPhoto.path.match(regex);
-        const nomeImagem = url[0].replace(/^\//, '')
-
-        formData.append('File', {
-            uri: userPhoto.path,
-            type: 'image/jpeg', // Tipo da imagem (pode variar)
-            name: nomeImagem,
-        });
+        if(userPhoto){
+            const regex = /\/([^/]+)\.jpg$/;
+            const url = userPhoto.path.match(regex);
+            const nomeImagem = url[0].replace(/^\//, '')
+    
+            formData.append('File', {
+                uri: userPhoto.path,
+                type: 'image/jpeg', // Tipo da imagem (pode variar)
+                name: nomeImagem,
+            });
+        }
 
         try {
             axios.post('http://18.230.154.41:3000/Usuario/Register', formData, {

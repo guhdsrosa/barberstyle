@@ -6,7 +6,6 @@ import callApi from '../../server/api'
 
 import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import logo from '../../assets/images/logo.png'
 import { styles } from './styles'
 
 const Login = () => {
@@ -39,14 +38,13 @@ const Login = () => {
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
                             AsyncStorage.setItem('userClient', JSON.stringify(response.data.cliente))
                             AsyncStorage.setItem('userSenha', JSON.stringify(response.data.Senha))
-                            //AsyncStorage.setItem('userFoto', JSON.stringify(response.data.Foto))
-                            navigation.navigate('Home')
+                            navigation.replace('Home')
                         }
                     })
                     .catch(function (error) {
                         Alert.alert('Erro', 'Login ou senha podem estar incorretos')
                         console.log('[error]', error)
-                    });
+                    })
             } catch (err) {
                 console.log('[ERROR]', err)
             }
@@ -126,7 +124,7 @@ const Login = () => {
                         }
                     </View>
 
-                    <TouchableOpacity style={styles.Button} onPress={Login}>
+                    <TouchableOpacity style={styles.Button} onPress={() => Login()}>
                         <Text style={styles.ButtonText}>Log In</Text>
                     </TouchableOpacity>
 

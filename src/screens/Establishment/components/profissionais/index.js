@@ -23,10 +23,6 @@ const Profissionais = (props) => {
     const [listFunc, setListFunc] = useState([])
     const [barber, setBarber] = useState([])
 
-    const optionSelect = ({ opt }) => {
-        setOption(opt)
-    }
-
     const searchUser = () => {
         try {
             var config = {
@@ -63,7 +59,6 @@ const Profissionais = (props) => {
             callApi(config)
                 .then(function (response) {
                     if (response.status == 200) {
-                        console.log('res', response.data)
                         setBarber(response.data.query)
                     }
                 })
@@ -142,6 +137,13 @@ const Profissionais = (props) => {
         }
     }
 
+    const removeBarber = (barber) => {
+        console.log(barber, props.establishment.IdEstabelecimento)
+
+
+        getBarber()
+    }
+
     useEffect(() => {
         setEstab(props.establishment)
         getBarber()
@@ -151,7 +153,7 @@ const Profissionais = (props) => {
         <View style={styles.container}>
             <View style={styles.barberContainer}>
                 {barber.map((result, index) => (
-                    <TouchableOpacity style={{marginHorizontal: 10}} key={index} onPress={() => null}>
+                    <View style={{ marginHorizontal: 10 }} key={index} onPress={() => null}>
                         <View style={{ alignItems: 'center' }}>
                             <Image
                                 source={{ uri: 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745' }}
@@ -159,8 +161,20 @@ const Profissionais = (props) => {
                                 style={styles.barberImage}
                             />
                             <Text style={styles.barberText}>{String(result.Nome).match(/\S+/)}</Text>
+                            <TouchableOpacity onPress={() => removeBarber(result)} style={{position: 'absolute', right: 0}}>
+                                <AntDesign
+                                    name="close"
+                                    size={20}
+                                    style={{
+                                        backgroundColor: '#ff1e1f',
+                                        borderRadius: 100,
+                                        padding: 1,
+                                    }}
+                                    color={'#fff'}
+                                />
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 ))}
             </View>
             <Text style={styles.titleText}>Vincule um funcionário a sua empresa inserindo seu E-mail:</Text>

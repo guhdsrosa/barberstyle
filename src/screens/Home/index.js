@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Modal } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Modal, RefreshControl, Linking } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +8,7 @@ import callApi from '../../server/api'
 import FastImage from "react-native-fast-image";
 
 import { Searchbar } from "react-native-paper";
+import { enableLatestRenderer } from 'react-native-maps';
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import googleMaps from '../../assets/images/icons/Google-Maps-Logo.png'
@@ -15,9 +16,8 @@ import Fotos from '../../assets/images/home/index'
 import { encode } from 'base-64';
 
 const Home = ({ route }) => {
-
-
     const navigation = useNavigation()
+    const [refreshing, setRefreshing] = useState(false);
     const [user, setUser] = useState({});
     const [Senha, setSenha] = useState({});
     const [fototeste, setFototeste] = useState({})
@@ -30,7 +30,6 @@ const Home = ({ route }) => {
     })
 
     const perfilPress = () => {
-        console.log("Antes de ir para o perfil: ", user)
         navigation.navigate('Perfil')
     }
 
@@ -51,6 +50,7 @@ const Home = ({ route }) => {
     }
 
     const getRecomendedEstablishment = async () => {
+        setTop5Establishment([])
         try {
             var config = {
                 method: 'get',
@@ -96,12 +96,30 @@ const Home = ({ route }) => {
         }
     }
 
+    const onRefresh = () => {
+        getHorariosAgendado()
+        getRecomendedEstablishment()
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
     const moreAgendaPress = (item) => {
         setModal({
             ativo: true,
             item: item
         })
     }
+
+    const openGoogleMaps = (endereco) => {
+        const formattedAddress = encodeURIComponent(endereco);
+        const url = `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`;
+
+        Linking.openURL(url).catch(err =>
+            console.error('Erro ao abrir o Google Maps:', err)
+        );
+    };
 
     useEffect(() => {
         userGet()
@@ -116,7 +134,15 @@ const Home = ({ route }) => {
 
     return (
         <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <View style={styles.menuContent}>
                     <View style={styles.userContent}>
                         <TouchableOpacity onPress={perfilPress}>
@@ -145,7 +171,7 @@ const Home = ({ route }) => {
                 />
 
                 <View style={styles.body}>
-                    {hrAgendada && (
+                    {hrAgendada.length > 0 && (
                         <>
                             <View style={styles.bodyContent}>
                                 <Text style={styles.titleText}>Horários Agendados</Text>
@@ -159,7 +185,7 @@ const Home = ({ route }) => {
                                 {hrAgendada.map((res) => (
                                     <View style={stylesCard.container}>
                                         <View>
-                                            <Text style={{ color: "#fff" }}>Nome estabelecimento</Text>
+                                            <Text style={{ color: "#fff" }}>{res.Estabelecimento}</Text>
                                             <Text style={{ color: "#fff" }}>Data marcada: {res.DataMarcada}</Text>
                                             <Text style={{ color: "#fff" }}>Horário: {res.Horario.slice(11, 16)}</Text>
                                         </View>
@@ -207,6 +233,7 @@ const Home = ({ route }) => {
                         <View style={stylesModal.content}>
                             <Text style={stylesModal.title}>Detalhes do agendamento</Text>
                             <View style={{ marginVertical: 10 }}>
+                                <Text style={stylesModal.text}>{modal.item?.Estabelecimento}</Text>
                                 <Text style={stylesModal.text}>Funcionario: {modal.item?.Funcionario}</Text>
                                 <Text style={stylesModal.text}>Horario: {modal.item?.Horario?.slice(11, 16)}</Text>
                                 <Text style={stylesModal.text}>Data: {modal.item?.DataMarcada}</Text>
@@ -216,7 +243,7 @@ const Home = ({ route }) => {
 
                             <Text style={[stylesModal.text, { textAlign: 'center' }]}>Localização</Text>
                             <TouchableOpacity
-                                // onPress={() => openGoogleMaps(`${props.data.Rua}, ${props.data.NumeroEstabelecimento} - ${props.data.Bairro}, ${props.data.Cidade} - ${props.data.Estado} `)}
+                                onPress={() => openGoogleMaps(`${modal.item?.Rua}, ${modal.item?.NumeroEstabelecimento} - ${modal.item?.Bairro}, ${modal.item?.Cidade} - ${modal.item?.Estado} `)}
                                 style={stylesModal.googleContainer}
                             >
                                 <Image
