@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CalendarModal from '../../../Schedule/components/calendar';
@@ -13,26 +14,52 @@ import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './styles';
 import LoadingGif from '../../../../assets/images/loading/loading.gif';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import callApi from '../../../../server/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ScheduleDaily = () => {
+const ScheduleDaily = ({route}) => {
+  const {IdEstabelecimento} = route?.params
   const navigation = useNavigation();
+  const [user, setUser] = useState('');
   const [loading, setLoading] = useState(false);
   const [reservation, setReservation] = useState(true);
-  const [userId, setUserId] = useState([]);
-  const [selected, setSelected] = useState(' ');
+  const [userHorario, setUserHorario] = useState(' ');
+  const [selected, setSelected] = useState('');
   const [barber, setBarber] = useState(null);
+
+  const GetHorarios = async () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Funcionario/horarioAgenda',
+        data: {
+          IdFuncionario: user.IdUsuario,
+          IdEstabelecimento: user.IdEstabelecimento,
+          DataFront: selected,
+        },
+      };
+      console.log(config);
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            console.log(response.data.horarios);
+          }
+        })
+        .catch(function (error) {
+          Alert.alert('', 'Erro');
+        });
+    } catch (err) {
+      //console.log('[ERROR]', err);
+    }
+  };
 
   useEffect(() => {
     setLoading(false);
     //     getUserId()
   }, []);
-
-  const horario = [
-    {nome: 'Agenda', horario: '10:00'},
-    {nome: 'aaaaaa', horario: '13:00'},
-    {nome: 'bbbbbb', horario: '15:00'},
-    {nome: 'cccccc', horario: '16:00'},
-  ];
+  useEffect(() => {
+    GetHorarios();
+  }, [!selected]);
 
   const setCalendar = date => {
     setSelected(date);
@@ -40,6 +67,18 @@ const ScheduleDaily = () => {
   const hidePass = () => {
     setHide(!hide);
   };
+  const userGet = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      setUser(JSON.parse(jsonValue));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    userGet();
+  }, []);
 
   return (
     <LinearGradient colors={['#ffffff', '#fafafa']} style={styles.container}>
