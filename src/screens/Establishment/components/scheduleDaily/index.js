@@ -17,68 +17,114 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import callApi from '../../../../server/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ScheduleDaily = ({route}) => {
-  const {IdEstabelecimento} = route?.params
+const ScheduleDaily = ({item}) => {
   const navigation = useNavigation();
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [reservation, setReservation] = useState(true);
   const [userHorario, setUserHorario] = useState(' ');
   const [selected, setSelected] = useState('');
   const [barber, setBarber] = useState(null);
+  const [estab, setEstab] = useState(null);
+  const teste = item[0].IdUsuario;
 
+  const [optionsSelect, setOptionsSelect] = useState([
+    {name: 'Agenda'},
+    {name: 'Horarios'},
+  ]);
+
+  useEffect(() => {
+    setLoading(false);
+    //     getUserId()
+  }, []);
+
+  useEffect(() => {
+    GetHorarios();
+  }, [selected]);
+
+  const setCalendar = date => {
+    setSelected(date);
+  };
+
+  const userGet = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      const params = JSON.parse(jsonValue);
+      setUser(params);
+
+      if (params.TipoUsuario === 'Dono') {
+        setOptionsSelect([
+          {name: 'Agenda'},
+          {name: 'Estabelecimento'},
+          {name: 'Horarios'},
+          {name: 'Profissionais'},
+          {name: 'Estatisticas'},
+        ]);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const GetEstablish = async () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Estabelecimento/returnDono',
+        data: {
+          IdUsuario: teste,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            // console.log(response.data.query);
+            setEstab(response.data.query[0]);
+          }
+        })
+        .catch(function (error) {
+          //Alert.alert('', 'Erro');
+        });
+    } catch (err) {
+      console.log('[ERROR]', err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) GetEstablish();
+  }, [user]);
+
+  useEffect(() => {
+    userGet();
+  }, []);
   const GetHorarios = async () => {
     try {
       var config = {
         method: 'post',
         url: 'Funcionario/horarioAgenda',
         data: {
-          IdFuncionario: user.IdUsuario,
-          IdEstabelecimento: user.IdEstabelecimento,
+          IdUsuario: teste,
+          IdEstabelecimento: estab.IdEstabelecimento,
           DataFront: selected,
         },
       };
-      console.log(config);
-      callApi(config)
-        .then(function (response) {
-          if (response.status == 200) {
-            console.log(response.data.horarios);
-          }
-        })
-        .catch(function (error) {
-          Alert.alert('', 'Erro');
-        });
+      //console.log(config);
+      if (config.data) {
+        callApi(config)
+          .then(function (response) {
+            if (response.status == 200) {
+             // console.log('Response Schedule: ', response.data.horarios);
+              //console.log(response.data.horarios);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     } catch (err) {
       //console.log('[ERROR]', err);
     }
   };
-
-  useEffect(() => {
-    setLoading(false);
-    //     getUserId()
-  }, []);
-  useEffect(() => {
-    GetHorarios();
-  }, [!selected]);
-
-  const setCalendar = date => {
-    setSelected(date);
-  };
-  const hidePass = () => {
-    setHide(!hide);
-  };
-  const userGet = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('userInfo');
-      setUser(JSON.parse(jsonValue));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    userGet();
-  }, []);
 
   return (
     <LinearGradient colors={['#ffffff', '#fafafa']} style={styles.container}>
@@ -97,7 +143,7 @@ const ScheduleDaily = ({route}) => {
           <View style={{marginTop: 20, marginHorizontal: 10}} />
           <ScrollView style={{flex: 1}}>
             <View style={styles.container}>
-              {selected === ' ' ? (
+              {selected !== ' ' ? (
                 <>
                   <Text style={styles.title}>Selecione uma data</Text>
                   <CalendarModal setCalendar={setCalendar} date={selected} />

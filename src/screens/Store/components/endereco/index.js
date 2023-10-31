@@ -10,7 +10,7 @@ enableLatestRenderer();
 import styles from "./styles";
 
 const Endereco = (props) => {
-    console.log(props.data)
+    //console.log(props.data)
 
     const openGoogleMaps = (endereco) => {
         const formattedAddress = encodeURIComponent(endereco);

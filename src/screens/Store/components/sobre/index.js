@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 
 const Sobre = (props) => {
-    console.log(props.data)
+    //(props.data)
     return(
         <ScrollView>
             {props.data && 

@@ -32,9 +32,9 @@ const Login = () => {
                 };
                 callApi(config)
                     .then(function (response) {
-                        console.log(response.status)
+                        //console.log(response.status)
                         if (response.status == 200) {
-                            console.log('[USER]', response.data.cliente)
+                            //console.log('[USER]', response.data.cliente)
                             
                             AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
                             AsyncStorage.setItem('userClient', JSON.stringify(response.data.cliente))
@@ -45,7 +45,7 @@ const Login = () => {
                     })
                     .catch(function (error) {
                         Alert.alert('Erro', 'Login ou senha podem estar incorretos')
-                        console.log('[error]', error)
+                        //console.log('[error]', error)
                     });
             } catch (err) {
                 console.log('[ERROR]', err)
