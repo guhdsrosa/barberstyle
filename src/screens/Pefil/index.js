@@ -232,12 +232,14 @@ const Perfil = () => {
                         placeholder={'Nome'}
                         value={user.Nome}
                         onChangeText={text => setUser({ ...user, Nome: text })}
+                        placeholderTextColor={'#7e7e7e'}
                     />
                     <TextInput
                         style={styles.inputText}
                         placeholder={'Email'}
                         value={user.Email}
                         onChangeText={text => setUser({ ...user, Email: text })}
+                        placeholderTextColor={'#7e7e7e'}
                     />
                     {/* <TextInput
                         style={styles.inputText}
@@ -252,18 +254,21 @@ const Perfil = () => {
                         value={Senha}
                         onChangeText={setSenha}
                         secureTextEntry={true}
+                        placeholderTextColor={'#7e7e7e'}
                     />
                     <TextInput
                         style={styles.inputText}
                         placeholder={'Telefone1'}
                         value={user.Telefone}
                         onChangeText={text => setUser({ ...user, Telefone: text })}
+                        placeholderTextColor={'#7e7e7e'}
                     />
-                    {/*<TextInput
+                    <TextInput
                         style={styles.inputText}
-                        placeholder={'Telefone2'}
+                        placeholder={'Telefone 2'}
                         value={user.Telefone2}
-                    />*/}
+                        placeholderTextColor={'#7e7e7e'}
+                    />
 
 
                     <TouchableOpacity style={styles.saveButton} onPress={() => updateUser()}>

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import {NavigationContainer, useTheme} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import React, { useEffect, useState } from 'react';
+import { Image } from 'react-native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,14 +27,26 @@ const MyTabs = () => {
   theme.colors.secondaryContainer = 'transperent';
 
   const [user, setUser] = useState({});
-  const foto =
-    'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745';
+  const [photo, setPhoto] = useState(null);
+
+  const foto = 'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745';
 
   const userGet = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('userInfo');
       const params = JSON.parse(jsonValue);
       setUser(params);
+      setPhoto(params.Foto);
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const userGetFoto = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      const params = JSON.parse(jsonValue);
+      setPhoto(params.Foto);
     } catch (e) {
       // error reading value
     }
@@ -44,13 +56,22 @@ const MyTabs = () => {
     userGet();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(userGetFoto, 120000);
+
+    return () => {
+      // Limpa o intervalo quando o componente for desmontado
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <Tab.Navigator
       initialRouteName={
         user.TipoUsuario === 'Cliente' ? 'home' : 'Establishment'
       }
       activeColor="#14fef3"
-      inactiveColor="#03302e"
+      inactiveColor="#fff9"
       shifting={true}
       sceneAnimationEnabled={true}
       labeled={false}
@@ -63,7 +84,7 @@ const MyTabs = () => {
           component={Home}
           options={{
             tabBarLabel: 'Início',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="home" color={color} size={30} />
             ),
             headerShown: false,
@@ -77,7 +98,7 @@ const MyTabs = () => {
           component={Explore}
           options={{
             tabBarLabel: 'Explorar',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="magnifying-glass" color={color} size={30} />
             ),
             headerShown: false,
@@ -91,7 +112,7 @@ const MyTabs = () => {
           component={Establishment}
           options={{
             tabBarLabel: 'Estabelecimento',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="shop" color={color} size={30} />
             ),
             headerShown: false,
@@ -105,7 +126,7 @@ const MyTabs = () => {
           component={Establishment}
           options={{
             tabBarLabel: 'Estabelecimento',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="shop" color={color} size={30} />
             ),
             headerShown: false,
@@ -119,7 +140,7 @@ const MyTabs = () => {
           component={Statistics}
           options={{
             tabBarLabel: 'Relatório',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="bar-graph" color={color} size={30} />
             ),
             headerShown: false,
@@ -133,7 +154,7 @@ const MyTabs = () => {
           component={Statistics}
           options={{
             tabBarLabel: 'Relatório',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({ color }) => (
               <Entypo name="bar-graph" color={color} size={30} />
             ),
             headerShown: false,
@@ -148,8 +169,8 @@ const MyTabs = () => {
           tabBarLabel: 'Perfil',
           tabBarIcon: () => (
             <Image
-              source={{uri: user.Foto ? user.Foto : foto}}
-              style={{width: 30, height: 30, borderRadius: 100}}
+              source={{ uri: photo ? photo : foto }}
+              style={{ width: 30, height: 30, borderRadius: 100 }}
               resizeMode={'contain'}
             />
           ),
@@ -167,52 +188,52 @@ function App() {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Register"
           component={Register}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Home"
           component={MyTabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OptionRegister"
           component={OptionRegister}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Perfil"
           component={MyTabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Store"
           component={Store}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Explore"
           component={MyTabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Establishment"
           component={MyTabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Schedule"
           component={Schedule}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AgendHistoric"
           component={AgendHistoric}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

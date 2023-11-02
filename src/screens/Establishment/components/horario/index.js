@@ -3,21 +3,29 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
   Button,
-  Alert,
+  ScrollView,
+  RefreshControl,
+  Modal
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../../../server/api';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { TextInput } from 'react-native-paper';
 
 const Horario = props => {
   const [user, setUser] = useState({});
-  const [funcionarioId, setFuncionarioId] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [horaMessage, setHoraMessage] = useState('');
+  const [horarios, setHorarios] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [funcionarioId, setFuncionarioId] = useState(null);
+  const [showInsertH, setShowInsertH] = useState(false);
+  const [modal, setModal] = useState({
+    active: false,
+    horario: '',
+    item: {}
+  });
   const [abertura, setAbertura] = useState({
     visible: false,
     hora: '',
@@ -67,7 +75,6 @@ const Horario = props => {
       });
     }
 
-    console.log('A date has been picked: ', formattedTime, option);
     hideDatePicker();
   };
 
@@ -87,11 +94,36 @@ const Horario = props => {
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
-            setEstab(response.data.query[0]);
+            console.log(response.data)
+            getExistHour()
           }
         })
         .catch(function (error) {
-          console.log('Erro');
+          console.log('Erro', error);
+        });
+    } catch (err) {
+      console.log('[ERROR]', err);
+    }
+  };
+
+  const getHour = () => {
+    try {
+      var config = {
+        method: 'post',
+        url: 'Horarios/findAllFuncionario',
+        data: {
+          IdEstabelecimento: props.establishment.IdEstabelecimento,
+          IdFuncionario: funcionarioId,
+        },
+      };
+      callApi(config)
+        .then(function (response) {
+          if (response.status == 200) {
+            setHorarios(response.data.horarios[0])
+          }
+        })
+        .catch(function (error) {
+          console.log('Erro', error);
         });
     } catch (err) {
       console.log('[ERROR]', err);
@@ -99,7 +131,7 @@ const Horario = props => {
   };
 
   const getIdFuncionario = () => {
-    if(user?.IdUsuario){
+    if (user.IdUsuario) {
       try {
         var config = {
           method: 'post',
@@ -114,7 +146,9 @@ const Horario = props => {
               setFuncionarioId(response.data.query.IdFuncionario);
             }
           })
-          .catch(function (error) { });
+          .catch(function (error) {
+            console.log('[Error]', error)
+          });
       } catch (err) {
         console.log('[ERROR]', err);
       }
@@ -122,33 +156,85 @@ const Horario = props => {
   };
 
   const getExistHour = () => {
+    if (funcionarioId) {
+      try {
+        var config = {
+          method: 'post',
+          url: 'Horario/existeHorario',
+          data: {
+            IdEstabelecimento: props.establishment.IdEstabelecimento,
+            IdFuncionario: funcionarioId,
+          },
+        };
+        callApi(config)
+          .then(function (response) {
+            if (response.status == 200) {
+              //0 n tem horario faz cad.
+              //1 tem
+              setShowInsertH(response.data.msg)
+
+              if (response.data.msg !== 0) {
+                getHour()
+              }
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } catch (err) {
+        console.log('[ERROR]', err);
+      }
+    }
+  };
+
+  const handleRefresh = () => {
+    getExistHour()
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
+  const alterarHorario = (item) => {
+    console.log(item)
+    setModal({
+      active: true,
+      horario: '',
+      item: item
+    })
+  }
+
+  const setaHorario = () => {
     try {
       var config = {
         method: 'post',
-        url: 'Horario/existeHorario',
+        url: 'Horarios/updateManual',
         data: {
           IdEstabelecimento: props.establishment.IdEstabelecimento,
           IdFuncionario: funcionarioId,
+          IdHorario: '',
+          Horario: ''
         },
       };
-      console.log(config)
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
-            if (response.data.query[0].Existe == 1) {
-              setHoraMessage('Você já possui um horario cadastrado');
-            } else {
-              setLoading(true);
+            //0 n tem horario faz cad.
+            //1 tem
+            setShowInsertH(response.data.msg)
+
+            if (response.data.msg !== 0) {
+              getHour()
             }
           }
         })
         .catch(function (error) {
-          console.log('Erro', error);
+          console.log(error);
         });
     } catch (err) {
       console.log('[ERROR]', err);
     }
-  };
+  }
 
   useEffect(() => {
     userGet();
@@ -159,15 +245,13 @@ const Horario = props => {
   }, [user]);
 
   useEffect(() => {
-    if (funcionarioId) {
-      getExistHour();
-    }
+    getExistHour();
   }, [funcionarioId]);
-  console.log(abertura)
+
   return (
-    <View style={styles.hourContainer}>
+    <ScrollView style={styles.hourContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
       <View style={styles.weekTouch}>
-        {loading && (
+        {showInsertH === 0 && (
           <>
             <Text style={styles.weekText}>
               Insira o horário de funcionamento
@@ -228,35 +312,65 @@ const Horario = props => {
             />
           </>
         )}
-
-        {horaMessage != '' && (
-          <Text style={styles.textOption}>{horaMessage}</Text>
-        )}
       </View>
 
-      {abertura.hora && fechamento.hora && hrEstimada.hora && (
+      {showInsertH === 0 && (
         <View style={styles.ButtonHour}>
-          <Button
-            title="Confirmar Horário"
-            onPress={() => insertHour()}
-            color={'#04bbb3'}
-          />
-          <Text style={[styles.textOption, { marginVertical: 3 }]}>
+          {abertura.hora && <Text style={[styles.textOption, { marginBottom: 3 }]}>
             Hora abertura: {abertura.hora}
-          </Text>
-          <Text style={[styles.textOption, { marginVertical: 3 }]}>
+          </Text>}
+          {fechamento.hora && <Text style={[styles.textOption, { marginBottom: 3 }]}>
             Hora fechamento: {fechamento.hora}
-          </Text>
-          <Text style={[styles.textOption, { marginVertical: 3 }]}>
+          </Text>}
+          {hrEstimada.hora && <Text style={[styles.textOption, { marginBottom: 10 }]}>
             Tempo estimado de corte: {hrEstimada.hora}
-          </Text>
+          </Text>}
+
+          {abertura.hora && fechamento.hora && hrEstimada.hora &&
+            <Button
+              title="Confirmar Horário"
+              onPress={() => insertHour()}
+              color={'#141414'}
+            />
+          }
         </View>
       )}
 
-      <TouchableOpacity>
-        <Text style={styles.attButton}>Atualizar Horário</Text>
-      </TouchableOpacity>
-    </View>
+      {showInsertH != 0 && (
+        <>
+          <Text style={styles.attButton}>Altere um horário</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {horarios && horarios.map((res) => (
+              <TouchableOpacity onPress={() => alterarHorario(res)} style={{ marginHorizontal: 10, marginVertical: 5 }}>
+                <Text style={{ color: "#fff", backgroundColor: "#141414", paddingHorizontal: 17, paddingVertical: 7, borderRadius: 10 }}>{res.Horarios.slice(0, 5)}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </>
+      )
+      }
+
+
+      <Modal animationType="fade" transparent={true} visible={modal.active}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0000009f' }}>
+          <View style={{ backgroundColor: '#fff', paddingHorizontal: 15, paddingVertical: 15, borderRadius: 10 }}>
+            <Text>Altere o horário</Text>
+
+            <TextInput
+              value={modal.horario}
+            />
+
+            <TouchableOpacity>
+              <Text>Salvar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setModal({ active: false, horario: '', item: {} })}>
+              <Text>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
   );
 };
 
@@ -269,6 +383,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-SemiBold',
     textAlign: 'center',
     paddingHorizontal: 30,
+    marginBottom: 10
   },
 
   hourContainer: {
@@ -286,7 +401,7 @@ const styles = StyleSheet.create({
     color: '#141414',
     fontFamily: 'Quicksand-SemiBold',
     textAlign: 'center',
-    paddingVertical: 30,
+    paddingBottom: 30,
   },
 
   inputStyle: {
@@ -303,17 +418,15 @@ const styles = StyleSheet.create({
 
   ButtonHour: {
     paddingHorizontal: 30,
-    marginVertical: 10,
+    marginVertical: 0,
     marginBottom: 30,
   },
 
   attButton: {
     textAlign: 'center',
-    color: "#fff",
-    backgroundColor: "#141414",
-    marginHorizontal: 20,
-    marginVertical: 20,
+    color: "#141414",
     paddingVertical: 10,
-    borderRadius: 10
+    fontWeight: 'bold',
+    fontSize: 17
   }
 });

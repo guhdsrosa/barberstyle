@@ -33,7 +33,7 @@ const Services = (props) => {
 
             <Text style={styles.title}>Consumivéis</Text>
 
-            {props.consumiveis.map((result, index) =>
+            {props?.consumiveis && props.consumiveis.map((result, index) =>
                 <View key={index} style={[styles.optionsContainer, { paddingVertical: 10 }]}>
                     <Text style={styles.textOptions}>{result.NomeConsumiveis}</Text>
 
@@ -45,7 +45,7 @@ const Services = (props) => {
 
             <Text style={styles.title}>Comodidades</Text>
 
-            {props.comodidades.map((result, index) =>
+            {props?.comodidades && props.comodidades.map((result, index) =>
                 <View key={index} style={[styles.optionsContainer, { paddingVertical: 10 }]}>
                     <Text style={styles.textOptions}>{result.NomeComodidade}</Text>
 

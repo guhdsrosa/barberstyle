@@ -19,8 +19,6 @@ const Home = ({ route }) => {
     const navigation = useNavigation()
     const [refreshing, setRefreshing] = useState(false);
     const [user, setUser] = useState({});
-    const [Senha, setSenha] = useState({});
-    const [fototeste, setFototeste] = useState({})
     const [foto, setFoto] = useState(false)
     const [hrAgendada, setHrAgendada] = useState(false);
     const [top5Establishment, setTop5Establishment] = useState([])
@@ -36,14 +34,9 @@ const Home = ({ route }) => {
     const userGet = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('userInfo')
-            const jsonValueSenha = await AsyncStorage.getItem('userSenha')
             const params = JSON.parse(jsonValue)
-            const senha = JSON.parse(jsonValueSenha)
-            const imageSource = { uri: params.Foto };
 
             setUser(params)
-            setSenha(senha)
-            setFototeste(imageSource.uri)
         } catch (e) {
             console.log('[userGet error]', e)
         }
@@ -96,9 +89,36 @@ const Home = ({ route }) => {
         }
     }
 
+    const getUserUpdate = () => {
+        try {
+            var config = {
+                method: 'post',
+                url: 'Usuario/getUser',
+                data: {
+                    id: user.IdUsuario
+                }
+            };
+            console.log(config)
+            callApi(config)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        AsyncStorage.setItem('userInfo', JSON.stringify(response.data.user))
+                        userGet()
+                    }
+                })
+                .catch(function (error) {
+                    console.log('[error]', error)
+                });
+        } catch (err) {
+            console.log('[error]', err)
+        }
+    }
+
     const onRefresh = () => {
         getHorariosAgendado()
         getRecomendedEstablishment()
+        getUserUpdate()
+
         setRefreshing(true);
         setTimeout(() => {
             setRefreshing(false);
@@ -234,7 +254,7 @@ const Home = ({ route }) => {
                                 key={index}
                             >
                                 <FastImage
-                                    source={{ uri: result.FotoEstabelecimento != 'null' ? result.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
+                                    source={{ uri: result.FotoEstabelecimento != null ? result.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
                                     style={styles.storeImage}
                                     resizeMode="cover"
                                 />

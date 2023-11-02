@@ -89,7 +89,7 @@ const Explore = () => {
                             >
                                 <FastImage
                                     style={styles.establishmentPhoto}
-                                    source={{ uri: 'https://graces.com.br/wp-content/uploads/2019/02/o-que-nao-pode-faltar-na-sua-barbearia-equipamentos.jpg' }}
+                                    source={{ uri: result.FotoEstabelecimento != null ? result.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
                                     resizeMode={FastImage.resizeMode.cover}
                                 />
 

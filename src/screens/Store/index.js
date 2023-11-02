@@ -178,7 +178,7 @@ const Store = ({ route }) => {
                         </TouchableOpacity>
 
                         {data && <Image
-                            source={{ uri: data.FotoEstabelecimento != 'null' ? data.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
+                            source={{ uri: data.FotoEstabelecimento != null ? data.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
                             style={styles.storePhoto}
                             resizeMode='cover'
                             blurRadius={0}
@@ -229,7 +229,7 @@ const Store = ({ route }) => {
                         </TouchableOpacity>
 
                         {data && <Image
-                            source={{ uri: 'https://img.freepik.com/fotos-premium/espaco-masculino-interior-de-barbearia-moderna-gerado-por-ia_866663-5580.jpg' }}
+                            source={{ uri: 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
                             //source={{ uri: data?.FotoEstabelecimento }}
                             style={styles.storePhoto}
                             resizeMode='cover'

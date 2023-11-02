@@ -90,12 +90,6 @@ const Login = () => {
                 </>
             }
 
-            {/*<Image
-                source={logo}
-                style={styles.TitleLogo}
-                resizeMode={'contain'}
-            />*/}
-
             {!loading &&
                 <>
                     <Text style={styles.TextWelcome}>Bem vindo ao{'\n'}Barber Style.</Text>
@@ -107,6 +101,7 @@ const Login = () => {
                         value={login.Email}
                         placeholderTextColor={'#BDBDBD'}
                         onChangeText={text => setLogin({ ...login, Email: text })}
+                        keyboardType="email-address"
                     />
 
                     <View>
