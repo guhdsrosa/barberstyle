@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  ScrollView,
-  RefreshControl,
-  Modal
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, ScrollView, RefreshControl, Modal, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import callApi from '../../../../server/api';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { TextInput } from 'react-native-paper';
 
 const Horario = props => {
   const [user, setUser] = useState({});
   const [horarios, setHorarios] = useState(null);
+  const [horarioMessage, setHorarioMessage] = useState({ ativo: false });
   const [refreshing, setRefreshing] = useState(false);
   const [funcionarioId, setFuncionarioId] = useState(null);
   const [showInsertH, setShowInsertH] = useState(false);
@@ -204,7 +196,7 @@ const Horario = props => {
     })
   }
 
-  const setaHorario = () => {
+  const setaHorario = (item) => {
     try {
       var config = {
         method: 'post',
@@ -212,24 +204,20 @@ const Horario = props => {
         data: {
           IdEstabelecimento: props.establishment.IdEstabelecimento,
           IdFuncionario: funcionarioId,
-          IdHorario: '',
-          Horario: ''
+          IdHorario: item.IdHorario,
+          Horario: item.Horarios
         },
       };
       callApi(config)
         .then(function (response) {
           if (response.status == 200) {
-            //0 n tem horario faz cad.
-            //1 tem
-            setShowInsertH(response.data.msg)
-
-            if (response.data.msg !== 0) {
-              getHour()
-            }
+            setModal({ active: false, horario: '', item: {} })
+            setHorarioMessage({ ativo: true, title: 'Sucesso', message: response.data, btnMessage: 'Ok' })
           }
         })
         .catch(function (error) {
           console.log(error);
+          setHorarioMessage({ ativo: true, title: 'Ops', message: 'Ocorreu um erro, por favor tente novamente', btnMessage: 'Tentar novamente' })
         });
     } catch (err) {
       console.log('[ERROR]', err);
@@ -340,8 +328,8 @@ const Horario = props => {
         <>
           <Text style={styles.attButton}>Altere um horário</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {horarios && horarios.map((res) => (
-              <TouchableOpacity onPress={() => alterarHorario(res)} style={{ marginHorizontal: 10, marginVertical: 5 }}>
+            {horarios && horarios.map((res, index) => (
+              <TouchableOpacity key={index} onPress={() => alterarHorario(res)} style={{ marginHorizontal: 10, marginVertical: 5 }}>
                 <Text style={{ color: "#fff", backgroundColor: "#141414", paddingHorizontal: 17, paddingVertical: 7, borderRadius: 10 }}>{res.Horarios.slice(0, 5)}</Text>
               </TouchableOpacity>
             ))}
@@ -352,24 +340,43 @@ const Horario = props => {
 
 
       <Modal animationType="fade" transparent={true} visible={modal.active}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0000009f' }}>
-          <View style={{ backgroundColor: '#fff', paddingHorizontal: 15, paddingVertical: 15, borderRadius: 10 }}>
-            <Text>Altere o horário</Text>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Altere o horário</Text>
 
             <TextInput
-              value={modal.horario}
+              value={modal.item.Horarios}
+              style={styles.modalInput}
+              onChangeText={(text) => setModal({ ...modal, item: { ...modal.item, Horarios: text } })}
             />
 
-            <TouchableOpacity>
-              <Text>Salvar</Text>
+            <TouchableOpacity onPress={() => setaHorario(modal.item)}>
+              <Text style={styles.modalButtom}>Salvar</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setModal({ active: false, horario: '', item: {} })}>
-              <Text>Cancelar</Text>
+              <Text style={styles.modalButtom}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
+
+      <AwesomeAlert
+        show={horarioMessage.ativo}
+        showProgress={false}
+        title={`${horarioMessage.title}`}
+        message={`${horarioMessage.message}`}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText={`${horarioMessage.btnMessage}`}
+        confirmButtonColor="#141414"
+        onConfirmPressed={() => {
+          setHorarioMessage({ ativo: false })
+          getExistHour()
+        }}
+      />
     </ScrollView>
   );
 };
@@ -428,5 +435,43 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontWeight: 'bold',
     fontSize: 17
+  },
+
+  //Modal
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0000009f'
+  },
+
+  modalContent: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10
+  },
+
+  modalTitle: {
+    color: '#000',
+    fontSize: 16,
+    marginBottom: 10
+  },
+
+  modalInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10
+  },
+
+  modalButtom: {
+    backgroundColor: '#000',
+    color: '#fff',
+    textAlign: 'center',
+    marginVertical: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 100,
+    borderRadius: 10
   }
 });
