@@ -18,7 +18,7 @@ const Perfil = () => {
     const [typeUser, setTypeUser] = useState('estabelecimento')
     const [user, setUser] = useState({})
     const [userName, setUserName] = useState('')
-    const [Senha, setSenha] = useState('')
+    const [Senha, setSenha] = useState(null)
     const [step, setStep] = useState(1)
     const [photo, setPhoto] = React.useState(null);
     //const fs = require('fs')

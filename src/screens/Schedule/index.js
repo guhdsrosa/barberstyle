@@ -109,15 +109,15 @@ const Schedule = ({ route }) => {
                 .then(function (response) {
                     if (response.status === 200) {
                         const data = new Date(response.data.agenda.DataMarcada);
-                        const hora = new Date(response.data.agenda.HoraMarcada);
+                        const hora = response.data.agenda.HoraMarcada
 
                         // Formate a data para o formato desejado (DD/MM/YYYY)
                         const dataFormatada = data.toLocaleDateString('pt-BR');
 
                         // Formate a hora para o formato desejado (HH:mm)
-                        const horaFormatada = hora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                        const horaFormatada = hora.slice(11, 16)
 
-                        setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${dataFormatada}, às ${horaFormatada}` })
+                        setShowAlert({ ...showAlert, alert: true, text: `Seu horário foi marcado para o dia ${dataFormatada}, às ${horaFormatada}`})
                     }
                     setReserveLoading(false)
                 })
@@ -192,7 +192,7 @@ const Schedule = ({ route }) => {
                         />
 
                         {selected && <View style={styles.hourContainer}>
-                            {dataHour.map((res, index) => (
+                            {dataHour && dataHour.map((res, index) => (
                                 res.disabled == null && (
                                     <TouchableOpacity style={styles.hourContent} index={index} onPress={() => setHorario(res)}>
                                         <Text style={[styles.hourText, { backgroundColor: horario.value === res.value ? '#0db2aa' : '#141414' }]}>{res.value}</Text>
@@ -224,7 +224,7 @@ const Schedule = ({ route }) => {
             <AwesomeAlert
                 show={showAlert.alert}
                 showProgress={false}
-                title={`Horário Reservado com Sucesso !`}
+                title={`Horário reservado com sucesso!`}
                 message={showAlert.text}
                 closeOnTouchOutside={true}
                 closeOnHardwareBackPress={false}

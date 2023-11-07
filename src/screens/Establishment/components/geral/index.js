@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Image, Modal, Alert } from "react-native";
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Image, Modal, Alert, RefreshControl } from "react-native";
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
 
@@ -9,6 +9,7 @@ import styles from "./styles";
 
 const Geral = (props) => {
     const [option, setOption] = useState('services')
+    const [refreshing, setRefreshing] = useState(false);
     const [modal, setModal] = useState({
         ativo: false,
         titulo: '',
@@ -686,9 +687,20 @@ const Geral = (props) => {
         }
     }
     //Foto estab
+
+    const handleRefresh = () => {
+        serviceEstab()
+        consumiveisEstab()
+        comodidadesEstab()
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => imagePickerCallback()}>
                         {saveButtonImage && (

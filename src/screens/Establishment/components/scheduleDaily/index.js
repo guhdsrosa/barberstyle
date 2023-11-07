@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import CalendarModal from '../../../Schedule/components/calendar';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,6 +14,7 @@ const ScheduleDaily = () => {
   const [selected, setSelected] = useState('');
   const [estab, setEstab] = useState(null);
   const [horarios, setHorarios] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const userGet = async () => {
     try {
@@ -79,6 +80,15 @@ const ScheduleDaily = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setHorarios([])
+    GetEstablish()
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   useEffect(() => {
     GetEstablish()
   }, [user])
@@ -101,7 +111,7 @@ const ScheduleDaily = () => {
       )}
 
       {!loading && (
-        <ScrollView style={{ marginTop: 20 }}>
+        <ScrollView style={{ marginTop: 20 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
           <View style={styles.container}>
             <Text style={styles.title}>Selecione uma data</Text>
             <CalendarModal

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, cloneElement } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, RefreshControl, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import callApi from '../../server/api'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +25,7 @@ const Store = ({ route }) => {
     const [selectService, setSelectService] = useState([])
     const [consumiveis, setConsumiveis] = useState([])
     const [comodidades, setComodidades] = useState([])
+    const [photoView, setPhotoView] = useState({ active: false, image: '' })
     const [price, setPrice] = useState(null)
     const { data } = route.params
 
@@ -177,12 +178,14 @@ const Store = ({ route }) => {
                             <AntDesign name="left" size={30} color={'#fff'} style={{ marginRight: 3, marginVertical: 1, marginLeft: -1 }} />
                         </TouchableOpacity>
 
-                        {data && <Image
-                            source={{ uri: data.FotoEstabelecimento != null ? data.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
-                            style={styles.storePhoto}
-                            resizeMode='cover'
-                            blurRadius={0}
-                        />}
+                        <TouchableOpacity onPress={() => setPhotoView({ active: true, image: data.FotoEstabelecimento != null ? data.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' })}>
+                            {data && <Image
+                                source={{ uri: data.FotoEstabelecimento != null ? data.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
+                                style={styles.storePhoto}
+                                resizeMode='cover'
+                                blurRadius={0}
+                            />}
+                        </TouchableOpacity>
                         {data && <Text style={styles.storeName}>{data?.NomeEstabelecimento}</Text>}
                     </View>
 
@@ -218,7 +221,7 @@ const Store = ({ route }) => {
                         <TouchableOpacity style={styles.confirmButton} onPress={() => reservationPress()}>
                             <Text style={styles.textButton}>Reservar Horário</Text>
                         </TouchableOpacity>
-                        <Text style={styles.textPrice}>Total: R${price ? price : `00`}</Text>
+                        <Text style={styles.textPrice}>Total: {price ? price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00'}</Text>
                     </View>
                 </ScrollView>
             ) : (
@@ -253,6 +256,23 @@ const Store = ({ route }) => {
                     navigation.goBack()
                 }
             />
+
+            <Modal animationType="fade" transparent={true} visible={photoView.active}>
+                <TouchableOpacity
+                    onPress={() => setPhotoView({ active: false, image: '' })}
+                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000cf' }}
+                >
+                    <Image
+                        source={{ uri: photoView.image }}
+                        style={{
+                            width: 350,
+                            height: '100%'
+                        }}
+                        resizeMode='contain'
+                        blurRadius={0}
+                    />
+                </TouchableOpacity>
+            </Modal>
         </View>
     )
 }

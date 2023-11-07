@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Modal, RefreshControl, Linking } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Modal, RefreshControl, Linking, Alert } from "react-native";
 import { styles } from "./styles";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -142,23 +142,26 @@ const Home = ({ route }) => {
     };
 
     const cancelAgendamento = (item) => {
-        return console.log(item)
         try {
             var config = {
                 method: 'post',
-                url: 'Usuario/horariosUsuarioDay',
+                url: 'Agenda/delete',
                 data: {
-                    IdUsuario: user.IdUsuario
+                    IdAgenda: item.IdAgenda
                 }
             };
+            console.log(config)
             callApi(config)
                 .then(function (response) {
                     if (response.status === 200) {
-                        console.log(response.data)
+                        setModal({ ativo: false, item: false })
+                        Alert.alert('', response.data.msg)
+                        onRefresh()
                     }
                 })
                 .catch(function (error) {
-                    console.log('[error]', error)
+                    setModal({ ativo: false, item: false })
+                    Alert.alert('Ocorreu um erro', `${error.response.data.msg}`)
                 });
         } catch (err) {
             console.log('[error]', err)
@@ -207,12 +210,12 @@ const Home = ({ route }) => {
                     <Text style={styles.titleText}>Bem vindo,{'\n'}qual serviço deseja procurar hoje?</Text>
                 </View>
 
-                <Searchbar
+                {/* <Searchbar
                     placeholder="Pesquisar"
                     style={styles.searchbarStyle}
                     elevation={0}
                     iconColor={'#131313'}
-                />
+                /> */}
 
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
@@ -239,6 +242,31 @@ const Home = ({ route }) => {
                     </View>
 
                     <View style={styles.bodyContent}>
+                        <Text style={styles.titleText}>Escolha dos editores</Text>
+                    </View>
+
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {top5Establishment.map((result, index) =>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Store', { data: result })}
+                                style={styles.touchStore}
+                                key={index}
+                            >
+                                <FastImage
+                                    source={{ uri: result.FotoEstabelecimento != null ? result.FotoEstabelecimento : 'https://th.bing.com/th/id/OIG.AobPibWwR9MDnbKZ.TtQ?pid=ImgGn' }}
+                                    style={styles.storeImage}
+                                    resizeMode="cover"
+                                />
+
+                                <View style={styles.textContent}>
+                                    <Text style={styles.textStore}>{result.NomeEstabelecimento}</Text>
+                                    <Text style={styles.descriptionStore}>{result.Cidade}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </ScrollView>
+
+                    <View style={[styles.bodyContent, {marginTop: 15}]}>
                         <Text style={styles.titleText}>Estabelecimentos</Text>
                         <TouchableOpacity style={styles.seeAllContent} onPress={() => navigation.navigate('Explore')}>
                             <Text style={[styles.titleText, { fontSize: 15 }]}>Ver mais</Text>
@@ -367,6 +395,7 @@ const stylesModal = StyleSheet.create({
         textAlign: "center",
         backgroundColor: "#970000",
         paddingVertical: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        paddingHorizontal: 20
     }
 })

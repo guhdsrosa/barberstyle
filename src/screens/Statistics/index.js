@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, ScrollView, View, Text, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, ActivityIndicator, TextInput, Modal, TouchableOpacity } from 'react-native';
 
 import { styles } from './styles';
 import FastImage from 'react-native-fast-image';
@@ -52,6 +52,8 @@ const Statistics = () => {
   };
 
   const GetProdution = async () => {
+    setProduto(null);
+    setServicos(null);
     const currentDate = new Date();
     const dataIni = new Date(currentDate);
     const dataFin = new Date(currentDate);
@@ -75,7 +77,7 @@ const Statistics = () => {
     const formattedDataInicial = dataIni.toISOString().split('T')[0];
     const formattedDataFinal = dataFin.toISOString().split('T')[0];
 
-    if(estab.IdEstabelecimento){
+    if (estab.IdEstabelecimento) {
       try {
         var config = {
           method: 'post',
@@ -125,7 +127,7 @@ const Statistics = () => {
   useEffect(() => {
     GetProdution();
   }, [dataInitial]);
-  console.log(servicos, produto)
+
   return (
     <LinearGradient colors={['#191919', '#000d0c']} style={styles.container}>
       {loading && (
@@ -166,13 +168,13 @@ const Statistics = () => {
                 {servicos != 0 && (
                   <View>
                     <Text style={[style.valorReceb, { fontSize: 16, marginTop: 20, textAlign: 'center' }]}>Quantidade de serviços</Text>
-                    <Text style={[style.valorReceb, { fontSize: 20, fontWeight: 'bold', marginTop: 0, textAlign: 'center' }]}>{servicos}</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{servicos}</Text>
                   </View>
                 )}
                 {produto != null && (
                   <View>
-                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 15, textAlign: 'center' }]}>Total ganho dia</Text>
-                    <Text style={[style.valorReceb, { fontSize: 20, fontWeight: 'bold', marginTop: 0, textAlign: 'center' }]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 15, textAlign: 'center' }]}>Total ganho no dia</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                   </View>
                 )}
               </View>

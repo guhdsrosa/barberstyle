@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image } from "react-native";
+import { View, Text, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image, ScrollView, RefreshControl } from "react-native";
 import { Searchbar } from "react-native-paper";
 import callApi from '../../../../server/api'
 import AwesomeAlert from "react-native-awesome-alerts";
@@ -22,6 +22,7 @@ const Profissionais = (props) => {
     const [estab, setEstab] = useState({})
     const [listFunc, setListFunc] = useState([])
     const [barber, setBarber] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
 
     const searchUser = () => {
         try {
@@ -144,13 +145,21 @@ const Profissionais = (props) => {
         getBarber()
     }
 
+    const handleRefresh = () => {
+        getBarber()
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
     useEffect(() => {
         setEstab(props.establishment)
         getBarber()
     }, [props.establishment])
-    barber
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
             <View style={styles.barberContainer}>
                 {barber.map((result, index) => (
                     <View style={{ marginHorizontal: 10 }} key={index} onPress={() => null}>
@@ -161,7 +170,7 @@ const Profissionais = (props) => {
                                 style={styles.barberImage}
                             />
                             <Text style={styles.barberText}>{String(result.Nome).match(/\S+/)}</Text>
-                            <TouchableOpacity onPress={() => removeBarber(result)} style={{position: 'absolute', right: 0}}>
+                            <TouchableOpacity onPress={() => removeBarber(result)} style={{ position: 'absolute', right: 0 }}>
                                 <AntDesign
                                     name="close"
                                     size={20}
@@ -216,7 +225,7 @@ const Profissionais = (props) => {
                     }
                 }}
             />
-        </View>
+        </ScrollView>
 
     )
 }
@@ -225,7 +234,7 @@ export default Profissionais;
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 30
+        paddingVertical: 30
     },
 
     titleText: {
