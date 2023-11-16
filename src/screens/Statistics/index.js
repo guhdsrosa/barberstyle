@@ -18,6 +18,8 @@ const Statistics = () => {
   const [dataInitial, setDataInitial] = useState(null);
   const [produto, setProduto] = useState(null);
   const [servicos, setServicos] = useState(null);
+  const [produtoManual, setProdutoManual] = useState(null);
+  const [servicosManual, setServicosManual] = useState(null);
   const data = [
     { key: 'Hoje', value: 'Hoje' },
     { key: '1', value: '1 dia atrás' },
@@ -58,6 +60,9 @@ const Statistics = () => {
     const dataIni = new Date(currentDate);
     const dataFin = new Date(currentDate);
 
+    if (dataInitial === 'Hoje') {
+      dataIni.setDate(dataIni.getDate());
+    }
     if (dataInitial === '1') {
       dataIni.setDate(dataIni.getDate() - 1);
     }
@@ -94,6 +99,33 @@ const Statistics = () => {
             if (response.status == 200) {
               setServicos(response.data.query[0].QTDServico)
               setProduto(response.data.query[0].ValorTotal);
+            }
+          })
+          .catch(function (error) {
+            console.log('[ERROR]', error);
+          });
+      } catch (err) {
+        console.log('[ERROR]', err);
+      }
+
+      try {
+        var config = {
+          method: 'get',
+          url: '/ServicoManual/relatorio',
+          params: {
+            IdUsuario: user.IdUsuario,
+            IdEstabelecimento: estab.IdEstabelecimento,
+            DataInicial: formattedDataInicial,
+            DataFinal: formattedDataFinal,
+          },
+        };
+        callApi(config)
+          .then(function (response) {
+            if (response.status == 200) {
+              console.log(response.data.dados[0])
+              var res = response.data.dados[0]
+              setServicosManual(res[0]?.QTDServico)
+              setProdutoManual(res[0]?.ValorTotal);
             }
           })
           .catch(function (error) {
@@ -167,6 +199,7 @@ const Statistics = () => {
               <View style={style.valores}>
                 {servicos != 0 && (
                   <View>
+                    <Text style={[style.valorReceb, { fontWeight: 'bold', fontSize: 20, marginTop: 20, textAlign: 'center' }]}>Serviços aplicativo:</Text>
                     <Text style={[style.valorReceb, { fontSize: 16, marginTop: 20, textAlign: 'center' }]}>Quantidade de serviços</Text>
                     <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{servicos}</Text>
                   </View>
@@ -175,6 +208,22 @@ const Statistics = () => {
                   <View>
                     <Text style={[style.valorReceb, { fontSize: 16, marginTop: 15, textAlign: 'center' }]}>Total ganho no dia</Text>
                     <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{produto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                  </View>
+                )}
+              </View>
+
+              <View style={style.valores}>
+                {servicosManual && (
+                  <View>
+                    <Text style={[style.valorReceb, { fontWeight: 'bold', fontSize: 22, marginTop: 20, textAlign: 'center' }]}>Serviços manuais:</Text>
+                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 20, textAlign: 'center' }]}>Quantidade de serviços</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{servicosManual}</Text>
+                  </View>
+                )}
+                {produtoManual && (
+                  <View>
+                    <Text style={[style.valorReceb, { fontSize: 16, marginTop: 15, textAlign: 'center' }]}>Total ganho no dia</Text>
+                    <Text style={[style.valorReceb, { fontSize: 20, marginTop: 5, textAlign: 'center' }]}>{produtoManual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                   </View>
                 )}
               </View>
@@ -192,7 +241,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '30%'
+    marginTop: '10%'
   },
   title: {
     fontSize: 18,
@@ -207,7 +256,7 @@ const style = StyleSheet.create({
   },
 
   valores: {
-
+    marginVertical: 10
   },
 
   valorReceb: {

@@ -263,12 +263,12 @@ const Perfil = () => {
                         onChangeText={text => setUser({ ...user, Telefone: text })}
                         placeholderTextColor={'#7e7e7e'}
                     />
-                    <TextInput
+                    {/* <TextInput
                         style={styles.inputText}
                         placeholder={'Telefone 2'}
                         value={user.Telefone2}
                         placeholderTextColor={'#7e7e7e'}
-                    />
+                    /> */}
 
 
                     <TouchableOpacity style={styles.saveButton} onPress={() => updateUser()}>

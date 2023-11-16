@@ -194,7 +194,7 @@ const Schedule = ({ route }) => {
                         {selected && <View style={styles.hourContainer}>
                             {dataHour && dataHour.map((res, index) => (
                                 res.disabled == null && (
-                                    <TouchableOpacity style={styles.hourContent} index={index} onPress={() => setHorario(res)}>
+                                    <TouchableOpacity style={styles.hourContent} key={index} onPress={() => setHorario(res)}>
                                         <Text style={[styles.hourText, { backgroundColor: horario.value === res.value ? '#0db2aa' : '#141414' }]}>{res.value}</Text>
                                     </TouchableOpacity>
                                 )

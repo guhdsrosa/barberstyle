@@ -79,8 +79,11 @@ const Establishment = () => {
 
   const AddServico = async () => {
     let valor = addservico.preco
-    valor = valor.replace("R$", ""); // remove "R$"
-    valor = valor.replace(",", "."); // substitui "," por "."
+    valor = valor.replace("R$", "")
+    valor = valor.replace(",", ".")
+
+    let dataString = addservico.data;
+    let data = new Date(dataString.split("/").reverse().join("-"));
 
     try {
       var config = {
@@ -89,7 +92,9 @@ const Establishment = () => {
         data: {
           Servico: addservico.nome,
           Valor: valor,
-          Data: addservico.data
+          Data: data,
+          IdUsuario: user.IdUsuario,
+          IdEstabelecimento: estab.IdEstabelecimento
         },
       };
       callApi(config)
@@ -124,24 +129,26 @@ const Establishment = () => {
   return (
     <>
       <ScrollView style={styles.container}>
-        <ScrollView style={styles.scrollContent} horizontal={true}>
-          {optionsSelect.map((result, index) => (
-            <TouchableOpacity
-              onPress={() => {
-                optionSelect({ opt: result.name });
-              }}
-              style={styles.touchOption}
-              key={index}>
-              <Text
-                style={[
-                  styles.textOption,
-                  { color: option == result.name ? '#0fcbc2' : '#fff' },
-                ]}>
-                {result.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        {estab && 
+          <ScrollView style={styles.scrollContent} horizontal={true}>
+            {optionsSelect.map((result, index) => (
+              <TouchableOpacity
+                onPress={() => {
+                  optionSelect({ opt: result.name });
+                }}
+                style={styles.touchOption}
+                key={index}>
+                <Text
+                  style={[
+                    styles.textOption,
+                    { color: option == result.name ? '#0fcbc2' : '#fff' },
+                  ]}>
+                  {result.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        }
 
         {option == 'Agenda' && <ScheduleDaily item={[user]} />}
 
