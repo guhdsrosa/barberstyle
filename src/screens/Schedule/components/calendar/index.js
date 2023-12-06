@@ -32,7 +32,7 @@ const CalendarModal = (props) => {
     LocaleConfig.defaultLocale = 'br';
 
     return (
-        <View style={{ marginBottom: 10, marginHorizontal: 10 }}>
+        <View style={{ marginBottom: 30, marginHorizontal: 10 }}>
             <Calendar
                 minDate={today}
                 disableMonthChange={true}
@@ -45,8 +45,8 @@ const CalendarModal = (props) => {
                 style={{
                     borderWidth: 1,
                     borderColor: '#000',
-                    height: 320,
-                    borderRadius: 20,
+                    // height: 320,
+                    // borderRadius: 20,
                     marginTop: 5
                 }}
                 theme={{
